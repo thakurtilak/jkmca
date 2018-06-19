@@ -48,6 +48,18 @@ class EmailUtility{
 					'validate' => FALSE
 				);
 
+                $config = Array(
+                    'protocol' => 'smtp',
+                    'smtp_host' => $host,
+                    'smtp_port' => $port,
+                    'smtp_user' => '', // change it to yours
+                    'smtp_pass' => '', // change it to yours
+                    'mailtype' => 'html',
+                    'charset' => 'utf-8',
+                    'wordwrap' => TRUE,
+                    'validate' => FALSE
+                );
+
 				$CI->load->library('email', $config);
 				$CI->email->from($fromEmail, $fromName);
 
