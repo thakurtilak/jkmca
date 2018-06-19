@@ -43,6 +43,7 @@ class EmailUtility{
 					'smtp_port' => $port,
 					'smtp_user' => $username, // change it to yours
 					'smtp_pass' => $password, // change it to yours
+                    'smtp_crypto' => 'tsl',
 					'mailtype' => 'html',
 					'charset' => 'utf-8',
 					'wordwrap' => TRUE,
