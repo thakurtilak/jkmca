@@ -33,35 +33,34 @@ class EmailUtility{
 				$fromName = $configSettings['from_name'];
 				$enableEmail = $configSettings['enable_email'];
 				if(!$enableEmail) { /*if setting disable email sending then return from here*/
-					//return false;
+					return false;
 				}
 				// Email configuration
 
-				$config = Array(
+				/*$config = Array(
 					'protocol' => 'smtp',
 					'smtp_host' => $host,
 					'smtp_port' => $port,
 					'smtp_user' => $username, // change it to yours
 					'smtp_pass' => $password, // change it to yours
-                    'smtp_crypto' => 'tsl',
+                    //'smtp_crypto' => 'tsl',
 					'mailtype' => 'html',
 					'charset' => 'utf-8',
 					'wordwrap' => TRUE,
 					'validate' => FALSE
-				);
-                if(!$enableEmail) { /*if setting disable email sending then return from here*/
-                    $config = Array(
-                        'protocol' => 'sendmail',
-                        'smtp_host' => $host,
-                        'smtp_port' => $port,
-                        //'smtp_user' => '', // change it to yours
-                        //'smtp_pass' => '', // change it to yours
-                        'mailtype' => 'html',
-                        'charset' => 'utf-8',
-                        'wordwrap' => TRUE,
-                        'validate' => FALSE
-                    );
-                }
+				);*/
+
+                $config = Array(
+                    'protocol' => 'mail',
+                    'smtp_host' => $host,
+                    'smtp_port' => $port,
+                    //'smtp_user' => '', // change it to yours
+                    //'smtp_pass' => '', // change it to yours
+                    'mailtype' => 'html',
+                    'charset' => 'utf-8',
+                    'wordwrap' => TRUE,
+                    'validate' => FALSE
+                );
 
 				$CI->load->library('email', $config);
 				$CI->email->from($fromEmail, $fromName);
