@@ -48,7 +48,7 @@ class EmailUtility{
 					'validate' => FALSE
 				);
 
-                $config = Array(
+                /*$config = Array(
                     'protocol' => 'smtp',
                     'smtp_host' => $host,
                     'smtp_port' => $port,
@@ -58,7 +58,7 @@ class EmailUtility{
                     'charset' => 'utf-8',
                     'wordwrap' => TRUE,
                     'validate' => FALSE
-                );
+                );*/
 
 				$CI->load->library('email', $config);
 				$CI->email->from($fromEmail, $fromName);
