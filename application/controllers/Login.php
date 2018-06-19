@@ -92,4 +92,14 @@ class Login extends CI_Controller {
         var_dump($res);
         die;
     }
+
+    public function email(){
+        $to = "dthakur29@gmail.com";
+        $subject = "JKMCA EMAIL TESTING";
+        $txt = "Hello world!";
+        $headers = "From: info@jkmca.in" . "\r\n";
+        $res = mail($to,$subject,$txt,$headers);
+        var_dump($res);
+        die;
+    }
 }
