@@ -262,7 +262,7 @@ function getAdministratorEmail(){
 
         }
     }*/
-    $emails = array();
+    //$emails = array();
     if(ENVIRONMENT == 'development') {
         $emails[] = "dthakur29@gmail.com";
     }

@@ -130,7 +130,7 @@ class Jobs extends CI_Controller
                     }elseif($isRecieptionist){
                         $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-print\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Print'><i class=\"fa fa-print\" aria-hidden=\"true\"></i></a>";
                         if($job->status == 'completed') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-completed\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Completed'><i class=\"fa fa-download\" aria-hidden=\"true\"></i></a>";
+                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-completed\" target='_blank' href='".base_url().$job->work_file_path."' data-target-id=" . $job->id . " title='Completed'><i class=\"fa fa-download\" aria-hidden=\"true\"></i></a>";
                         } elseif ($job->status == 'rejected') {
                             $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-rejected\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Rejected'><i class=\"fa fa-ban\"></i></a>";
                         }else if($job->status == 'approval_pending') {
