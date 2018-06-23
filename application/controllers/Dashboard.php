@@ -30,6 +30,8 @@ class Dashboard extends CI_Controller {
     {
         $this->template->set('title', 'Dashboard');
         $this->template->load('default', 'contents' , 'default/dashboard/index', array());
+        //$administratorEmails = getAdministratorEmail();
+        //print_r($administratorEmails); die;
     }
 
 }

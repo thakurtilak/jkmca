@@ -128,6 +128,7 @@ define('TBL_INVOICE_COURIER_INFO', 'ims_invoice_courier_info');
 define('TBL_JOB_MASTER', 'jkm_job_master');
 define('TBL_JOBCARDS_FILES', 'jkm_job_card_files');
 define('TBL_JOBS_ATTACHMENTS', 'jkm_jobs_attachments');
+define('TBL_JOBCARDS_WORK_FILES', 'jkm_job_work_files');
 /*End Tables*/
 
 /*DEFINE CATEGORY ID*/
@@ -144,8 +145,8 @@ define('TECHNOLOGYINCCAT', '10');
 define('ADNETWORKSINCCAT', '11');
 
 /*DEFINE ROLE ID*/
-define('ORIGINATERROLEID', 1);
-define('GENERATERROLEID', 2);
+define('RECIEPTIONISTROLEID', 1);
+define('STAFFROLEID', 2);
 define('COLLECTORROLEID', 3);
 define('MANAGERROLEID', 4);
 define('SUPERADMINROLEID', 5);

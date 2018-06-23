@@ -18,6 +18,14 @@ class Users extends CI_Controller {
         {
             redirect('login');
         }
+
+        $userDetail = getCurrentUser();
+        $usersRoles = $userDetail->role_id;
+        $rolesIDArray = explode(',', $usersRoles);
+        if (!in_array(SUPERADMINROLEID, $rolesIDArray)) {
+            $this->session->set_flashdata('error', "You don't have permission to access this.");
+            redirect('/dashboard');
+        }
     }
 
     public function index()

@@ -39,19 +39,32 @@ class Job_model extends CI_Model
       * get_datatables_query
       * To get list of raised invoices.
       */
-    function _get_datatables_query($userId, $work_type = false, $status = false, $month = false, $name = false, $orderBY = false)
+    function _get_datatables_query($userId, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false)
     {
         //$approverUsers = $this->_getAllexcutivesIds($userId);
 
-        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work');
         $this->db->from(TBL_JOB_MASTER . ' as Tm');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact,wf.file_path as work_file_path');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
         $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
-
+        $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        $this->db->join(TBL_JOBCARDS_WORK_FILES. ' as wf','wf.job_id = Tm.id','left');
         if($userId) {
             $this->db->group_start();
             $this->db->where('Tm.staff_id', $userId);
             $this->db->group_end();
+        }
+
+        if($payment_status){
+            if($payment_status == 'complete') {
+                $this->db->group_start();
+                $this->db->where('Tm.remaining_amount <=', 0);
+                $this->db->group_end();
+            } else if ($payment_status == 'pending'){
+                $this->db->group_start();
+                $this->db->where('Tm.remaining_amount >', 0);
+                $this->db->group_end();
+            }
         }
 
         if ($work_type) {
@@ -97,9 +110,9 @@ class Job_model extends CI_Model
 
     }
     /*RaisedInvoice count_filtered*/
-    function count_filtered($userId = false, $work_type = false, $status = false, $MONTH = false, $name = false, $orderBY = false)
+    function count_filtered($userId = false, $work_type = false, $status = false, $MONTH = false, $payment_status ='', $name = false, $orderBY = false)
     {
-        $this->_get_datatables_query($userId, $work_type, $status, $MONTH, $name, $orderBY);
+        $this->_get_datatables_query($userId, $work_type, $status, $MONTH, $payment_status, $name, $orderBY);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -109,7 +122,9 @@ class Job_model extends CI_Model
         //$approverUsers = $this->_getAllexcutivesIds($userId);
         $this->db->from(TBL_JOB_MASTER);
         if($userId){
-
+            $this->db->group_start();
+            $this->db->where('staff_id', $userId);
+            $this->db->group_end();
             /*if($case == 'raised') {
                 $this->db->group_start();
                 $this->db->where('originator_user_id', $userId);
@@ -132,10 +147,10 @@ class Job_model extends CI_Model
     }
 
     /*Jobs Listing*/
-    function listJobs($userId = false, $work_type = false, $status = false, $month = false, $name = false, $orderBY = false, $limitStart = 0, $limitLength = 10)
+    function listJobs($userId = false, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false, $limitStart = 0, $limitLength = 10)
     {
 
-        $this->_get_datatables_query($userId, $work_type, $status, $month, $name, $orderBY);
+        $this->_get_datatables_query($userId, $work_type, $status, $month, $payment_status, $name, $orderBY);
 
         $this->db->limit($limitLength, $limitStart);
         $query = $this->db->get();

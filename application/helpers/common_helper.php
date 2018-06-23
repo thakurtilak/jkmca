@@ -240,6 +240,35 @@ function getGeneratorsEmailByCategory($category_id){
     return $emails;
 }
 
+function getAdministratorEmail(){
+    $CI =& get_instance();
+    $where = array('role_id'=> SUPERADMINROLEID);
+    $administrators = $CI->common_model->getRecords(TBL_USER, array('id','email'), $where);
+    $emails = array();
+    if(count($administrators)) {
+        foreach($administrators as $user) {
+            $emails[] = $user->email;
+        }
+    }
+
+    /*$where = "FIND_IN_SET( '".GENERATERROLEID."' , role_id) AND status= 'A' AND is_approver IS NULL";
+    $generatorsAppr = $CI->common_model->getRecords(TBL_USER, array('id','email'), $where);
+    if(count($generatorsAppr)) {
+        foreach($generatorsAppr as $genAppr) {
+
+            if(!in_array($genAppr->email, $emails)){
+                $emails[] = $genAppr->email;
+            }
+
+        }
+    }*/
+    $emails = array();
+    if(ENVIRONMENT == 'development') {
+        $emails[] = "dthakur29@gmail.com";
+    }
+    return $emails;
+}
+
 function getCompanyDetailById($companyId) {
     $CI =& get_instance();
     $where = array('company_id' => $companyId);

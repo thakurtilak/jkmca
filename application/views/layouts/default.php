@@ -166,9 +166,9 @@ $mainMenuArray = array(
             <?php endif; ?>
             <div class="navbar-right-content">
                 <ul class="nav-alerts">
-                    <?php if($userPermission && in_array('orders/create-order', $userPermission)): ?>
-                    <li class="create_link"><a href="<?php echo base_url()?>orders/create-order" class="btn-theme btn-pink mdl-js-button mdl-js-ripple-effect ripple-white">Create Job </a></li>
-                    <?php endif; ?>
+                    <?php /*if($userPermission && in_array('orders/create-order', $userPermission)): */?><!--
+                    <li class="create_link"><a href="<?php /*echo base_url()*/?>orders/create-order" class="btn-theme btn-pink mdl-js-button mdl-js-ripple-effect ripple-white">Create Job </a></li>
+                    --><?php /*endif; */?>
 
                     <li class="notification_dropdown">
 						<a href="javascript:voiude(0);"><i class="fa fa-bell-o" aria-hidden="true"></i><!--<span class="notification_count">5</span>-->
