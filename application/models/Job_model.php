@@ -44,11 +44,10 @@ class Job_model extends CI_Model
         //$approverUsers = $this->_getAllexcutivesIds($userId);
 
         $this->db->from(TBL_JOB_MASTER . ' as Tm');
-        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact,wf.file_path as work_file_path');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
         $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
         $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
-        $this->db->join(TBL_JOBCARDS_WORK_FILES. ' as wf','wf.job_id = Tm.id','left');
         if($userId) {
             $this->db->group_start();
             $this->db->where('Tm.staff_id', $userId);
@@ -161,7 +160,7 @@ class Job_model extends CI_Model
     /*To get Job Details*/
     public function getJob($jobId){
 
-        $this->db->select('Tm.*,wt.work,uM.id,CONCAT(uM.first_name, \' \' , uM.last_name) as requestorname, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact' );
+        $this->db->select('Tm.*,wt.work,uM.id as userId,CONCAT(uM.first_name, \' \' , uM.last_name) as requestorname, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact' );
         $this->db->from(TBL_JOB_MASTER.' as Tm');
         $this->db->join(TBL_WORK_TYPE.' as wt','wt.id = Tm.work_type', 'left');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.created_by', 'left');
