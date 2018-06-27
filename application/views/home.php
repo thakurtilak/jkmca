@@ -65,11 +65,11 @@
                         <div class="content-center-vertical line">
                             <div class="margin-top-bottom-80">
                                 <!-- Title -->
-                                <h1 class="text-white margin-bottom-30 text-size-60 text-m-size-30 text-line-height-1">Eleganter is the Most Elegant<br> HTML5 Template</h1>
-                                <div class="s-12 m-10 l-8 center"><p class="text-white text-size-14 margin-bottom-40">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Iriure dolor in hendrerit duis autem vel eum in vulputate velit esse molestie consequat.</p></div>
-                                <div class="line">
+                                <h1 class="text-white margin-bottom-30 text-size-60 text-m-size-30 text-line-height-1">Our Vission is To Provide Best Solutions <br> In Matter Of Accounting, Auditing & Finance</h1>
+                                <!--<div class="s-12 m-10 l-8 center"><p class="text-white text-size-14 margin-bottom-40">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Iriure dolor in hendrerit duis autem vel eum in vulputate velit esse molestie consequat.</p></div>
+                                --><div class="line">
                                     <div class="s-12 m-12 l-3 center">
-                                        <a class="button button-white-stroke s-12" href="/">Get Started Now</a>
+                                        <a class="button-white-stroke s-12" href="#aboutus">LEARN MORE</a>
                                     </div>
                                 </div>
                             </div>
@@ -87,24 +87,27 @@
                 <div class="s-12 m-12 l-4 margin-m-bottom">
                     <div class="padding-2x block-bordered">
                         <i class="icon-sli-shield icon3x text-dark center margin-bottom-30"></i>
-                        <h2 class="text-thin">Unlimited Color Variants</h2>
-                        <p class="margin-bottom-30">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
+                        <h2 class="text-thin">Taxation</h2>
+                        <p class="margin-bottom-30">IT assessment(s), Appeals & Regular Income Tax matters
+                            & GST Matters</p>
                         <a class="button button-dark-stroke text-size-12" href="/">GET MORE INFO</a>
                     </div>
                 </div>
                 <div class="s-12 m-12 l-4 margin-m-bottom">
                     <div class="padding-2x block-bordered">
                         <i class="icon-sli-umbrella icon3x text-dark center margin-bottom-30"></i>
-                        <h2 class="text-thin">Parallax Background</h2>
-                        <p class="margin-bottom-30">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
+                        <h2 class="text-thin">Audit</h2>
+                        <p class="margin-bottom-30">Statutory & Internal Audit, Listed, Limited & Pvt. Limited Companies,
+                            Club & Sports associations and Charitable trust.</p>
                         <a class="button button-dark-stroke text-size-12" href="/">GET MORE INFO</a>
                     </div>
                 </div>
                 <div class="s-12 m-12 l-4 margin-m-bottom">
                     <div class="padding-2x block-bordered">
                         <i class="icon-sli-home icon3x text-dark center margin-bottom-30"></i>
-                        <h2 class="text-thin">Clean Modern Code</h2>
-                        <p class="margin-bottom-30">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
+                        <h2 class="text-thin">Industry Implementation</h2>
+                        <p class="margin-bottom-30">Acquisition of Land, Compliance, Planning, Approval,
+                            Clearance, Utility Arrangements, Regulations, Registration and more</p>
                         <a class="button button-dark-stroke text-size-12" href="/">GET MORE INFO</a>
                     </div>
                 </div>
@@ -121,13 +124,26 @@
         <div class="line">
             <div class="margin">
                 <div class="s-12 m-12 l-2">
-                    <p class="h1 text-size-30 margin-m-bottom-30 text-primary text-line-height-1 text-right">We Are<br> Web Design Heroes</p>
+                    <p class="h1 text-size-30 margin-m-bottom-30 text-primary text-line-height-1 text-right">We Are<br> Accounting Heroes</p>
                 </div>
                 <div class="s-12 m-12 l-5">
-                    <p class="text-size-14 margin-m-bottom-30 text-dark">Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica. Dolor in hendrerit in vulputate velit esse molestie consequat. Mirum est notare quam littera gothica. </p>
+                    <p class="text-size-14 margin-m-bottom-30 text-dark">
+                        As our markets are also become global, clients in this new information
+                        technology era need the services, which is based on the expert knowledge.
+                        To cater the needs of the clients and providing the Experts services in the
+                        areas like corporate after and other taxation auditing, project Financing,
+                        financial management, MIS etc. under one roof, our firm “JKM &  ASSOCIATES.”
+                        came into the existence in the year 2013.
+                    </p>
                 </div>
                 <div class="s-12 m-12 l-5">
-                    <p class="text-size-14 text-dark">Mirum est notare quam littera gothica. Dolor in hendrerit in vulputate velit esse molestie consequat. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Dolor in hendrerit in vulputate velit esse molestie consequat.</p>
+                    <p class="text-size-14 text-dark">
+                        Our vision is to provide best solutions in matters of accounting,
+                        auditing & finance. We have a client centric approach with a motive
+                        to serve client needs. We endeavor for a vibrant and long lasting
+                        client relationship. We have defined values by the way of excellence,
+                        transparency and commitment.
+                    </p>
                 </div>
             </div>
         </div>
@@ -239,286 +255,74 @@
 
     <!-- Section 4 -->
     <section class="section-top-padding full-width">
-        <h2 class="text-size-50 text-center">Our Work</h2>
+        <h2 class="text-size-50 text-center">Our Office</h2>
         <hr class="break-small background-primary break-center">
         <div class="tabs background-primary-hightlight">
             <div class="tab-item tab-active">
-                <a class="tab-label active-btn">Web Design</a>
+                
                 <div class="tab-content lightbox-gallery">
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="img/portfolio/portfolio-02.jpg">
+                    <div class="s-12 m-6 l-4">
+                        <a class="image-with-hover-overlay image-hover-zoom" href="img/reception-1.jpg">
                             <div class="image-hover-overlay background-primary">
                                 <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
+                                    <h2 class="text-thin">Reception</h2>
                                 </div>
                             </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-02.jpg" alt="" title="Portfolio Image 1" />
-                        </a>
+                            <img style="width: 450px; height: 450px;" src="<?php echo base_url('assets/default/');?>img/reception-1.jpg" alt="" title="Portfolio Image 1" />
+                        </a>                                         
                     </div>
-                    <div class="s-12 m-6 l-3">
+                    <div class="s-12 m-6 l-4">
                         <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
                             <div class="image-hover-overlay background-primary">
                                 <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
+                                    <h2 class="text-thin">Inner View</h2></div>
                             </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-09.jpg" alt="" title="Portfolio Image 2" />
-                        </a>
+                            <img style="width: 450px; height: 450px;" src="<?php echo base_url('assets/default/');?>img/office-1.jpg" alt="" title="Portfolio Image 2" />
+                        </a>                                         
                     </div>
-                    <div class="s-12 m-6 l-3">
+                    <div class="s-12 m-6 l-4">
                         <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-08.jpg">
                             <div class="image-hover-overlay background-primary">
                                 <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
+                                    <h2 class="text-thin">Main Building</h2></div>
                             </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-08.jpg" alt="" title="Portfolio Image 3" />
-                        </a>
+                            <img style="width: 450px; height: 450px;" src="<?php echo base_url('assets/default/');?>img/office-2.jpg" alt="" title="Portfolio Image 3" />
+                        </a>                                         
                     </div>
-                    <div class="s-12 m-6 l-3">
+                    <div class="s-12 m-6 l-4">
                         <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-05.jpg">
                             <div class="image-hover-overlay background-primary">
                                 <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
+                                    <h2 class="text-thin">Our CEO</h2>
                                 </div>
                             </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-05.jpg" alt="" title="Portfolio Image 4" />
-                        </a>
+                            <img style="width: 450px; height: 450px;" src="<?php echo base_url('assets/default/');?>img/office-3.jpg" alt="" title="Portfolio Image 4" />
+                        </a>                                         
                     </div>
-                    <div class="s-12 m-6 l-3">
+                    <div class="s-12 m-6 l-4">
                         <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
                             <div class="image-hover-overlay background-primary">
                                 <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
+                                    <h2 class="text-thin">Inauguration Day</h2>
                                 </div>
                             </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-06.jpg" alt="" title="Portfolio Image 5" />
+                                                
+                            <img style="width: 450px; height: 450px;" src="<?php echo base_url('assets/default/');?>img/office-4.jpg" alt="" title="Portfolio Image 5" />
                         </a>
                     </div>
-                    <div class="s-12 m-6 l-3">
+                    <div class="s-12 m-6 l-4">
                         <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-11.jpg">
                             <div class="image-hover-overlay background-primary">
                                 <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
+                                    <h2 class="text-thin">Inauguration Day</h2>
+                                    
                                 </div>
                             </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-11.jpg" alt="" title="Portfolio Image 6" />
+
+                            <img style="width: 450px; height: 450px;" src="<?php echo base_url('assets/default/');?>img/office-5.jpg" alt="" title="Portfolio Image 6" />
                         </a>
                     </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-12.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-12.jpg" alt="" title="Portfolio Image 7" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-07.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-07.jpg" alt="" title="Portfolio Image 8" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-item">
-                <a class="tab-label">Graphic Design</a>
-                <div class="tab-content lightbox-gallery">
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-04.jpg" alt="" title="Portfolio Image 1" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-06.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-06.jpg" alt="" title="Portfolio Image 2" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-13.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-13.jpg" alt="" title="Portfolio Image 3" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-05.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-05.jpg" alt="" title="Portfolio Image 4" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-12.jpg" alt="" title="Portfolio Image 5" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-14.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-14.jpg" alt="" title="Portfolio Image 6" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-07.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-07.jpg" alt="" title="Portfolio Image 7" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-10.jpg" alt="" title="Portfolio Image 8" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-item">
-                <a class="tab-label">Campaigns</a>
-                <div class="tab-content lightbox-gallery">
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-03.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-03.jpg" alt="" title="Portfolio Image 9" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-01.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-01.jpg" alt="" title="Portfolio Image 10" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-09.jpg" alt="" title="Portfolio Image 11" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-14.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-14.jpg" alt="" title="Portfolio Image 12" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-07.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-07.jpg" alt="" title="Portfolio Image 13" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-13.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-13.jpg" alt="" title="Portfolio Image 14" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/video.mp4">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-11.jpg" alt="" title="Portfolio Image 15" />
-                        </a>
-                    </div>
-                    <div class="s-12 m-6 l-3">
-                        <a class="image-with-hover-overlay image-hover-zoom" href="<?php echo base_url('assets/default/');?>img/portfolio/portfolio-04.jpg">
-                            <div class="image-hover-overlay background-primary">
-                                <div class="image-hover-overlay-content text-center padding-2x">
-                                    <h2 class="text-thin">Lorem Ipsum Dolor</h2>
-                                    <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.</p>
-                                </div>
-                            </div>
-                            <img src="<?php echo base_url('assets/default/');?>img/portfolio/thumb-04.jpg" alt="" title="Portfolio Image 16" />
-                        </a>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -527,14 +331,14 @@
     <!-- Section 5 -->
     <section class="section background-white text-center">
         <div class="line">
-            <h2 class="text-size-50 text-center">Testimonials</h2>
+            <h2 class="text-size-50 text-center">Our Team</h2>
             <hr class="break-small background-primary break-center">
             <div class="carousel-default owl-carousel carousel-wide-arrows">
                 <div class="item">
                     <div class="s-12 m-12 l-7 center text-center">
-                        <img class="image-testimonial-small" src="<?php echo base_url('assets/default/');?>img/testimonials-04.png" alt="">
-                        <p class="h1 margin-bottom text-size-20">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
-                        <p class="h1 text-size-16">Scott Star / CEO / Company</p>
+                        <img class="image-testimonial-small" src="<?php echo base_url('assets/default/');?>img/ca-mahendra-1.gif" alt="">
+                        <p class="h1 margin-bottom text-size-20">Practicing As Tax And Corporate Consultant from 2010 Practising As A Chartered Accountant, Having A Wast Knowledge In The Field Of Company Law Matter, Direct And Indirect Taxes, Corporate And Firm Audits, Bank Audits Etc.</p>
+                        <p class="h1 text-size-16">Mahendra Thakur / CEO / JKMCA</p>
                     </div>
                 </div>
                 <div class="item">
@@ -560,7 +364,7 @@
 <footer id="contactus">
     <!-- Contact Us -->
     <div class="background-primary padding text-center">
-        <p class="h1">Contact Us: 0800 787 787</p>
+        <p class="h1">Contact Us: 075602 45454</p>
     </div>
 
     <!-- Main Footer -->
@@ -582,8 +386,8 @@
                     </div>
                     <div class="margin-left-70 margin-bottom-30">
                         <h3 class="margin-bottom-0">Company Address</h3>
-                        <p>Responsive Street 7<br>
-                            London / United Kingdom / Europe
+                        <p>JKM & ASSOCIATES CHARTERED ACCOUNTANTS<br>
+                            Seminary Road Ashta 466120 (MP)
                         </p>
                     </div>
                     <div class="float-left">
@@ -591,8 +395,8 @@
                     </div>
                     <div class="margin-left-70 margin-bottom-30">
                         <h3 class="margin-bottom-0">E-mail</h3>
-                        <p>contact@sampledomain.com<br>
-                            office@sampledomain.com
+                        <p>cahamendra17@gmail.com<br>
+                            info@jkmca.in
                         </p>
                     </div>
                     <div class="float-left">
@@ -600,9 +404,8 @@
                     </div>
                     <div class="margin-left-70">
                         <h3 class="margin-bottom-0">Phone Numbers</h3>
-                        <p>0800 4521 800 50<br>
-                            0450 5896 625 16<br>
-                            0798 6546 465 15
+                        <p>075602 45454<br>
+                            +91 9584314454<br>
                         </p>
                     </div>
                 </div>
@@ -614,12 +417,12 @@
     <!-- Bottom Footer -->
     <section class="padding background-dark full-width">
         <div class="s-12 l-6">
-            <p class="text-size-12">Copyright 2018, Vision Design - graphic zoo</p>
-            <p class="text-size-12">All images have been purchased from Bigstock. Do not use the images in your website.</p>
+            <p class="text-size-12">Copyright <?php echo date('Y');?>, JKM & ASSOCIATES CHARTERED ACCOUNTANTS</p>
+            <p class="text-size-12"></p>
         </div>
-        <div class="s-12 l-6">
+        <!--<div class="s-12 l-6">
             <a class="right text-size-12" href="http://www.myresponsee.com" title="Responsee - lightweight responsive framework">Design and coding<br> by Responsee Team</a>
-        </div>
+        </div>-->
     </section>
 </footer>
 <script type="text/javascript" src="<?php echo base_url('assets/default/');?>js/responsee.js"></script>
@@ -627,15 +430,39 @@
 <script type="text/javascript" src="<?php echo base_url('assets/default/');?>js/template-scripts.js"></script>
 <script>
     function initMap() {
-        var uluru = {lat: 23.01385, lng: 76.728418};
+        var uluru = {lat: 23.0143128, lng: 76.7281839};
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 16,
-            center: uluru
+            center: uluru,
+            mapTypeId: 'roadmap',
+            disableDefaultUI: true
         });
         var marker = new google.maps.Marker({
             position: uluru,
+            //label: "JKM & ASSOCIATES CHARTERED ACCOUNTANTS",
             map: map
         });
+
+        var coordInfoWindow = new google.maps.InfoWindow();
+        coordInfoWindow.setContent(createInfoWindowContent(uluru, map.getZoom()));
+        coordInfoWindow.setPosition(uluru);
+        //coordInfoWindow.open(map);
+
+        marker.addListener('click', function() {
+            coordInfoWindow.open(map, marker);
+        });
+
+
+    }
+
+    var TILE_SIZE = 256;
+
+    function createInfoWindowContent(latLng, zoom) {
+        return [
+            'JKM & ASSOCIATES',
+            'CHARTERED ACCOUNTANTS',
+            'Phone No : 075602 45454'
+        ].join('<br>');
     }
 </script>
 <!-- Replace the value of the key parameter with your own API key. -->
@@ -647,6 +474,7 @@
         height: 400px;
         width: 100%;
     }
+    #map * {background-color: initial;}
 </style>
 </body>
 </html>
