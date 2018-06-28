@@ -15,12 +15,6 @@ class Dashboard extends CI_Controller {
         if (!isLoggedIn()) {
             redirect('login');
         }
-        // get permissions and show error if they don't have any permissions at all
-        if (!$this->permissions = $this->session->userdata('userPermission'))
-        {
-            show_error('You do not have any permissions!');
-        }
-
     }
 
     /**
