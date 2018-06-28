@@ -69,7 +69,7 @@ if($this->uri->segment(3)) {
     $currentURL = implode('/', $allParts);
 }
 $mainMenuArray = array(
-    'Dashboard' =>  array('dashboard', 'dashboard/approve-pending', 'dashboard/pending'),
+    'Dashboard' =>  array('dashboard', 'dashboard/approve-pending', 'dashboard/change-password'),
     'manage_clients' => array('clients','clients/add-client', 'clients/edit-client'),
     'users' => array('users/add', 'users/edit'),
     'Manage Invoice' => array('jobs', 'jobs/new-job','jobs/view-job', 'invoice/pending-invoices', 'collections', 'invoice/generates', 'invoice/generate-invoice', 'invoice/invoice-approval', 'invoice-delivery'),
@@ -185,6 +185,7 @@ $mainMenuArray = array(
                                     </li>
                                     <li><a href="#">Check Inbox</a>
                                     </li>-->
+                                    <li><a href="<?php echo base_url('dashboard/')?>change-password">Change Password</a>
                                     <li><a href="<?php echo base_url()?>logout">Sign Out</a>
                                     </li>
                                 </ul>

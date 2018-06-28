@@ -531,4 +531,34 @@
             }
             return $uploadedFiles;
         }
+
+        public function check_pan(){
+            if($this->input->is_ajax_request()) {
+                $pan_no = $this->input->get('pan_no', true);
+                $where = array('pan_no' => $pan_no);
+                $query = $this->common_model->getRecords(TBL_CLIENT_MASTER, array('client_id'), $where);
+                if (count($query) > 0) {
+                    echo 'false';
+                    die;
+                } else {
+                    echo 'true';
+                    die;
+                }
+            }
+        }
+
+        public function check_aadhar(){
+            if($this->input->is_ajax_request()) {
+                $aadhar_no = $this->input->get('aadhar_no', true);
+                $where = array('aadhar_number' => $aadhar_no);
+                $query = $this->common_model->getRecords(TBL_CLIENT_MASTER, array('client_id'), $where);
+                if (count($query) > 0) {
+                    echo 'false';
+                    die;
+                } else {
+                    echo 'true';
+                    die;
+                }
+            }
+        }
     }

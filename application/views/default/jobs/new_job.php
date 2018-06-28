@@ -24,7 +24,10 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="box-form">
-                                <h3 class="form-box-title">Search Client</h3>
+                                <h3 class="form-box-title pull-left" style="width: 80%">Search Client</h3>
+                                <div class="add_new_btn text-right">
+                                    <a href="<?php echo base_url(); ?>clients/add-client" class="mdl-js-button mdl-js-ripple-effect btn-event" data-upgraded=",MaterialButton,MaterialRipple">Add Client</a>
+                                </div>
                                 <div class="theme-form">
                                     <div class="row">
                                         <div class="col-sm-4">

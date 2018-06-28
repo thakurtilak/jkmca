@@ -167,7 +167,7 @@
                                             <div class="form-group">
                                                 <label class="ims_form_label">Date Of Birth*</label>
                                                 <input maxlength="15" type="text" name="dob" id="dob"
-                                                       class="ims_form_control date_icon sel_date" readonly placeholder="DOB" value="<?php echo (isset($clientDetail) && $clientDetail->dob) ? date('d-M-Y', strtotime($clientDetail->dob)):"" ?>"/>
+                                                       class="ims_form_control date_icon sel_date" placeholder="DOB" value="<?php echo (isset($clientDetail) && $clientDetail->dob) ? date('d-M-Y', strtotime($clientDetail->dob)):"" ?>"/>
                                                 <?php echo form_error('dob'); ?>
                                             </div>
                                         </div>

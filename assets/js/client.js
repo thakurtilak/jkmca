@@ -40,6 +40,11 @@ $(document).ready(function () {
     {
         return this.optional(element) || /^[A-Z]{5}\d{4}[A-Z]{1}$/.test(value);
     }, "Invalid Pan Number");
+
+    $.validator.addMethod("aadhar", function(value, element)
+    {
+        return this.optional(element) || /^\d{4}\d{4}\d{4}$/.test(value);
+    }, "Invalid Aadhar Number");
     /*
      *  Client side validations for add client
      * @purpose - Validations for add client.
@@ -55,8 +60,9 @@ $(document).ready(function () {
             //father_last_name: {required: true},
             mobile_number: {required: true, number: true},
             email: { isValidEmail: true},
-            pan_no: {pan: true},
-            //aadhar_no: {required: true},
+            pan_no: {pan: true, remote: BASEURL+"clients/check-pan"
+                },
+            aadhar_no: {aadhar: true, remote: BASEURL+"clients/check-aadhar"},
             dob: {required: true},
             account_person_email: {isValidEmail: true},
             "agreement_no": {agreementGroupRequired: true},
@@ -76,8 +82,8 @@ $(document).ready(function () {
             father_first_name: {required: "This field is required"},
             father_last_name: {required: "This field is required"},
             mobile_number: {required: "This field is required"},
-            pan_no: {required: "This field is required"},
-            aadhar_no: {required: "This field is required"},
+            pan_no: {required: "This field is required",remote:"Pan number already exist"},
+            aadhar_no: {required: "This field is required",remote:"Aadhar number already exist"},
             dob: {required: "This field is required"},
             account_person_email: {isValidEmail: "Please enter a valid email address"},
             "agreement_no": "This field is required",
@@ -94,6 +100,15 @@ $(document).ready(function () {
             zip_code: {required: "This field is required", number: "Please enter a valid Zip Code"},
         }
     });
+
+    $("#dob").bind("keyup","keydown", function(event) {
+        var inputLength = event.target.value.length;
+        if(inputLength === 2 || inputLength === 5){
+            var thisVal = event.target.value;
+            thisVal += '-';
+            $(event.target).val(thisVal);
+        }
+    })
 
     /*File Handling*/
     $(document).on('click', '.file-upload-button', function () {
