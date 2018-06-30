@@ -523,6 +523,9 @@ class Jobs extends CI_Controller
         echo $viewHtml;
     }
 
+    /**
+     * @param bool $jobId
+     */
     public function view_job($jobId = false){
         //error_reporting(0);
 
@@ -691,7 +694,7 @@ class Jobs extends CI_Controller
         $where = array('job_id' => $jobId);
         $jobWorkFiles = $this->common_model->getRecords(TBL_JOBCARDS_WORK_FILES
             , array(
-            'file_path','file_name', 'attach_type'), $where);
+            'id','file_path','file_name', 'attach_type'), $where);
         $data['jobWorkFiles'] = $jobWorkFiles;
 
         $jobDocuments = $this->job_model->getJobDocuments($jobId);
@@ -895,5 +898,39 @@ class Jobs extends CI_Controller
             $this->session->set_flashdata('error', "There is an error while updating job record.");
         }
         redirect('/jobs');
+    }
+
+    /**
+     * @param int $jobId
+     * @param int $workFileId
+     * @author DHARMENDRA T
+     * @version 1.0
+     */
+    public function delete_job_file($jobId = 0, $workFileId = 0){
+        $basePath = FCPATH;
+        if(!$jobId) {
+            $this->session->set_flashdata('error', "Unable to find JobId. Please try again");
+            redirect('/jobs');
+        }
+        if($workFileId) {
+            $where = array('id' => $workFileId, 'job_id' => $jobId);
+            $fileRecord = $this->common_model->getRecord(TBL_JOBCARDS_WORK_FILES, array('id', 'file_path'), $where);
+            if($fileRecord){
+                $deleted = $this->common_model->delete(TBL_JOBCARDS_WORK_FILES, $where);
+                if($deleted) {
+                    /*Remove File as well*/
+                    $fileFullPath = $basePath.DIRECTORY_SEPARATOR.$fileRecord->file_path;
+                    unlink($fileFullPath);
+                    $this->session->set_flashdata('success', 'Job file has been deleted successfully ');
+                } else {
+                    $this->session->set_flashdata('error', "There is an error while deleting job file.");
+                }
+            } else {
+                $this->session->set_flashdata('error', "Unable to find job file. Please try again.");
+            }
+        } else {
+            $this->session->set_flashdata('error', "There is an error while deleting job file.");
+        }
+        redirect('/jobs/view-job/'.$jobId);
     }
 }

@@ -188,6 +188,9 @@
                                     <tr>
                                         <th width="40%">Document Name</th>
                                         <th>Attached File</th>
+                                        <?php if($jobDetail->status =='rejected'): ?>
+                                            <th>Action</th>
+                                        <?php endif; ?>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -197,6 +200,11 @@
                                             <tr>
                                                 <td><?php echo $doc->attach_type; ?></td>
                                                 <td><span class="ov_data"><a href="<?php echo base_url();?><?php echo $doc->file_path; ?>" title="<?php echo $doc->file_name; ?>" target="_blank"><?php echo $doc->file_name; ?></a></span></td>
+                                                <?php if($jobDetail->status =='rejected'):
+                                                    $removeLink = "<a class='mdl-js-button mdl-js-ripple-effect btn-view action-btn button-delete' href='#deleteFile' data-toggle='modal' data-target-id='" . $jobDetail->id."/".$doc->id . "' title='Remove'><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a>";
+                                                    ?>
+                                                    <td><?php echo $removeLink; ?></td>
+                                                <?php endif; ?>
                                             </tr>
                                         <?php   endforeach;
                                     else: ?>
@@ -254,7 +262,7 @@
                                                         <button type="button" class="file-upload-button file-upload-select" tabindex="-1">
                                                         </button>
                                                     </div>
-                                                    <label id="file-upload-input_1-error" class="error" for="file-upload-input_1" style="display: none;"></label>
+                                                    <label id="file-upload-input_1-error" class="error" for="file-upload-input_1" style="display: none;width: 88%; float: left;"></label>
                                                     <a href="javascript:void(0);" class="delete_record delete_attachment" style="display:none"><img src="<?php echo base_url();?>assets/images/delete_icon.svg" /></a>
                                                 </div>
                                             </div>
@@ -409,6 +417,31 @@
             </div>
         </div>
     </div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="deleteFile" tabindex="-1" role="dialog" aria-labelledby="deleteFileLabel" aria-hidden="true">
+        <div style="width: 350px;" class="modal-dialog cancel-order-modal zoomIn animated" role="document">
+            <div class="modal-content">
+                <div class="modal-header ims_modal_header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="deleteFileLabel">Job File Delete Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo base_url(); ?>jobs/delete-job-file" method="POST" name="deleteJobFileForm" id="deleteJobFileForm">
+                        <div class="form-group">
+                            <p>Are you sure want to delete this job file ?</p>
+                        </div>
+                        <div class="form-footer1">
+                            <button type="submit" class="btn-theme btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">YES</button>
+                            <button class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" data-dismiss="modal">NO</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         <?php if(($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0) :  ?>
         $("#helpText").modal('show');
@@ -446,16 +479,26 @@
             $("#"+fileID).parent().find(".file-upload-input").blur();
         });
 
+        /*Delete job file Model window*/
+        $("#deleteFile").on("show.bs.modal", function(e) {
+            var id = $(e.relatedTarget).data('target-id');
+            var jobFileHref = BASEURL + "jobs/delete-job-file/"+id;
+            $("#deleteJobFileForm").prop('action', jobFileHref);
+
+        });
+
         /*Client side validations*/
         $("#view-jobs-form").validate({
-
+            ignore: ":hidden:not(.file-upload-input)",
             rules: {
                 pay_amount: {required: true,number:true},
-                'file-upload-input[]': {extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
+                'add_job_doc[]' : {required: true},
+                'file-upload-input[]': {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
             },
             messages: {
-                pay_amount: {required: "This field is required ", number:"The field should contain a numeric value"},
-                'file-upload-input[]': {extension:"Invalid file format"}
+                pay_amount: {required: "This field is required", number:"The field should contain a numeric value"},
+                'add_job_doc[]' : {required: "This field is required "},
+                'file-upload-input[]': {required: "This field is required",extension:"Invalid file format"}
             }
         });
         /*Delete single invoice attachment record*/
