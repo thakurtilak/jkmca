@@ -188,7 +188,7 @@ class Jobs extends CI_Controller
     }
 
     public function new_job(){
-        $postData = $this->input->post();
+        $postData = $this->input->post(NULL, true);
         $userDetail = getCurrentUser();
         $usersRoles = $userDetail->role_id;
         $rolesIDArray = explode(',', $usersRoles);
@@ -197,7 +197,7 @@ class Jobs extends CI_Controller
             redirect('/dashboard');
         }
         if ($postData) {
-
+            //echo "<pre>"; print_r($postData); exit;
             $this->form_validation->set_rules('work_type', 'Work Type', 'required');
             $this->form_validation->set_rules('client', 'Client', 'required');
             $this->form_validation->set_rules('client_code', 'Client Code', 'required');
@@ -320,6 +320,9 @@ class Jobs extends CI_Controller
                                     'attach_file_name' => $upload_doc_data[$i]['client_name'],
                                     'attach_file_detail' => json_encode($upload_doc_data[$i]),
                                 );
+                                if($data['attach_type'] == 0) {
+                                    $data['other_file_name'] = (isset($postData['add_job_other'][$i])) ? $postData['add_job_other'][$i] :null;
+                                }
                                 $this->common_model->insert(TBL_JOBS_ATTACHMENTS, $data);
                             }
                         }
@@ -371,7 +374,7 @@ class Jobs extends CI_Controller
         $data['documentTypes'] = $documentTypes;
 
         $data['currentUserId'] = getCurrentUsersId();
-
+        $data['rolesIDArray'] = $rolesIDArray;
         $this->template->set('title', 'Create Job');
         $this->template->load('default', 'contents', 'default/jobs/new_job',$data);
     }
@@ -540,7 +543,7 @@ class Jobs extends CI_Controller
         } else {
             $isStaff = true;
         }
-        $postData = $this->input->post();
+        $postData = $this->input->post(NULL, true);
         if($postData && $jobId == $postData['job_id']) {
 
             /*Mean Job going to completed*/
@@ -642,11 +645,15 @@ class Jobs extends CI_Controller
                 }
                 redirect('/jobs');
             } elseif(isset($postData['submit4'])) {
-                //echo "<pre>"; print_r($postData); exit;
-                if(isset($postData['payment_status']) && $postData['payment_status'] =='YES') {
+                $jobRecord = $this->common_model->getRecord(TBL_JOB_MASTER, array('amount','advanced_amount','remaining_amount'), array('id' => $jobId));
+
+                if(isset($postData['payment_status']) && $jobRecord) {
+                    $remainingAmount = $jobRecord->remaining_amount - $postData['pay_amount'];
+                    $remainingAmount = ($remainingAmount > 0 ) ? $remainingAmount : 0;
                     $updateArray = array(
-                        'remaining_amount' => 0
+                        'remaining_amount' => $remainingAmount
                     );
+                    //echo "<pre>"; print_r($jobRecord); print_r($postData); print_r($updateArray); exit;
                     $where = array('id' => $jobId);
                     $updated = $this->common_model->update(TBL_JOB_MASTER, $updateArray, $where);
                     if ($updated) {
@@ -655,7 +662,7 @@ class Jobs extends CI_Controller
                         $this->session->set_flashdata('error', "There is an error while updating job record.");
                     }
                 } else{
-                    $this->session->set_flashdata('error', "Please select Payment status YES.");
+                    $this->session->set_flashdata('error', "Please select payment status.");
                 }
                 redirect('/jobs/view-job/'.$jobId);
             } else {

@@ -161,7 +161,7 @@
                                 if(count($jobDocuments)):
                                     foreach ($jobDocuments as $doc): ?>
                                         <tr>
-                                            <td><?php echo $doc->documentName; ?></td>
+                                            <td><?php echo ($doc->attach_type != 0) ? $doc->documentName : $doc->other_file_name; ?></td>
                                             <td><span class="ov_data"><a href="<?php echo base_url();?><?php echo $doc->attach_file_path; ?>" title="<?php echo $doc->attach_file_name; ?>" target="_blank"><?php echo $doc->attach_file_name; ?></a></span></td>
                                         </tr>
                                     <?php   endforeach;
@@ -342,13 +342,13 @@
                             <h3 class="form-box-title">Payment Status</h3>
                             <div class="theme-form">
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="ims_form_label">Remaining Amount</label>
                                             <?php echo formatAmount($jobDetail->remaining_amount); ?>
                                         </div>
                                     </div><!--col-sm-6-->
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="ims_form_label">Is Payment Completed ?</label>
                                             <div class="radio radio-inline">
@@ -361,6 +361,14 @@
                                             </div>
                                         </div>
                                     </div><!--col-sm-6-->
+                                    <?php if($jobDetail->remaining_amount > 0) : ?>
+                                    <div class="col-sm-4" id="pay_amount_box">
+                                        <div class="form-group">
+                                            <label class="ims_form_label">Pay Amount*</label>
+                                            <input class="ims_form_control" type="text" name="pay_amount" id="pay_amount" placeholder="Amount">
+                                        </div>
+                                    </div><!--col-sm-6-->
+                                    <?php endif; ?>
                                 </div><!--row-->
                             </div><!--theme-form-->
                         </div><!--box-form-->
@@ -439,40 +447,15 @@
         });
 
         /*Client side validations*/
-        $("#generate-invoice").validate({
+        $("#view-jobs-form").validate({
 
             rules: {
-                project_title: {required: true},
-                po_no: {required: true},
-                invoice_no : {required: true},
-                invoice_no1 : {required: true},
-                invoice_date: {required: true},
-                payment_due_date: {required: true},
-                invoice_gen_comments: {required: true},
-                service_category: {required: true},
-                conversion_rate: {number:true},
-
-                'file-upload-input[]': {extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"},
-
-                payment_term: {required:true}
-                //currency:{required: true},
-                //bank_details:{required: true},
+                pay_amount: {required: true,number:true},
+                'file-upload-input[]': {extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
             },
             messages: {
-                project_title: {required: "This field is required "},
-                po_no: {required: "This field is required"},
-                invoice_no : {required: "This field is required "},
-                invoice_no1 : {required: "This field is required"},
-                invoice_date: {required: "This field is required"},
-                payment_due_date: "This field is required",
-                invoice_gen_comments: {required: "This field is required"},
-                service_category: {required: "This field is required"},
-                conversion_rate: {number:"The field should contain a numeric value"},
-                'file-upload-input[]': {extension:"Invalid file format"},
-                payment_term: {required:"This field is required"}
-
-                //currency:{required: "Please select currency"},
-                //bank_details:{required: "Please enter bank details"},
+                pay_amount: {required: "This field is required ", number:"The field should contain a numeric value"},
+                'file-upload-input[]': {extension:"Invalid file format"}
             }
         });
         /*Delete single invoice attachment record*/

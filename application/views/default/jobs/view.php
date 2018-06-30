@@ -115,7 +115,7 @@
             if(count($jobDocuments)):
                 foreach ($jobDocuments as $doc): ?>
                     <tr>
-                        <td><?php echo $doc->documentName; ?></td>
+                        <td><?php echo ($doc->attach_type != 0) ? $doc->documentName : $doc->other_file_name; ?></td>
                         <td><span class="ov_data"><a href="<?php echo base_url();?><?php echo $doc->attach_file_path; ?>" title="<?php echo $doc->attach_file_name; ?>" target="_blank"><?php echo $doc->attach_file_name; ?></a></span></td>
                     </tr>
                 <?php   endforeach;

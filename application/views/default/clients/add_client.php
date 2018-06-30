@@ -74,7 +74,7 @@
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label class="ims_form_label">First Name*</label>
+                                                <label class="ims_form_label">First Name</label>
                                                 <input type="text" name="father_first_name" class="ims_form_control"
                                                        maxlength="50" id="father_first_name" placeholder="First Name" value="<?php echo (isset($clientDetail)) ? $clientDetail->father_first_name:"" ?>"/>
                                                 <?php echo form_error('father_first_name'); ?>
@@ -165,7 +165,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="ims_form_label">Date Of Birth*</label>
+                                                <label class="ims_form_label">Date Of Birth</label>
                                                 <input maxlength="15" type="text" name="dob" id="dob"
                                                        class="ims_form_control date_icon sel_date" placeholder="DOB" value="<?php echo (isset($clientDetail) && $clientDetail->dob) ? date('d-M-Y', strtotime($clientDetail->dob)):"" ?>"/>
                                                 <?php echo form_error('dob'); ?>

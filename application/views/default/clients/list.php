@@ -1,9 +1,11 @@
 <div class="content-wrapper">
     <div class="content_header">
         <h3>Client List</h3>
+        <?php if($isSuperAdmin || $isRecieptionist): ?>
          <div class="add_new_btn text-right">
                            <a href="<?php echo base_url(); ?>clients/add-client" class="mdl-js-button mdl-js-ripple-effect btn-event" data-upgraded=",MaterialButton,MaterialRipple">Add Client</a>
          </div>
+        <?php endif; ?>
     </div>
     <div class="inner_bg content_box">
 		<div class="row">

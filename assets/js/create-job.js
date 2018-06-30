@@ -13,20 +13,24 @@ $(document).ready(function () {
         ignore: ":hidden:not(.file-upload-input)",
         rules: {
             client: {required: true},
+            client_code : {required: true},
             work_type: {required: true},
             price: {required: true},
             staff: {required: true},
             completion_date: {required: true},
             "file-upload-input": {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"},
+            "add_job_doc[]" : {required: true},
             "file-upload-input[]": {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
         },
         messages: {
             client: {required: "This field is required"},
+            client_code : {required: "This field is required"},
             work_type: {required: "This field is required"},
             price: {required: "This field is required"},
             staff: {required: "This field is required"},
             completion_date: {required: "This field is required"},
             "file-upload-input": {required: "This field is required",extension:"Invalid file format"},
+            "add_job_doc[]" : {required: "This field is required"},
             "file-upload-input[]": {required: "This field is required",extension:"Invalid file format"}
         }
     });
@@ -85,6 +89,15 @@ $(document).ready(function () {
                     $(".loader-wrapper").hide();
                 }
             });
+        }
+    });
+
+    $("#completion_date").bind("keyup","keydown", function(event) {
+        var inputLength = event.target.value.length;
+        if(inputLength === 2 || inputLength === 5){
+            var thisVal = event.target.value;
+            thisVal += "-";
+            $(event.target).val(thisVal);
         }
     });
 
@@ -170,6 +183,15 @@ $(document).ready(function () {
     $(document).on("click", ".delete_attachment", function() {
         $deleteBox = $(this).parent().parent().parent();
         $deleteBox.remove();
+    });
+
+    $(document).on("change", "select[name='add_job_doc[]']", function () {
+        if($(this).val() == "0") {
+            $(this).next().show();
+        } else {
+            $(this).next().hide();
+        }
+
     });
 });
 

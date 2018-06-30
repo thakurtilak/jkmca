@@ -42,13 +42,27 @@
          */
         public function index(){
             $userDetail = getCurrentUser();
+            $usersRoles = $userDetail->role_id;
+            $rolesIDArray = explode(',', $usersRoles);
+            //print_r($rolesIDArray);
+            $isSuperAdmin = false;
+            $isRecieptionist = false;
+            $isStaff = false;
+            if (in_array(SUPERADMINROLEID, $rolesIDArray)) {
+                $isSuperAdmin = true;
+            } else if(in_array(RECIEPTIONISTROLEID, $rolesIDArray)) {
+                $isRecieptionist = true;
+            } else {
+                $isStaff = true;
+            }
             if($this->input->is_ajax_request()) {
 
                 $start =    $this->input->get('start');
                 $length =   $this->input->get('length');
                 $orderField =    $this->input->get('order[0][column]');
                 $order =    $this->input->get('order[0][dir]');
-                $categoryId = (!empty($this->input->get('category_id')))? $this->input->get('category_id') : false;
+                $categoryId = $this->input->get('category_id');
+                $categoryId = (!empty($categoryId))? $categoryId : false;
                 $status = $this->input->get("status_id");
                 //$assigned = (!empty($this->input->get('type_id')))? $this->input->get('type_id') : false;
                 $name = $this->input->get('search[value]');
@@ -86,7 +100,9 @@
                         $father_name = $client->father_first_name." ".$client->father_last_name;
 
                         $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#ClientViewModal\" data-toggle=\"modal\" data-target-id=".$client->client_id." title='View'><i class='icon-view1'></i></a>";
-                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."clients/edit-client/".$client->client_id."' data-target-id=".$client->client_id." title='Edit'><i class='icon-edit'></i></a>";
+                        if($isSuperAdmin || $isRecieptionist) {
+                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."clients/edit-client/".$client->client_id."' data-target-id=".$client->client_id." title='Edit'><i class='icon-edit'></i></a>";
+                        }
                         $tempData = array("client_id" => $client->client_id,
                             "client_name" => $clientName,
                             "father_name" => $father_name,
@@ -108,7 +124,9 @@
                 echo json_encode($response);
                 exit;
             }
-            
+            $data['isStaff'] = $isStaff;
+            $data['isRecieptionist'] = $isRecieptionist;
+            $data['isSuperAdmin'] = $isSuperAdmin;
             $data['user_id'] = $userDetail->id;
             $this->template->set('title', 'Client List');
             $this->template->load('default', 'contents', 'default/clients/list', $data);
@@ -122,11 +140,19 @@
         */
         public function add_client()
         {
-            $postData = $this->input->post();
+            $userDetail = getCurrentUser();
+            $usersRoles = $userDetail->role_id;
+            $rolesIDArray = explode(',', $usersRoles);
+            if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray)) {
+                $this->session->set_flashdata('error', "You don't have permission to create client.");
+                redirect('/dashboard');
+            }
+
+            $postData = $this->input->post(NULL, true);
             if($postData) {
                 $this->form_validation->set_rules('first_name', 'First Name', 'required|trim');
                 //$this->form_validation->set_rules('last_name', 'Last Name', 'required|trim');
-                $this->form_validation->set_rules('father_first_name', 'First Mame', 'required|trim');
+                //$this->form_validation->set_rules('father_first_name', 'First Mame', 'required|trim');
                 //$this->form_validation->set_rules('father_last_name', 'Last Name', 'required|trim');
 
                 /*Agreement Validation Rule*/
@@ -138,7 +164,7 @@
                 $this->form_validation->set_rules('mobile_number', 'Mobile Number', 'required|trim');
                 //$this->form_validation->set_rules('pan_no', 'PAN NO.', 'required|trim');
                 //$this->form_validation->set_rules('aadhar_no', 'Aadhar Number', 'required|trim');
-                $this->form_validation->set_rules('dob', 'DOB', 'required|trim');
+                //$this->form_validation->set_rules('dob', 'DOB', 'required|trim');
 
                 $this->form_validation->set_rules('address1', 'Address Line1', 'required|trim');
 
@@ -228,13 +254,19 @@
          */
         public function edit_client($encryptedClientId ='')
         {
+            $userDetail = getCurrentUser();
+            $usersRoles = $userDetail->role_id;
+            $rolesIDArray = explode(',', $usersRoles);
+            if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray)) {
+                $this->session->set_flashdata('error', "You don't have permission to edit client.");
+                redirect('/dashboard');
+            }
             if($encryptedClientId==''){
                 $this->session->set_flashdata('success',"Some thing happened wrong");
                 redirect('clients');
             }
             $clientId = $encryptedClientId;//base64_decode($encryptedClientId);
-            $this->load->library('form_validation');
-            $postData = $this->input->post();
+            $postData = $this->input->post(NULL, true);
             if($postData && ($clientId ==  $this->input->post('client_id'))) {
                 $this->form_validation->set_rules('first_name', 'First Name', 'required|trim');
                 $this->form_validation->set_rules('last_name', 'Last Name', 'required|trim');

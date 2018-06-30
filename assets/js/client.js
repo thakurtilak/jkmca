@@ -56,15 +56,15 @@ $(document).ready(function () {
         rules: {
             first_name: {required: true},
             //last_name: {required: true},
-            father_first_name: {required: true},
+            //father_first_name: {required: true},
             //father_last_name: {required: true},
             mobile_number: {required: true, number: true},
             email: { isValidEmail: true},
             pan_no: {pan: true, remote: BASEURL+"clients/check-pan"
                 },
             aadhar_no: {aadhar: true, remote: BASEURL+"clients/check-aadhar"},
-            dob: {required: true},
-            account_person_email: {isValidEmail: true},
+            //dob: {required: true},
+            //account_person_email: {isValidEmail: true},
             "agreement_no": {agreementGroupRequired: true},
             "agreement_date": {agreementGroupRequired: true},
             "file-upload-input": {agreementGroupRequired: true, extension: "gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"},
@@ -79,12 +79,12 @@ $(document).ready(function () {
         messages: {
             first_name: {required: "This field is required"},
             last_name: {required: "This field is required"},
-            father_first_name: {required: "This field is required"},
-            father_last_name: {required: "This field is required"},
+            //father_first_name: {required: "This field is required"},
+            //father_last_name: {required: "This field is required"},
             mobile_number: {required: "This field is required"},
             pan_no: {required: "This field is required",remote:"Pan number already exist"},
             aadhar_no: {required: "This field is required",remote:"Aadhar number already exist"},
-            dob: {required: "This field is required"},
+            //dob: {required: "This field is required"},
             account_person_email: {isValidEmail: "Please enter a valid email address"},
             "agreement_no": "This field is required",
             "agreement_date": {agreementGroupRequired: "This field is required"},
@@ -108,7 +108,7 @@ $(document).ready(function () {
             thisVal += '-';
             $(event.target).val(thisVal);
         }
-    })
+    });
 
     /*File Handling*/
     $(document).on('click', '.file-upload-button', function () {

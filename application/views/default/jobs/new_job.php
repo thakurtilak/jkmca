@@ -25,9 +25,11 @@
                         <div class="col-sm-12">
                             <div class="box-form">
                                 <h3 class="form-box-title pull-left" style="width: 80%">Search Client</h3>
-                                <div class="add_new_btn text-right">
-                                    <a href="<?php echo base_url(); ?>clients/add-client" class="mdl-js-button mdl-js-ripple-effect btn-event" data-upgraded=",MaterialButton,MaterialRipple">Add Client</a>
-                                </div>
+                                <?php if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray)): ?>
+                                    <div class="add_new_btn text-right">
+                                        <a href="<?php echo base_url(); ?>clients/add-client" class="mdl-js-button mdl-js-ripple-effect btn-event" data-upgraded=",MaterialButton,MaterialRipple">Add Client</a>
+                                    </div>
+                                <?php endif; ?>
                                 <div class="theme-form">
                                     <div class="row">
                                         <div class="col-sm-4">
@@ -182,7 +184,9 @@
                                                             <option value="<?php echo $doc->id ?>"><?php echo $doc->name; ?></option>
                                                         <?php endforeach; ?>
                                                     <?php endif; ?>
+                                                    <option value="0">Other</option>
                                                 </select>
+                                                <input placeholder="Document name" type="text" name="add_job_other[]" class="ims_form_control" style="display: none">
                                             </div>
                                         </div>
                                         <div class="col-sm-6 attach_col attach" id="attachment_1">
@@ -195,7 +199,7 @@
                                                     <button type="button" class="file-upload-button file-upload-select" tabindex="-1">
                                                     </button>
                                                 </div>
-                                                <label id="file-upload-input_1-error" class="error" for="file-upload-input_1" style="display: none;"></label>
+                                                <label style="width:88%;float: left" id="file-upload-input_1-error" class="error" for="file-upload-input_1" style="display: none;"></label>
                                                 <a href="javascript:void(0);" class="delete_record delete_attachment" style="display:none"><img src="<?php echo base_url();?>assets/images/delete_icon.svg" /></a>
                                             </div>
                                         </div>
@@ -246,6 +250,7 @@
                                                 <input style="width:90%;" maxlength="10" type="text" name="price"
                                                        class="ims_form_control" id="price"
                                                        placeholder="Price" value="" readonly/>
+                                                <label style="display: none;width: 90%;float: left;" id="price-error" class="error" for="price"></label>
                                                 <a id="editPrice" style="vertical-align:bottom;" href="javascript:void(0);"><i class='icon-edit'></i></a>
                                                 <?php echo form_error('price'); ?>
                                             </div>
@@ -294,7 +299,7 @@
                                         </div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label class="ims_form_label">Remark*</label>
+                                                <label class="ims_form_label">Remark</label>
                                                 <textarea class="ims_form_control" name="remark" id="remark"></textarea>
                                             </div>
                                         </div>
