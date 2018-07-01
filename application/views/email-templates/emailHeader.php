@@ -13,7 +13,7 @@
             <img src="<?php /*echo base_url(); */?>assets/images/webdunia_logo.png" width="280" height="80">
         </td>-->
         <td align="center" bgcolor="#4a51be" style="padding:10px 0;">
-            <img src="<?php echo base_url(); ?>assets/default/img/logo_2.png" width="280" height="80">
+            <img src="<?php echo "http://jkmca.in/" ?>assets/default/img/logo_2.png" width="280" height="80">
         </td>
     </tr>
     <tr>
