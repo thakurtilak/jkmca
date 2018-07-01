@@ -90,5 +90,21 @@ class ClientModel extends CI_Model
         return $this->db->affected_rows();
     }
 
+    /**
+     * @param $clientId
+     * @return mixed
+     */
+    public function getJobDocuments($clientId){
+        $this->db->select('m.*,dm.name as documentName' );
+        $this->db->from(TBL_CLIENTS_ATTACHMENTS.' as m');
+        $this->db->join(TBL_DOCUMENTS_MASTER.' as dm','dm.id = m.attach_type', 'left');
+        if($clientId) {
+            $this->db->where('m.client_id', $clientId);
+        }
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result();
+    }
+
 }
 ?>

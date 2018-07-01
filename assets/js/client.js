@@ -1,5 +1,7 @@
 var FromEndDate = new Date();
 $(document).ready(function () {
+    $attachmentCloneObje = $("#order_attachment_box_1").clone();
+
     $("#agreement_date").datepicker({format: "d-M-yyyy", autoclose: true, startDate: '-1y',endDate: FromEndDate});
     $("#dob").datepicker({format: "d-M-yyyy", autoclose: true, endDate: FromEndDate});
 
@@ -119,11 +121,84 @@ $(document).ready(function () {
         var fileID = $(this).attr('id');
         var filename = $("#" + fileID).val().split('\\').pop();
         $("#" + fileID).parent().find(".file-upload-input").val(filename);
+        $("#" + fileID).parent().find(".file-upload-span").text(filename);
+    });
+
+    /*Delete single invoice attachment record*/
+    $(document).on("click", ".delete_attachment", function() {
+        $deleteBox = $(this).parent().parent().parent();
+        $deleteBox.remove();
+    });
+
+    $(document).on("change", "select[name='add_job_doc[]']", function () {
+        if($(this).val() == "0") {
+            $(this).next().show();
+        } else {
+            $(this).next().hide();
+        }
+    });
+
+    /*Delete job file Model window*/
+    $("#deleteFile").on("show.bs.modal", function(e) {
+        var id = $(e.relatedTarget).data('target-id');
+        var jobFileHref = BASEURL + "clients/delete-file/"+id;
+        $("#deleteJobFileForm").prop('action', jobFileHref);
+
     });
 
     $('#pan_no').keyup(function(){
         $(this).val($(this).val().toUpperCase());
     });
 });
+
+function addMoreAttachment() {
+    //$(".delete_attachment").show();
+    //var nextIndex = $(".attachtype").length + 1;
+    var LastEl = $(".order_attachment_box").last();
+    var lastid = LastEl.attr("id");
+    var LastIdParts = lastid.split("order_attachment_box_");
+    var lenth = LastIdParts[1];
+    var nextIndex = parseInt(lenth) + 1;
+    $attachmentCloneObje.attr({id:"order_attachment_box_"+nextIndex});
+
+    if($attachmentCloneObje.find("select[name^='job_doc[']").length > 0) {
+        $attachmentCloneObje.find("select[name^='job_doc[']").attr({
+            name: "add_job_doc[]",
+            id: "job_doc" + nextIndex,
+            value: ""
+        });
+        $attachmentCloneObje.find("option[selected]").removeAttr("selected");
+    } else {
+        $attachmentCloneObje.find("select[name^='add_job_doc[']").attr({
+            name: "add_job_doc[]",
+            id: "job_doc" + nextIndex,
+            value: ""
+        });
+        $attachmentCloneObje.find("option[selected]").removeAttr("selected");
+    }
+    //var nextIndex = $(".file-upload-wrapper").length + 1;
+    $attachmentCloneObje.find(".file-upload-wrapper").attr("id","file-upload-wrapper_"+nextIndex);
+
+    if($attachmentCloneObje.find("input[name^='add_document_name[']").length > 0) {
+        $attachmentCloneObje.find("input[name^='add_document_name[']").attr({id:"document"+nextIndex,value:""});
+        $attachmentCloneObje.find("input[name^='add_document_name[']").attr({name:"add_document_name[]"});
+    } else {
+        $attachmentCloneObje.find("input[name^='add_document_name[']").attr({id:"document"+nextIndex,value:''});
+        $attachmentCloneObje.find("input[name^='add_document_name[']").attr({name:"add_document_name[]"});
+    }
+    $attachmentCloneObje.find(".file-upload-span").html("");
+    $attachmentCloneObje.find("input[name^='file-upload-input[']").attr({name:"file-upload-input[]" ,id:"file-upload-input_"+nextIndex, value:""});
+    $attachmentCloneObje.find("label[for^=file-upload-input]").attr({id:"file-upload-input_"+nextIndex+"-error", for:"file-upload-input_"+nextIndex});
+
+    //$attachmentCloneObje.find(".add_more_btn").attr("id", "add_more_btn_' + nextIndex);
+    $attachmentCloneObje.find(".delete_record ").attr("id", "delete_record_" + nextIndex);
+
+    //$attachmentCloneObje.find(".add_more_btn").hide();
+    $attachmentCloneObje.find(".delete_attachment").show();
+
+    $cloneHtml = $attachmentCloneObje.wrap("<div>").parent().html();
+    //$(".add_more_attach_inv").parent().before($cloneHtml);
+    $(".job-documents-wrapper").append($cloneHtml);
+}
 
 
