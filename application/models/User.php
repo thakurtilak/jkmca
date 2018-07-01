@@ -37,7 +37,7 @@ class User extends CI_Model
             $this->db->where($where);
             //$this->db->where('role_id', $role_id);
         }
-
+        $this->db->where('id >', 1); //For DS email
         if($status) {
             $this->db->where('status', $status);
         }
