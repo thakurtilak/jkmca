@@ -63,11 +63,11 @@
             <div class="order_info_block">
                 <span class="ov_title">Client Name</span>
                 <span class="ov_data"><?php echo $jobDetail->first_name;
-                echo ($jobDetail->middle_name) ? " ".$jobDetail->middle_name :'';
-                echo ($jobDetail->last_name) ? " ".$jobDetail->last_name :'';
-                ?></span>
+                    echo ($jobDetail->middle_name) ? " " . $jobDetail->middle_name : '';
+                    echo ($jobDetail->last_name) ? " " . $jobDetail->last_name : '';
+                    ?></span>
             </div>
-            </li>
+        </li>
         <li>
             <div class="order_info_block">
                 <span class="ov_title">Client Address</span>
@@ -83,27 +83,67 @@
         <li>
             <div class="order_info_block">
                 <span class="ov_title">Attached Job Card</span>
-                <?php if(isset($jobCard) && !empty($jobCard)): ?>
-                       <?php
-                        $fileURl = $jobCard->file_path;
-                        ?>
-                        <span class="ov_data"><a href="<?php echo base_url();?><?php echo $fileURl; ?>" title="<?php echo $jobCard->file_name; ?>" target="_blank"><?php echo $jobCard->file_name; ?></a></span>
+                <?php if (isset($jobCard) && !empty($jobCard)): ?>
+                    <?php
+                    $fileURl = $jobCard->file_path;
+                    ?>
+                    <span class="ov_data"><a href="<?php echo base_url(); ?><?php echo $fileURl; ?>"
+                                             title="<?php echo $jobCard->file_name; ?>"
+                                             target="_blank"><?php echo $jobCard->file_name; ?></a></span>
                 <?php else: ?>
                     <span class="ov_data">No Attachment</span>
                 <?php endif; ?>
             </div>
         </li>
         <li>
-        <div class="order_info_block">
-            <span class="ov_title">Remark</span>
-            <span class="ov_data"><?php echo $jobDetail->remark ?></span>
-        </div>
+            <div class="order_info_block">
+                <span class="ov_title">Remark</span>
+                <span class="ov_data"><?php echo $jobDetail->remark ?></span>
+            </div>
         </li>
     </ul>
+    <?php if (isset($clientDocuments) && count($clientDocuments)): ?>
+
+        <div class="ims_datatable table-responsive"
+             style="background: #FFFFFF;">
+            <h3 class="form-box-title">Client Documents</h3>
+            <table id="clientList"
+                   class="table table-striped table-bordered table-condensed table-hover"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th width="40%">Document Name</th>
+                    <th>Attached File</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                if (count($clientDocuments)):
+                    foreach ($clientDocuments as $doc): ?>
+                        <tr>
+                            <td><?php echo ($doc->attach_type != 0) ? $doc->documentName : $doc->other_file_name; ?></td>
+                            <td><span class="ov_data"><a
+                                            href="<?php echo base_url(); ?><?php echo $doc->attach_file_path; ?>"
+                                            title="<?php echo $doc->attach_file_name; ?>"
+                                            target="_blank"><?php echo $doc->attach_file_name; ?></a></span>
+                            </td>
+                        </tr>
+                    <?php endforeach;
+                else: ?>
+                    <tr>
+                        <td colspan="2">No Document found</td>
+                    </tr>
+                <?php endif;
+                ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
     <h3 class="form-box-title">Documents</h3>
     <div class="ims_datatable table-responsive" style="background: #FFFFFF;">
         <!-- <h3 class="form-box-title">Client Details </h3>-->
-        <table id="clientList" class="table table-striped table-bordered table-condensed table-hover" cellspacing="0" width="100%">
+        <table id="clientList" class="table table-striped table-bordered table-condensed table-hover" cellspacing="0"
+               width="100%">
             <thead>
             <tr>
                 <th>Document Name</th>
@@ -112,18 +152,21 @@
             </thead>
             <tbody>
             <?php
-            if(count($jobDocuments)):
+            if (count($jobDocuments)):
                 foreach ($jobDocuments as $doc): ?>
                     <tr>
                         <td><?php echo ($doc->attach_type != 0) ? $doc->documentName : $doc->other_file_name; ?></td>
-                        <td><span class="ov_data"><a href="<?php echo base_url();?><?php echo $doc->attach_file_path; ?>" title="<?php echo $doc->attach_file_name; ?>" target="_blank"><?php echo $doc->attach_file_name; ?></a></span></td>
+                        <td><span class="ov_data"><a
+                                        href="<?php echo base_url(); ?><?php echo $doc->attach_file_path; ?>"
+                                        title="<?php echo $doc->attach_file_name; ?>"
+                                        target="_blank"><?php echo $doc->attach_file_name; ?></a></span></td>
                     </tr>
-                <?php   endforeach;
+                <?php endforeach;
             else: ?>
                 <tr>
                     <td colspan="2">No Document found</td>
                 </tr>
-             <?php endif;
+            <?php endif;
             ?>
             </tbody>
         </table>

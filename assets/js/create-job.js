@@ -210,7 +210,8 @@ function populateClientDetails(response) {
         return;
     }
     response = JSON.parse(response);
-
+    $("#clientDocumentSec").html(response.clientDocumentHtml);
+    response = response.clientDetail;
     $("#first_name").val(response.first_name);
     $("#middle_name").val(response.middle_name);
     $("#last_name").val(response.last_name);

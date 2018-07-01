@@ -518,6 +518,10 @@ class Jobs extends CI_Controller
         if($type == 'print') {
             $viewHtml = $this->load->view('default/jobs/print', $data, true);
         } else {
+            if($jobDetail->client_id) {
+                $clientDocuments = $this->ClientModel->getJobDocuments($jobDetail->client_id);
+                $data['clientDocuments'] = $clientDocuments;
+            }
             $viewHtml = $this->load->view('default/jobs/view', $data, true);
         }
         echo $viewHtml;
@@ -675,6 +679,10 @@ class Jobs extends CI_Controller
         }
 
         $jobDetail = $this->job_model->getJob($jobId);
+        if(!$jobDetail) {
+            $this->session->set_flashdata('error', "Unable to find Job details.");
+            redirect('/jobs');
+        }
         //echo "<pre>"; print_r($jobDetail); exit;
         $data = array('jobDetail' => $jobDetail);
         $data['userRole'] = explode(',',$userDetail->role_id);
@@ -700,6 +708,11 @@ class Jobs extends CI_Controller
         $jobDocuments = $this->job_model->getJobDocuments($jobId);
         //print_r($jobDocuments);
         $data['jobDocuments'] = $jobDocuments;
+        if($jobDetail->client_id) {
+            $clientDocuments = $this->ClientModel->getJobDocuments($jobDetail->client_id);
+            $data['clientDocuments'] = $clientDocuments;
+        }
+
         $data['isStaff'] = $isStaff;
         $data['isRecieptionist'] = $isRecieptionist;
         $data['isSuperAdmin'] = $isSuperAdmin;
@@ -729,7 +742,13 @@ class Jobs extends CI_Controller
             if($clientId) {
                 $where = array('client_id' => $clientId);
                 $clientRecord = $this->common_model->getRecord(TBL_CLIENT_MASTER, array('*'), $where);
-                echo json_encode($clientRecord);
+                $response = array('clientDetail' => $clientRecord);
+
+                $clientDocuments = $this->ClientModel->getJobDocuments($clientId);
+                $data = array('clientDocuments' => $clientDocuments);
+                $clientDocumentHtml = $this->load->view('default/jobs/clientDocuments', $data, TRUE);
+                $response ['clientDocumentHtml'] = $clientDocumentHtml;
+                echo json_encode($response);
                 die;
             }
         }
