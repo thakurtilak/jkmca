@@ -481,7 +481,12 @@ class Clients extends CI_Controller
     {
         if ($this->input->is_ajax_request()) {
             $pan_no = $this->input->get('pan_no', true);
+            $clientId = $this->input->get('clientId', true);
             $where = array('pan_no' => $pan_no);
+            if(!empty($clientId)) {
+                $where['client_id !='] = $clientId;
+            }
+
             $query = $this->common_model->getRecords(TBL_CLIENT_MASTER, array('client_id'), $where);
             if (count($query) > 0) {
                 echo 'false';
@@ -497,7 +502,11 @@ class Clients extends CI_Controller
     {
         if ($this->input->is_ajax_request()) {
             $aadhar_no = $this->input->get('aadhar_no', true);
+            $clientId = $this->input->get('clientId', true);
             $where = array('aadhar_number' => $aadhar_no);
+            if(!empty($clientId)) {
+                $where['client_id !='] = $clientId;
+            }
             $query = $this->common_model->getRecords(TBL_CLIENT_MASTER, array('client_id'), $where);
             if (count($query) > 0) {
                 echo 'false';

@@ -402,6 +402,12 @@
             </div>
         </div>
     </div>
+    <script>
+        var clientId = null;
+        <?php if(isset($clientDetail)): ?>
+        var clientId = '<?php echo $clientDetail->client_id; ?>';
+        <?php endif; ?>
+    </script>
     <script src="<?php echo base_url(); ?>assets/js/client.js"></script>
     <style>
         .indian-row {

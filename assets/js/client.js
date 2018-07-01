@@ -62,9 +62,28 @@ $(document).ready(function () {
             //father_last_name: {required: true},
             mobile_number: {required: true, number: true},
             email: { isValidEmail: true},
-            pan_no: {pan: true, remote: BASEURL+"clients/check-pan"
+            pan_no: {   pan: true,
+                        remote: {
+                            url: BASEURL+"clients/check-pan",
+                            data: {
+                                pan_no: function () {
+                                    return $("#pan_no").val();
+                                },
+                                clientId:clientId
+                            }
+                        }
+                    },
+            aadhar_no: {aadhar: true,
+                        remote: {
+                            url: BASEURL+"clients/check-aadhar",
+                            data: {
+                                aadhar_no: function () {
+                                    return $("#aadhar_no").val();
+                                },
+                                clientId:clientId
+                            }
+                        }
                 },
-            aadhar_no: {aadhar: true, remote: BASEURL+"clients/check-aadhar"},
             //dob: {required: true},
             //account_person_email: {isValidEmail: true},
             "agreement_no": {agreementGroupRequired: true},

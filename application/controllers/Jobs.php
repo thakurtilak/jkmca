@@ -205,15 +205,14 @@ class Jobs extends CI_Controller
             $this->form_validation->set_rules('staff', 'Staff', 'required');
             $this->form_validation->set_rules('completion_date', 'Completion Date', 'required');
             if ($postData['work_type'] == 1) {
-                $this->form_validation->set_rules('first_name', 'First Name', 'required');
+                /*$this->form_validation->set_rules('first_name', 'First Name', 'required');
                 $this->form_validation->set_rules('dob', 'DOB', 'required');
                 $this->form_validation->set_rules('mobile_number', 'Mobile', 'required');
                 $this->form_validation->set_rules('aadhar_no', 'Aadhar Card No.', 'required');
-                $this->form_validation->set_rules('address', 'Address', 'required');
+                $this->form_validation->set_rules('address', 'Address', 'required');*/
 
             } elseif($postData['work_type'] == 2) {
-                $this->form_validation->set_rules('assessment_year', 'Assessment Year', 'required');
-                //$this->form_validation->set_rules('po_detail', 'PO/RO Details', 'required');
+                //$this->form_validation->set_rules('assessment_year', 'Assessment Year', 'required');
             }elseif($postData['work_type'] == 3) {
 
             }elseif($postData['work_type'] == 4) {
@@ -352,7 +351,8 @@ class Jobs extends CI_Controller
                 }
                 redirect('/jobs');
             } else{
-                //echo "Validation Failed"; die;
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('/jobs/new-job');
             }
         }
 

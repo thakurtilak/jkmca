@@ -1,6 +1,7 @@
 <div class="content-wrapper">
     <div class="content_header">
-        <h3 class="pull-left1" style="width: 95%">Job Detail</h3>
+        <h3 class="pull-left1" style="width: 85%">Job Detail</h3>
+        <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-event pull-right ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Exit">
     </div>
     <div class="inner_bg content_box">
         <div class="row">
