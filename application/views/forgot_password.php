@@ -43,7 +43,7 @@
                     <label id="email-error" class="error" for="email" style="display: none">email can't be empty</label>
                 </div>
                 <div class="log_field_group log_submit" style="text-align: center">
-                    <button class="btn-theme btn-submit mdl-js-button mdl-js-ripple-effect ripple-white" type="submit">Login</button>
+                    <button class="btn-theme btn-submit mdl-js-button mdl-js-ripple-effect ripple-white" type="submit">Submit</button>
                     <button onclick="window.location='<?php echo base_url('login');?>'" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" type="button">Cancel</button>
                 </div>
                 <?php echo form_close(); ?>
