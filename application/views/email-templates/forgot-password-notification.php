@@ -5,10 +5,7 @@
     <td>&nbsp;</td>
 </tr>
 <tr>
-    <td>Congratulation, You are the part of JKM Associates</td>
-</tr>
-<tr>
-    <td>Please find below login details.</td>
+    <td>Your password has been reset.Please find below login details.</td>
 </tr>
 <tr>
     <td><table width="800" border="0">
@@ -26,7 +23,7 @@
             <tr>
                 <td><strong>Password</strong></td>
                 <td>:</td>
-                <td><?php echo $password; ?> </td>
+                <td><?php echo $user->password; ?> </td>
             </tr>
         </table></td>
 </tr>
@@ -34,7 +31,7 @@
     <td>&nbsp;</td>
 </tr>
 <tr>
-    <td>Please Login to <a target="_blank" href="<?php echo base_url('login'); ?>"><?php echo base_url(); ?></a> with your login details.
+    <td>Please Login to <a target="_blank" href="<?php echo base_url('login'); ?>"><?php echo base_url(); ?></a> with your login detail.
     </td>
 </tr>
 <tr>

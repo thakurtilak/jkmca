@@ -17,7 +17,7 @@
                 </li>
                 <li>
                     <div class="order_info_block">
-                        <span class="ov_title">Address Line 2</span>
+                        <span class="ov_title">Last Name</span>
                         <span class="ov_data"><?php echo $clientInfo->last_name; ?></span>
                     </div>
                 </li>
@@ -42,7 +42,7 @@
                 </li>
                 <li>
                     <div class="order_info_block">
-                        <span class="ov_title">Address Line 2</span>
+                        <span class="ov_title">Last Name</span>
                         <span class="ov_data"><?php echo $clientInfo->father_last_name; ?></span>
                     </div>
                 </li>
@@ -68,7 +68,7 @@
                 <li>
                     <div class="order_info_block">
                         <span class="ov_title">DOB</span>
-                        <span class="ov_data"><?php echo date('d-M-Y', strtotime($clientInfo->dob)); ?></span>
+                        <span class="ov_data"><?php echo ($clientInfo->dob) ? date('d-M-Y', strtotime($clientInfo->dob)):'--'; ?></span>
                     </div>
                 </li>
                 <li>

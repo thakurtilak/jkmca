@@ -11,6 +11,7 @@ class Login extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->load->model('common_model');
+        $this->load->library('emailUtility');
         $this->load->library('permission');
         if($this->session->userdata('user'))
         {
@@ -41,7 +42,7 @@ class Login extends CI_Controller {
 
     public function authenticate()
     {
-        $post = $this->input->post();
+        $post = $this->input->post(NULL, true);
         if($post) {
             $this->form_validation->set_rules('username', 'Username', 'trim|required');
             $this->form_validation->set_rules('password', 'Password' , 'trim|required');
@@ -80,6 +81,48 @@ class Login extends CI_Controller {
         } else {
             echo "Error"; exit;
         }
+    }
+
+    /**
+     * forgot_password Action
+     */
+    public function forgot_password(){
+        $post = $this->input->post(NULL, true);
+        if($post) {
+            $this->form_validation->set_rules('email', 'Email', 'trim|required');
+            if ($this->form_validation->run()) {
+                $email = $post['email'];
+                $where = array('email' => $email, 'status' => 'A');
+                $isEmailExist = $this->common_model->getRecord(TBL_USER, array('id', 'email','first_name', 'last_name'), $where);
+                if($isEmailExist) {
+                    $new_password = generateStrongPassword();
+                    $updateArray = array(
+                        'password' => md5($new_password)
+                    );
+                    $where = array('id' => $isEmailExist->id);
+                    $this->common_model->update(TBL_USER, $updateArray, $where);
+                    /*Send Email notification to User*/
+                    $to = array();
+                    $to[] = $email;
+                    $subject = "JKMCA:Password Reset Notification";
+                    $template = 'forgot-password-notification';
+                    $user = new stdClass();
+                    $user->full_name = ucwords($isEmailExist->first_name . ' ' . $isEmailExist->last_name);
+                    $user->email = $email;
+                    $user->password = $new_password;
+                    $templateData = array('user' => $user);
+                    $isSent = EmailUtility::sendEmail($to, $subject, $template, $templateData);
+                    /*END EMAIL CODE*/
+                    $this->session->set_flashdata('success', 'Your password has been reset and sent to your email address.');
+                    redirect('login');
+                } else {
+                    $this->session->set_flashdata('error', 'Couldn\'t found email address. Please contact to admin.');
+                    redirect('login/forgot-password');
+                }
+                print_r($post); die;
+            }
+        }
+        $this->load->view('forgot_password');
     }
 
     public function email_test(){

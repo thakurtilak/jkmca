@@ -126,7 +126,7 @@ class Users extends CI_Controller {
                     $userRecord = $this->common_model->getRecord(TBL_USER, 'id', $where);
                     if (!$userRecord) {
                         $roles = $postData['user_role'];
-                        $password = $this->_randomPassword();
+                        $password = generateStrongPassword();
                         $dataArray = array(
                             'role_id' => $roles,
                             'first_name' => $postData['first_name'],

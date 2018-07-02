@@ -53,6 +53,7 @@
                 <div class="log_field_group log_submit">
                     <button class="btn-login mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="submit">Login</button>
                 </div>
+                <div><a title="Forgot Password?" href="<?php echo base_url('login/forgot-password');?>">Forgot password?</a></div>
             <?php echo form_close(); ?>
         </div><!--login_r_block-->
     </div><!--login_page-->
