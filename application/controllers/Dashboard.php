@@ -22,8 +22,41 @@ class Dashboard extends CI_Controller {
      */
     public function index()
     {
+        $userDetail = getCurrentUser();
+        $usersRoles = $userDetail->role_id;
+        $rolesIDArray = explode(',', $usersRoles);
+        $data = array();
+        if (in_array(SUPERADMINROLEID, $rolesIDArray)) {
+            /**
+             * get approve pending job cards
+             */
+            $approvePendingJobs = $this->job_model->getApprovePendingJobs();
+            $data['approvePendingJobs'] = $approvePendingJobs;
+
+            /*get payment pending*/
+            $paymentPendingJobs = $this->job_model->getPaymentPendingJobs();
+            $data['paymentPendingJobs'] = $paymentPendingJobs;
+
+            /*get pending job*/
+            $pendingJobs = $this->job_model->getPendingJobs();
+            $data['pendingJobs'] = $pendingJobs;
+
+        } elseif (in_array(RECIEPTIONISTROLEID, $rolesIDArray)) {
+            /*get payment pending*/
+            $paymentPendingJobs = $this->job_model->getPaymentPendingJobs();
+            $data['paymentPendingJobs'] = $paymentPendingJobs;
+
+            /*get pending job*/
+            $pendingJobs = $this->job_model->getPendingJobs();
+            $data['pendingJobs'] = $pendingJobs;
+        } elseif (in_array(STAFFROLEID, $rolesIDArray)){
+            /*get pending job*/
+            $pendingJobs = $this->job_model->getPendingJobs(getCurrentUsersId());
+            $data['pendingJobs'] = $pendingJobs;
+        }
+
         $this->template->set('title', 'Dashboard');
-        $this->template->load('default', 'contents' , 'default/dashboard/index', array());
+        $this->template->load('default', 'contents' , 'default/dashboard/index', $data);
         //$administratorEmails = getAdministratorEmail();
         //print_r($administratorEmails); die;
     }

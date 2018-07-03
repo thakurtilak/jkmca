@@ -132,7 +132,7 @@
                         technology era need the services, which is based on the expert knowledge.
                         To cater the needs of the clients and providing the Experts services in the
                         areas like corporate after and other taxation auditing, project Financing,
-                        financial management, MIS etc. under one roof, our firm “JKM &  ASSOCIATES.”
+                        financial management, MIS etc. under one roof, our firm “JKM & ASSOCIATES CHARTERED ACCOUNTANTS.”
                         came into the existence in the year 2013.
                     </p>
                 </div>
@@ -161,8 +161,13 @@
                         <i class="icon-sli-drop icon3x text-dark"></i>
                     </div>
                     <div class="margin-left-60 margin-bottom-30">
-                        <h3 class="text-size-25 margin-bottom-0">Unlimited Color Variants</h3>
-                        <p class="text-dark">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.<br> Vel illum dolore eu feugiat nulla facilisis.</p>
+                        <h3 class="text-size-25 margin-bottom-0">Tax Advisory Services</h3>
+                        <p class="text-dark">Firm Having Experience Of Providing Comprehensive
+                            Tax Related Services And Consultancy And Is In Position To Cater
+                            To All Areas Of Taxation Including Tax Planning, Preparing
+                            And Filing Tax Returns, Attending Assessment Proceeding
+                            And Appellate Proceeding, Commercial Tax,
+                            Service Tax, Excise, Custom Etc.</p>
                     </div>
                 </div>
 
@@ -171,8 +176,12 @@
                         <i class="icon-sli-screen-smartphone icon3x text-dark"></i>
                     </div>
                     <div class="margin-left-60 margin-bottom-30">
-                        <h3 class="text-size-25 margin-bottom-0">Responsive Layoute</h3>
-                        <p class="text-dark">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p>
+                        <h3 class="text-size-25 margin-bottom-0">Balance Sheet or Statutory Audit</h3>
+                        <p class="text-dark">Audit required under Companies Act, Income Tax Act, Trust
+                            Act etc. are done under this category which includes Audits of
+                            Limited Companies,
+                            Pvt. Ltd. Companies, Society, Trust, Firms,
+                            Individual Proprietary Units etc.</p>
                     </div>
                 </div>
 
@@ -181,8 +190,11 @@
                         <i class="icon-sli-heart icon3x text-dark"></i>
                     </div>
                     <div class="margin-left-60 margin-bottom-30">
-                        <h3 class="text-size-25 margin-bottom-0">Clean Minimalistic Design</h3>
-                        <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.<br> Vel illum dolore eu feugiat nulla facilisis.</p>
+                        <h3 class="text-size-25 margin-bottom-0">Return Filing</h3>
+                        <p>Inceptive Stage involving filing of Income Tax and  TDS computation
+                            returns of various assesses ranging from Individuals,
+                            Firms to Public Ltd Companies.
+                        </p>
                     </div>
                 </div>
 
@@ -191,8 +203,13 @@
                         <i class="icon-sli-chart icon3x text-dark"></i>
                     </div>
                     <div class="margin-left-60 margin-bottom-30">
-                        <h3 class="text-size-25 margin-bottom-0">Tons of Animated Elements</h3>
-                        <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p>
+                        <h3 class="text-size-25 margin-bottom-0">Tax Planning</h3>
+                        <p>
+                            Involving a combination of tact and skill of the Chartered Accountant,
+                            it is the paramount step for any assessee. Pizzazz of the young blood
+                            in the team of JKM & ASSOCIATES traverses the tax planning of every assessee - the most
+                            strenuous step in taxation.
+                        </p>
                     </div>
                 </div>
 
@@ -201,8 +218,11 @@
                         <i class="icon-sli-globe-alt icon3x text-dark"></i>
                     </div>
                     <div class="margin-left-60">
-                        <h3 class="text-size-25 margin-bottom-0">And many more...</h3>
-                        <p class="text-dark">Nam liber tempor cum soluta nobis eleifend. Duis autem vel eum iriure dolor<br> in hendrerit in vulputate velit esse molestie consequat.</p>
+                        <h3 class="text-size-25 margin-bottom-0">Management Services</h3>
+                        <p class="text-dark">
+                            Firm Having Experience Of Internal Audit, System Study And Design,
+                            Concurrent Audit, Comprehensive Services To Management In Areas
+                            Connected With Finance And Accounting.</p>
                     </div>
                 </div>
             </div>
@@ -210,7 +230,7 @@
     </section>
 
     <!-- Section 3 -->
-    <section class="section background-white" >
+    <!--<section class="section background-white" >
         <div class="line">
             <h2 class="text-size-50 text-center">Our Stats</h2>
             <hr class="break-small background-primary break-center">
@@ -251,7 +271,7 @@
         </div>
     </section>
 
-    <hr class="break margin-top-bottom-0">
+    <hr class="break margin-top-bottom-0">-->
 
     <!-- Section 4 -->
     <section class="section-top-padding full-width">
@@ -371,7 +391,7 @@
     <section class="background-dark full-width">
         <!-- Map -->
         <div class="s-12 m-12 l-6 margin-m-bottom-2x">
-            <div class="s-12 grayscale center" id="map">
+            <div class="s-12 center" id="map">
 <!--
                 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d459.03377248292344!2d76.728418!3d23.01385!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xc7c96f9a48569af1!2sChhayalok+computer+Center+ashta!5e0!3m2!1sen!2sin!4v1526099915694" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
             --></div>
@@ -387,7 +407,7 @@
                     <div class="margin-left-70 margin-bottom-30">
                         <h3 class="margin-bottom-0">Company Address</h3>
                         <p>JKM & ASSOCIATES CHARTERED ACCOUNTANTS<br>
-                            Seminary Road Ashta 466120 (MP)
+                            Seminary Road Ashta 466116 (MP)
                         </p>
                     </div>
                     <div class="float-left">
@@ -448,8 +468,12 @@
         coordInfoWindow.setPosition(uluru);
         //coordInfoWindow.open(map);
 
-        marker.addListener('click', function() {
+        marker.addListener('mouseover', function() {
             coordInfoWindow.open(map, marker);
+        });
+        // assuming you also want to hide the infowindow when user mouses-out
+        marker.addListener('mouseout', function() {
+            coordInfoWindow.close();
         });
 
 

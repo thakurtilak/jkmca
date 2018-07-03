@@ -184,84 +184,65 @@ class Job_model extends CI_Model
         //echo $this->db->last_query();die;
         return $query->result();
     }
+
+    public function getApprovePendingJobs($limitLength = 10, $limitStart = 0) {
+
+        $this->db->from(TBL_JOB_MASTER . ' as Tm');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
+        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
+        $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
+        $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        $this->db->where('Tm.status', 'approval_pending');
+        $this->db->order_by('complete_date DESC');
+        $this->db->limit($limitLength, $limitStart);
+        $query = $this->db->get();
+        //echo  $this->db->last_query(); die;
+        return $query->result();
+    }
+
+    public function getPendingJobs($userId = false, $limitLength = 10, $limitStart = 0) {
+
+        $this->db->from(TBL_JOB_MASTER . ' as Tm');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
+        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
+        $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
+        $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        if($userId) {
+            $this->db->where('Tm.staff_id', $userId);
+        }
+        $this->db->group_start();
+        $this->db->where('Tm.status', 'pending');
+        $this->db->or_where('Tm.status', 'rejected');
+        $this->db->group_end();
+        $this->db->order_by('created_date ASC');
+        $this->db->limit($limitLength, $limitStart);
+        $query = $this->db->get();
+        //echo  $this->db->last_query(); die;
+        return $query->result();
+    }
+
+    public function getPaymentPendingJobs($limitLength = 10, $limitStart = 0) {
+
+        $this->db->from(TBL_JOB_MASTER . ' as Tm');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
+        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
+        $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
+        $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        $this->db->where('Tm.status', 'completed');
+        $this->db->where('Tm.remaining_amount >', 0);
+        $this->db->order_by('complete_date DESC');
+        $this->db->limit($limitLength, $limitStart);
+        $query = $this->db->get();
+        //echo  $this->db->last_query(); die;
+        return $query->result();
+    }
+
+
    /*Function to update invoice master table*/
     public function update($where, $data)
     {
         $this->db->update(TBL_INVOICE_MASTER, $data, $where);
         return $this->db->affected_rows();
-    }
-    /*generate Invoice*/
-    function get_datatables_query_generateInvoice($userId, $name = false, $orderBY = false)
-    {
-        $isApprover = false;
-        if(isApprover($userId)) {
-            $isApprover = true;
-        }
-        $this->db->select('Tm.*,  CONCAT(uM.first_name, \' \' , uM.last_name) as name, uM.id, catM.category_name, clientM.client_name,curM.currency_symbol');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_USER .' as uM', 'uM.id = Tm.originator_user_id');
-        $this->db->join(TBL_CATEGORY_MASTER . ' as catM', 'catM.id = Tm.category_id');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency');
-
-        $this->db->where('Tm.invoice_acceptance_status', 'Pending');
-        $this->db->where('Tm.approval_status', 'accept');
-        $this->db->where('Tm.invoice_originate_date >=', '2014-04-01'); /*Based on current system*/
-        if(!$isApprover) {
-            $subQRY = "SELECT category_id FROM ".TBL_INVOICE_CATEGORY_GEN_MAPPER ." WHERE generator_user_id = $userId";
-            $this->db->where('Tm.category_id IN('.$subQRY.')', NULL, FALSE);
-        }
-
-        if ($name) {
-            $this->db->like('catM.category_name', $name);
-            $this->db->or_like('clientM.client_name',$name);
-            $this->db->or_like('Tm.po_no',$name);
-        }
-
-        if ($orderBY) {
-            $this->db->order_by($orderBY);
-        } else {
-            $this->db->order_by('invoice_originate_date DESC');
-        }
-
-
-    }
-     /*Generate Invoice count-filtered*/
-    function count_filtered_generateInvoice($userId, $name = false, $orderBY = false)
-    {
-        $this->get_datatables_query_generateInvoice($userId, $name, $orderBY);
-        $query = $this->db->get();
-        return $query->num_rows();
-    }
-    /*Generate Invoice count_all*/
-    public function count_all_generateInvoice($userId)
-    {
-        $isApprover = false;
-        if(isApprover($userId)) {
-            $isApprover = true;
-        }
-        $this->db->from(TBL_INVOICE_MASTER);
-        $this->db->where('invoice_acceptance_status', 'Pending');
-        $this->db->where('approval_status', 'accept');
-        $this->db->where('invoice_originate_date >=', '2014-04-01'); /*Based on current system*/
-
-        if(!$isApprover) {
-            $subQRY = "SELECT category_id FROM ".TBL_INVOICE_CATEGORY_GEN_MAPPER ." WHERE generator_user_id = $userId";
-            $this->db->where('category_id IN('.$subQRY.')', NULL, FALSE);
-        }
-        return $this->db->count_all_results();
-    }
-
-    /*Generate Invoice Listing*/
-    function listInvoices_generateInvoice($userId, $name = false, $id=false,$orderBY = false, $limitStart = 0, $limitLength = 10)
-    {
-
-        $this->get_datatables_query_generateInvoice($userId, $name, $orderBY);
-
-        $this->db->limit($limitLength, $limitStart);
-        $query = $this->db->get();
-      // echo  $this->db->last_query(); die;
-        return $query->result();
     }
 
     /*To get UserDetails by Id*/
@@ -454,74 +435,6 @@ class Job_model extends CI_Model
     }
 
     /*
-     * listGeneratorApprovalPendingInvoices
-     * Get list of invoices those are pending to finance head
-     */
-    public function listGeneratorApprovalPendingInvoices($userId, $searchKey = false, $orderBy = false, $limitStart = 0, $limitLength = 10, $countOnly = false){
-
-        $this->db->select('Tm.invoice_req_id,Tm.invoice_originate_date,Tm.project_name,Tm.invoice_acceptance_status,Tm.invoice_net_amount,Tm.category_id, Tm.client_id,Tm.originator_user_id,Tm.po_no,Tm.po_date,Tm.invoice_no,Tm.invoice_date, Tm.invoice_generate_date,Tm.payment_due_date, uM.id, CONCAT(uM1.first_name, \' \' , uM1.last_name) as generatedBy, catM.category_name, clientM.client_name,curM.currency_symbol');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.originator_user_id');
-        $this->db->join(TBL_USER . ' as uM1', 'uM1.id = Tm.generator_user_id','left');
-        $this->db->join(TBL_CATEGORY_MASTER . ' as catM', 'catM.id = Tm.category_id');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency');
-
-        $this->db->where('Tm.invoice_acceptance_status !=', 'Pending');
-        $this->db->where('Tm.invoice_acceptance_status !=', 'Reject');
-        $this->db->where('Tm.gen_approval_userid =', $userId);
-        $this->db->where('Tm.gen_approval_status IS NULL');
-        $this->db->where('Tm.invoice_generate_date >=', '2014-04-01'); /*Based on current system*/
-
-        if($searchKey){
-            $this->db->group_start();
-            $this->db->like('uM1.first_name', $searchKey);
-            $this->db->or_like('uM1.last_name', $searchKey);
-            $this->db->or_like('catM.category_name',$searchKey);
-            $this->db->or_like('clientM.client_name',$searchKey);
-            $this->db->or_like('Tm.po_no',$searchKey);
-            $this->db->or_like('Tm.invoice_no',$searchKey);
-            $this->db->group_end();
-        }
-        if($orderBy) {
-            $this->db->order_by($orderBy);
-        } else {
-            $this->db->order_by('invoice_generate_date DESC');
-        }
-
-        if($countOnly) {
-            $query = $this->db->get();
-            return $query->num_rows();
-        } else {
-            $this->db->limit($limitLength, $limitStart);
-            $query = $this->db->get();
-            //echo  $this->db->last_query(); die;
-            return $query->result();
-        }
-    }
-
-    /*
-     * count_all_generatorApprovalPendingInvoices
-     * Get count of all invoice those are pending to finance head
-     */
-    public function count_all_generatorApprovalPendingInvoices($userId){
-        $this->db->select('Tm.invoice_req_id');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.originator_user_id');
-        $this->db->join(TBL_USER . ' as uM1', 'uM1.id = Tm.generator_user_id','left');
-        $this->db->join(TBL_CATEGORY_MASTER . ' as catM', 'catM.id = Tm.category_id');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency');
-
-        $this->db->where('Tm.invoice_acceptance_status !=', 'Pending');
-        $this->db->where('Tm.invoice_acceptance_status !=', 'Reject');
-        $this->db->where('Tm.gen_approval_userid =', $userId);
-        $this->db->where('Tm.gen_approval_status IS NULL');
-        $this->db->where('Tm.invoice_generate_date >=', '2014-04-01'); /*Based on current system*/
-        return $this->db->count_all_results();
-    }
-
-    /*
      * getCollections
      * Get the list of collections
     */
@@ -637,56 +550,6 @@ class Job_model extends CI_Model
             //$subQRY = "SELECT id FROM ".TBL_USER ." WHERE approver_user_id = $userId OR id = $userId";
             //$this->db->where('Tm.originator_user_id IN('.$subQRY.')', NULL, FALSE);
         }
-        return $this->db->count_all_results();
-    }
-
-
-
-    public function updateCollections($userId,$searchKey = false, $orderBY= false, $limitStart= 0, $limitLength = 10, $countOnly = false) {
-
-        $this->db->select('Tm.invoice_req_id,  CONCAT(uM.first_name, \' \' , uM.last_name) as name, CONCAT(uM1.first_name, \' \' , uM1.last_name) as generatedBy,Tm.po_date,Tm.invoice_no,Tm.invoice_date,Tm.invoice_acceptance_status,Tm.invoice_net_amount, Tm.payment_due_date,Tm.payment_recieved_date,Tm.payment_recieved_flag, Tm.category_id, Tm.client_id,Tm.originator_user_id,Tm.generator_user_id,Tm.po_no, uM.id, catM.category_name, clientM.client_name,curM.currency_symbol');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.originator_user_id');
-        $this->db->join(TBL_USER . ' as uM1', 'uM1.id = Tm.generator_user_id','left');
-        $this->db->join(TBL_CATEGORY_MASTER . ' as catM', 'catM.id = Tm.category_id');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency');
-        $this->db->where('Tm.invoice_acceptance_status', 'Accept');
-        $this->db->where('Tm.gen_approval_status', 'Accept');
-
-
-
-        if($searchKey){
-            $this->db->group_start();
-            $this->db->like('catM.category_name', $searchKey);
-            $this->db->or_like('clientM.client_name',$searchKey);
-            $this->db->or_like('Tm.invoice_no',$searchKey);
-            $this->db->or_like('Tm.payment_recieved_flag',$searchKey);
-            $this->db->group_end();
-        }
-
-        if ($orderBY) {
-            $this->db->order_by($orderBY);
-        } else {
-            $this->db->order_by('payment_due_date DESC');
-        }
-
-        if($countOnly) {
-            $query = $this->db->get();
-            return $query->num_rows();
-        } else {
-            $this->db->limit($limitLength, $limitStart);
-            $query = $this->db->get();
-            //echo  $this->db->last_query(); die;
-            return $query->result();
-        }
-    }
-
-    function count_all_UpdateCollectionsTotal($userId) {
-
-        $this->db->from(TBL_INVOICE_MASTER);
-        $this->db->where('invoice_acceptance_status', 'Accept');
-        $this->db->where('gen_approval_status', 'Accept');
         return $this->db->count_all_results();
     }
 
@@ -843,204 +706,6 @@ class Job_model extends CI_Model
     }
 
 
-    /*
-     * getInvoiceDelivery
-     * For invoice delivery list
-     */
-    public function getInvoiceDelivery($userId, $categoryId = false, $clientId = false, $paymentStatus = false, $month = false,  $searchKey = false, $orderBY= false, $limitStart= 0, $limitLength = 10, $countOnly = false) {
-
-        $this->db->select('Tm.invoice_req_id,Tm.po_date,Tm.invoice_no,Tm.invoice_date,Tm.invoice_net_amount, Tm.payment_recieved_flag, Tm.category_id, Tm.client_id,Tm.originator_user_id,Tm.po_no, uM.id, catM.category_name, clientM.client_name,curM.currency_symbol, ic.id as courier');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.originator_user_id');
-        $this->db->join(TBL_CATEGORY_MASTER . ' as catM', 'catM.id = Tm.category_id', 'left');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id', 'left');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency', 'left');
-        $this->db->join(TBL_INVOICE_COURIER_INFO. ' as ic','ic.invoice_id = Tm.invoice_req_id', 'left');
-        $this->db->where('Tm.invoice_acceptance_status', 'Accept');
-
-        $subQRY = "SELECT id FROM ".TBL_USER ." WHERE approver_user_id = $userId OR id = $userId";
-        $this->db->where('Tm.originator_user_id IN('.$subQRY.')', NULL, FALSE);
-
-        if($categoryId) {
-            $this->db->where('Tm.category_id', $categoryId);
-        }
-
-        if ($clientId) {
-            $this->db->where('Tm.client_id', $clientId);
-        }
-        if ($paymentStatus) {
-            $this->db->where('Tm.payment_recieved_flag', $paymentStatus);
-        }
-
-        if ($month && $month != '-1') {
-            $first_date = $month;
-            //Here we treat 1-6th date as previous month and 7th to next month's 6th will be current month
-            $first_date = date("Y-m-07", strtotime($first_date));
-            $second_date = date("Y-m-06", strtotime('+1 month', strtotime($month)));
-            //$second_date = date("Y-m-t", strtotime($month));
-            $this->db->group_start();
-            $this->db->where('invoice_date >=', $first_date);
-            $this->db->where('invoice_date <=', $second_date);
-            $this->db->group_end();
-        } else {
-            $first_date = date("Y-m-07", strtotime('-1 months')); //First Date of previous month
-            $second_date = date("Y-m-t"); //Last Date of current Month
-            $this->db->group_start();
-            $this->db->where('invoice_date >=', $first_date);
-            $this->db->where('invoice_date <=', $second_date);
-            $this->db->group_end();
-        }
-
-        if($searchKey){
-            $this->db->group_start();
-            $this->db->like('Tm.project_name', $searchKey);
-            $this->db->or_like('clientM.client_name',$searchKey);
-            $this->db->or_like('Tm.po_no',$searchKey);
-            $this->db->or_like('Tm.invoice_no',$searchKey);
-
-            $this->db->group_end();
-        }
-
-        if ($orderBY) {
-            $this->db->order_by($orderBY);
-        } else {
-            $this->db->order_by('invoice_originate_date DESC');
-        }
-
-        if($countOnly) {
-            $query = $this->db->get();
-            return $query->num_rows();
-        } else {
-            $this->db->limit($limitLength, $limitStart);
-            $query = $this->db->get();
-            //echo  $this->db->last_query(); die;
-            return $query->result();
-        }
-    }
-
-    function count_all_InvoiceDeliveryTotal($userId) {
-
-        $this->db->from(TBL_INVOICE_MASTER);
-        $this->db->where('invoice_acceptance_status', 'Accept');
-
-        $subQRY = "SELECT id FROM ".TBL_USER ." WHERE approver_user_id = $userId OR id = $userId";
-        $this->db->where('originator_user_id IN('.$subQRY.')', NULL, FALSE);
-
-        $first_date = date("Y-m-07", strtotime('-1 months')); //First Date of previous month
-        $second_date = date("Y-m-t"); //Last Date of current Month
-        $this->db->group_start();
-        $this->db->where('invoice_date >=', $first_date);
-        $this->db->where('invoice_date <=', $second_date);
-        $this->db->group_end();
-
-        return $this->db->count_all_results();
-    }
-
-
-    public function sumPendingCollectionInvoices($roleId, $userId, $groupBy= false, $limitStart= '', $limitLength = '', $countOnly = false) {
-        $hasApprover = false;
-        if(hasApprover($userId)) {
-            $hasApprover = true;
-        }
-        $limit = "limit ".$limitStart.",".$limitLength;
-
-        if($roleId == SUPERADMINROLEID ){
-            $sub_query_from = "(SELECT Tm.invoice_req_id, Tm.invoice_originate_date, Tm.project_name, Tm.invoice_net_amount, Tm.invoice_currency, Tm.invoice_acceptance_status, Tm.category_id, Tm.client_id, Tm.originator_user_id, Tm.po_no, uM.id, catM.category_name, clientM.client_name, curM.currency_symbol
-            FROM ims_invoice_master as Tm
-            JOIN ims_user_master as uM ON uM.id = Tm.originator_user_id
-            JOIN ims_invoice_category_master as catM ON catM.id = Tm.category_id
-            JOIN ims_client_master as clientM ON clientM.client_id = Tm.client_id
-            JOIN ims_currency_master as curM ON curM.currency_id = Tm.invoice_currency
-            WHERE invoice_acceptance_status = 'Accept'
-            AND payment_recieved_flag = 'N'
-            ORDER BY invoice_originate_date desc
-            ".$limit.") as tt1";
-        } elseif($roleId == MANAGERROLEID) {
-            $sub_query_from = "(SELECT Tm.invoice_req_id, Tm.invoice_originate_date, Tm.project_name, Tm.invoice_net_amount, Tm.invoice_currency, Tm.invoice_acceptance_status, Tm.category_id, Tm.client_id, Tm.originator_user_id, Tm.po_no, uM.id, catM.category_name, clientM.client_name, curM.currency_symbol
-            FROM ims_invoice_master as Tm
-            JOIN ims_user_master as uM ON uM.id = Tm.originator_user_id
-            JOIN ims_invoice_category_master as catM ON catM.id = Tm.category_id
-            JOIN ims_client_master as clientM ON clientM.client_id = Tm.client_id
-            JOIN ims_currency_master as curM ON curM.currency_id = Tm.invoice_currency
-            WHERE invoice_acceptance_status = 'Accept'
-            AND payment_recieved_flag = 'N'
-            AND Tm.originator_user_id IN(SELECT id FROM ims_user_master WHERE approver_user_id = ".$userId." OR id = ".$userId.")
-            ORDER BY invoice_originate_date desc
-            ".$limit.") as tt1";
-        }elseif ($roleId == ORIGINATERROLEID) {
-
-            $sub_query_from = "(SELECT Tm.invoice_req_id, Tm.invoice_originate_date, Tm.project_name, Tm.invoice_net_amount, Tm.invoice_currency, Tm.invoice_acceptance_status, Tm.category_id, Tm.client_id, Tm.originator_user_id, Tm.po_no, uM.id, catM.category_name, clientM.client_name, curM.currency_symbol
-            FROM ims_invoice_master as Tm
-            JOIN ims_user_master as uM ON uM.id = Tm.originator_user_id
-            JOIN ims_invoice_category_master as catM ON catM.id = Tm.category_id
-            JOIN ims_client_master as clientM ON clientM.client_id = Tm.client_id
-            JOIN ims_currency_master as curM ON curM.currency_id = Tm.invoice_currency
-            WHERE invoice_acceptance_status = 'Accept'
-            AND payment_recieved_flag = 'N'
-            AND Tm.originator_user_id IN(SELECT id FROM ims_user_master WHERE approver_user_id = ".$userId." OR id = ".$userId.")
-            ORDER BY invoice_originate_date desc
-            ".$limit.") as tt1";
-
-        }elseif($roleId == GENERATERROLEID) {
-
-            if($hasApprover) {
-                $sub_query_from = "(SELECT Tm.invoice_req_id, Tm.invoice_originate_date, Tm.project_name, Tm.invoice_net_amount, Tm.invoice_currency, Tm.invoice_acceptance_status, Tm.category_id, Tm.client_id, Tm.originator_user_id, Tm.po_no, uM.id, catM.category_name, clientM.client_name, curM.currency_symbol
-            FROM ims_invoice_master as Tm
-            JOIN ims_user_master as uM ON uM.id = Tm.originator_user_id
-            JOIN ims_invoice_category_master as catM ON catM.id = Tm.category_id
-            JOIN ims_client_master as clientM ON clientM.client_id = Tm.client_id
-            JOIN ims_currency_master as curM ON curM.currency_id = Tm.invoice_currency
-            WHERE invoice_acceptance_status = 'Accept'
-            AND payment_recieved_flag = 'N'
-            AND Tm.category_id IN(SELECT category_id FROM ".TBL_INVOICE_CATEGORY_GEN_MAPPER ." WHERE generator_user_id =". $userId.")
-            ORDER BY invoice_originate_date desc
-            ".$limit.") as tt1";
-            } else {
-                $sub_query_from = "(SELECT Tm.invoice_req_id, Tm.invoice_originate_date, Tm.project_name, Tm.invoice_net_amount, Tm.invoice_currency, Tm.invoice_acceptance_status, Tm.category_id, Tm.client_id, Tm.originator_user_id, Tm.po_no, uM.id, catM.category_name, clientM.client_name, curM.currency_symbol
-            FROM ims_invoice_master as Tm
-            JOIN ims_user_master as uM ON uM.id = Tm.originator_user_id
-            JOIN ims_invoice_category_master as catM ON catM.id = Tm.category_id
-            JOIN ims_client_master as clientM ON clientM.client_id = Tm.client_id
-            JOIN ims_currency_master as curM ON curM.currency_id = Tm.invoice_currency
-            WHERE invoice_acceptance_status = 'Accept'
-            AND payment_recieved_flag = 'N'
-            ORDER BY invoice_originate_date desc
-            ".$limit.") as tt1";
-            }
-        } elseif($roleId == COLLECTORROLEID) {
-            $sub_query_from = "(SELECT Tm.invoice_req_id, Tm.invoice_originate_date, Tm.project_name, Tm.invoice_net_amount, Tm.invoice_currency, Tm.invoice_acceptance_status, Tm.category_id, Tm.client_id, Tm.originator_user_id, Tm.po_no, uM.id, catM.category_name, clientM.client_name, curM.currency_symbol
-            FROM ims_invoice_master as Tm
-            JOIN ims_user_master as uM ON uM.id = Tm.originator_user_id
-            JOIN ims_invoice_category_master as catM ON catM.id = Tm.category_id
-            JOIN ims_client_master as clientM ON clientM.client_id = Tm.client_id
-            JOIN ims_currency_master as curM ON curM.currency_id = Tm.invoice_currency
-            WHERE invoice_acceptance_status = 'Accept'
-            AND payment_recieved_flag = 'N'
-            ORDER BY invoice_originate_date desc
-            ".$limit.") as tt1";
-        } else {
-
-        }
-
-        $this->db->select('currency_symbol`,SUM(invoice_net_amount) as sum');
-        $this->db->from($sub_query_from);
-
-        if($groupBy){
-            $this->db->group_by('invoice_currency');
-        }
-
-        if($countOnly) {
-            $query = $this->db->get();
-            return $query->num_rows();
-        } else {
-            //$this->db->limit($limitLength, $limitStart);
-            $query = $this->db->get();
-            //echo  $this->db->last_query(); die;
-            return $query->result();
-        }
-    }
-
-
     public function getTotalFinancialYearPendingInvoices($startDate, $endDate) {
         $this->db->select('Tm.invoice_req_id, Tm.invoice_net_amount, Tm.invoice_originate_date, Tm.invoice_currency');
         $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
@@ -1081,109 +746,6 @@ class Job_model extends CI_Model
         $query = $this->db->get();
         //echo  $this->db->last_query(); die;
         return $query->result();
-    }
-
-	
-	 /*
-     * getClientsWiseTotalInvoice
-     * For Super admin Dashboard
-     */
-    public function getClientsWiseSuperAdminTotalInvoice($clientId = false, $status = false, $month = false, $orderBY= false, $limitStart= 0, $limitLength = false, $countOnly = false){
-        $this->db->select('Tm.invoice_net_amount,Tm.invoice_originate_date, clientM.client_name, curM.currency_symbol, Tm.invoice_currency');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency');
-        if($status) {
-            $this->db->where('Tm.invoice_acceptance_status', $status);
-        } else {
-            $this->db->where('Tm.invoice_acceptance_status', 'Accept');
-            $this->db->where('Tm.gen_approval_status', 'Accept');
-        }
-         if($clientId) {
-            $this->db->where('clientM.client_name', $clientId);
-        }
-
-        if ($month) {
-            $first_date = $month;
-            //Here we treat 1-6th date as previous month and 7th to next month's 6th will be current month
-            $first_date = date("Y-m-07", strtotime($first_date));
-            $second_date = date("Y-m-06", strtotime('+1 month', strtotime($first_date)));
-            //$second_date = date("Y-m-t", strtotime($endDate));
-            $this->db->group_start();
-            $this->db->where('Tm.invoice_originate_date >=', $first_date);
-            $this->db->where('Tm.invoice_originate_date <=', $second_date);
-            $this->db->group_end();
-        }
-
-        if($orderBY) {
-            $this->db->order_by($orderBY);
-        } else {
-            $this->db->order_by('clientM.client_name', 'ASC');
-        }
-
-        if($limitLength) {
-            $this->db->limit($limitLength, $limitStart);
-        }
-        $query = $this->db->get();
-     //   echo  $this->db->last_query(); die;
-        return $query->result();
-    }
-	
-	   /*
-     * getTopInvoicesOfTheCurrentMonth
-     * Super admin Dashboard's Dashboard
-     **/
-    public function getTopInvoicesOfTheCurrentMonth($clientId = false, $status = false, $month = false,  $searchKey = false, $orderBY= false, $limitStart= 0, $limitLength = 5, $countOnly = false) {
-
-        $this->db->select('Tm.invoice_req_id,Tm.invoice_no,Tm.invoice_originate_date,Tm.project_name,Tm.invoice_acceptance_status,Tm.invoice_net_amount,Tm.category_id, Tm.client_id,Tm.originator_user_id,Tm.po_no, uM.id, catM.category_name, clientM.client_name,curM.currency_symbol,Tm.invoice_currency');
-        $this->db->from(TBL_INVOICE_MASTER . ' as Tm');
-        $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.originator_user_id');
-        $this->db->join(TBL_CATEGORY_MASTER . ' as catM', 'catM.id = Tm.category_id');
-        $this->db->join(TBL_CLIENT_MASTER . ' as clientM', 'clientM.client_id = Tm.client_id');
-        $this->db->join(TBL_CURRENCY_MASTER. ' as curM','curM.currency_id = Tm.invoice_currency');
-
-        if ($clientId) {
-            $this->db->where('Tm.client_id', $clientId);
-        }
-        if ($status) {
-            $this->db->where('Tm.invoice_acceptance_status', $status);
-        }
-
-        if ($month && $month != '-1') {
-            $first_date = $month;
-            //Here we treat 1-6th date as previous month and 7th to next month's 6th will be current month
-            $first_date = date("Y-m-07", strtotime($first_date));
-            $second_date = date("Y-m-06", strtotime('+1 month', strtotime($month)));
-            //$second_date = date("Y-m-t", strtotime($month));
-            $this->db->group_start();
-            $this->db->where('invoice_originate_date >=', $first_date);
-            $this->db->where('invoice_originate_date <=', $second_date);
-            $this->db->group_end();
-        }
-
-        if($searchKey){
-            $this->db->group_start();
-            $this->db->like('Tm.project_name', $searchKey);
-            $this->db->or_like('clientM.client_name',$searchKey);
-            $this->db->or_like('Tm.po_no',$searchKey);
-            $this->db->group_end();
-        }
-
-        if ($orderBY) {
-            $this->db->order_by($orderBY);
-        } else {
-            $this->db->order_by('invoice_originate_date DESC');
-        }
-
-        if($countOnly) {
-            $query = $this->db->get();
-            return $query->num_rows();
-        } else {
-            $this->db->limit($limitLength, $limitStart);
-            $query = $this->db->get();
-            //echo  $this->db->last_query(); die;
-            return $query->result();
-        }
     }
 	
 }
