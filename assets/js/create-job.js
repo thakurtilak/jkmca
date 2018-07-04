@@ -18,9 +18,9 @@ $(document).ready(function () {
             price: {required: true},
             staff: {required: true},
             completion_date: {required: true},
-            "file-upload-input": {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"},
-            "add_job_doc[]" : {required: true},
-            "file-upload-input[]": {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
+            "file-upload-input": {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
+            //"add_job_doc[]" : {required: true},
+            //"file-upload-input[]": {required: true,extension:"gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg"}
         },
         messages: {
             client: {required: "This field is required"},
@@ -29,9 +29,9 @@ $(document).ready(function () {
             price: {required: "This field is required"},
             staff: {required: "This field is required"},
             completion_date: {required: "This field is required"},
-            "file-upload-input": {required: "This field is required",extension:"Invalid file format"},
-            "add_job_doc[]" : {required: "This field is required"},
-            "file-upload-input[]": {required: "This field is required",extension:"Invalid file format"}
+            "file-upload-input": {required: "This field is required",extension:"Invalid file format"}
+            //"add_job_doc[]" : {required: "This field is required"},
+            //"file-upload-input[]": {required: "This field is required",extension:"Invalid file format"}
         }
     });
 

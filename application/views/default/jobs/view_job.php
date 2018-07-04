@@ -441,6 +441,11 @@
                         <div class="form-footer">
                             <input type="submit" id="submit1" name="submit1" value="Submit" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
                             <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
+                            <?php if($isSuperAdmin): ?>
+                                <a class='mdl-js-button mdl-js-ripple-effect btn-view button-delete' href='#deleteJobCard' data-toggle='modal' data-target-id='<?php echo $jobDetail->id; ?>' title='Remove'>
+                                    <input name="remove" type="button" class="btn-theme btn-event ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="remove" value="Remove">
+                                </a>
+                            <?php endif; ?>
                         </div>
                     <?php } elseif (($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0){ ?>
                         <div class="form-footer">
@@ -490,6 +495,30 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="deleteJobCard" tabindex="-1" role="dialog" aria-labelledby="deleteJobCardLabel" aria-hidden="true">
+        <div style="width: 350px;" class="modal-dialog cancel-order-modal zoomIn animated" role="document">
+            <div class="modal-content">
+                <div class="modal-header ims_modal_header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="deleteJobCardLabel">Job Card Delete Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo base_url(); ?>jobs/delete-job-card" method="POST" name="deleteJobCardForm" id="deleteJobCardForm">
+                        <div class="form-group">
+                            <p>Are you sure want to delete this Job?</p>
+                        </div>
+                        <div class="form-footer1">
+                            <button type="submit" class="btn-theme btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">YES</button>
+                            <button class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" data-dismiss="modal">NO</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         <?php if(($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0) :  ?>
         $("#helpText").modal('show');
@@ -532,6 +561,14 @@
             var id = $(e.relatedTarget).data('target-id');
             var jobFileHref = BASEURL + "jobs/delete-job-file/"+id;
             $("#deleteJobFileForm").prop('action', jobFileHref);
+
+        });
+
+        /*Delete job file Model window*/
+        $("#deleteJobCard").on("show.bs.modal", function(e) {
+            var id = $(e.relatedTarget).data('target-id');
+            var jobFileHref = BASEURL + "jobs/delete-job-card/"+id;
+            $("#deleteJobCardForm").prop('action', jobFileHref);
 
         });
 

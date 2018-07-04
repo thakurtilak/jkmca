@@ -25,7 +25,7 @@
                         <div class="col-sm-12">
                             <div class="box-form">
                                 <h3 class="form-box-title pull-left" style="width: 80%">Search Client</h3>
-                                <?php if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray)): ?>
+                                <?php if (in_array(SUPERADMINROLEID, $rolesIDArray) || in_array(RECIEPTIONISTROLEID, $rolesIDArray)): ?>
                                     <div class="add_new_btn text-right">
                                         <a href="<?php echo base_url(); ?>clients/add-client" class="mdl-js-button mdl-js-ripple-effect btn-event" data-upgraded=",MaterialButton,MaterialRipple">Add Client</a>
                                     </div>

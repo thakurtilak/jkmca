@@ -121,8 +121,8 @@ button,button:hover,button:focus{outline: none;text-decoration: none;transition:
 .log_forget {text-align: right;}
 .log_forget a {color: #3e64e9;font-size:  14px;}
 .log_forget a:hover {color: #ff4081;}
-.btn-login {position: relative;overflow: hidden;display: block;width: 100%;background: #f95575;border: 0;border-radius: 25px;font-size:  18px;height: 45px;padding: 10px;color: #fff;outline:  none;box-shadow: 5px 5px 5px 0 rgba(0,0,0,0.1);}
-.btn-login:hover {background: #e4264b;}
+.btn-login {position: relative;overflow: hidden;display: block;width: 100%;background: #65AC4B;border: 0;border-radius: 25px;font-size:  18px;height: 45px;padding: 10px;color: #fff;outline:  none;box-shadow: 5px 5px 5px 0 rgba(0,0,0,0.1);}
+.btn-login:hover {background: #65AC4B;}
 .lg_wd span {color: #fff;display: block;font-family: 'ProximaNova-Light';font-size:  16px;}
 /*=============== End Login Page css ==============*/
 /*=============== Dashboard ==============*/
@@ -131,7 +131,7 @@ nav.navbar-ims .nav-page-title {float: left;font-size: 20px;padding: 17px 0;}
 .navbar-right-content ul {margin:  0;padding:  0;list-style:  none;}
 .navbar-right-content ul li {display: inline-block;padding:  0 10px;vertical-align: bottom;}
 .navbar-right-content ul li a {padding: 15px 0;display: inline-block;}
-nav.navbar-ims {padding: 0 35px;color: #fff;background: #4a51be;margin-bottom: 20px;}
+nav.navbar-ims {padding: 0 35px;color: #fff;background: #65AC4B;margin-bottom: 20px;}
 .navbar-right-content ul li span, .navbar-right-content ul li span i {vertical-align: middle;display: inline-block;font-size: 13px;color: #fff;}
 span.user_info img {margin-right: 5px;}
 li.notification_dropdown {position:  relative;}
@@ -142,7 +142,7 @@ span.user_name {max-width: 115px;overflow: hidden;white-space: nowrap;text-overf
 .side_menu ul {margin:  0;padding:  0;list-style:  none;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;-ms-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
 .side_menu ul li {margin-bottom: 15px;}
 .side_menu ul li a {color: #202020;font-size:  16px;display: block;padding: 11px 10px;border-radius: 5px;}
-.side_menu ul li.active a,.side_menu ul li a:hover,.side_menu ul li a:focus {background: #3967f0;color: #fff;}
+.side_menu ul li.active a,.side_menu ul li a:hover,.side_menu ul li a:focus {background: #023E62;color: #fff;}
 .side_menu ul li a:focus span {color: #fff;}
 .side_menu ul li.active a:not(.collapsed) i.fa {transform: rotate(90deg);}
 .side_menu ul li.active a span, .side_menu ul li a:hover span {color: #fff;}
@@ -222,8 +222,8 @@ select.ims_form_control::-ms-expand{display: none;}
 .form-footer {text-align: right;}
 .btn-theme {border: 0;border-radius: 20px;font-size: 16px;padding: 12px 36px;box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1); position: relative;overflow: hidden;}
 .btn-theme:focus{outline:none;}
-.btn-submit {background: #4d5cd3;color: #fff;}
-.btn-submit:hover {background: #2f42d8;color: #fff;}
+.btn-submit {background: #65AC4B;color: #fff;}
+.btn-submit:hover {background: #65AC4B;color: #fff;}
 .btn-reset {background: #5f5f5f;color: #fff;}
 .btn-red {background: #f95575;color: #fff;}
 .btn-reset:hover {background: #3c3c3c;}
@@ -268,7 +268,7 @@ li.create_link a:hover{color:#fff;}
 .dataTables_wrapper .dataTables_filter input {color: #202020;height: 35px;border-radius: 5px;border: 1px solid #dfdfdf;padding: 0 10px;font-size: 14px;outline: none;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);background-image: url(../images/search_icon.png);background-size: 20px;background-repeat: no-repeat;background-position: right 10px center;
 padding-right: 35px;width: 280px;font-weight: 100;}
 .order_filter {margin-bottom: 15px;}
-.ims_modal_header {background: #4a51be;border-top-left-radius: 4px;border-top-right-radius: 4px;color: #fff;}
+.ims_modal_header {background: #65AC4B;border-top-left-radius: 4px;border-top-right-radius: 4px;color: #fff;}
 .ims_modal_header .close {color: #fff;opacity: 0.8;font-size: 25px;}
 ul.order_view_detail {padding:  0 2px;list-style:  none;margin: 0 -10px;display: flex;-webkit-flex-flow: row wrap;flex-flow: row wrap;flex-wrap: wrap;margin-bottom: 15px;}
 ul.order_view_detail li {margin: 10px;padding: 5px 15px;background: #fff;box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1);flex-grow: 1;width: 30%;position: relative;}

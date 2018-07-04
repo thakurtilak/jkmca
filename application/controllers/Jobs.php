@@ -952,4 +952,84 @@ class Jobs extends CI_Controller
         }
         redirect('/jobs/view-job/'.$jobId);
     }
+
+    /**
+     * @param int $jobId
+     * @author DHARMENDRA T
+     * @version 1.0
+     */
+    public function delete_job_card($jobId = 0){
+        $basePath = FCPATH;
+        if(!$jobId) {
+            $this->session->set_flashdata('error', "Unable to find JobId. Please try again");
+            redirect('/jobs');
+        }
+        $userDetail = getCurrentUser();
+        $usersRoles = $userDetail->role_id;
+        $rolesIDArray = explode(',', $usersRoles);
+        $isSuperAdmin = false;
+        if (in_array(SUPERADMINROLEID, $rolesIDArray)) {
+            $isSuperAdmin = true;
+        }
+        if($isSuperAdmin) {
+            $where = array('id' => $jobId);
+            $jobRecord = $this->common_model->getRecord(TBL_JOB_MASTER, array('*'), $where);
+            if($jobRecord){
+                $deleted = $this->common_model->delete(TBL_JOB_MASTER, $where);
+                if($deleted) {
+                    /*START REMOVE JOB ATTACHMENT*/
+                    $where1 = array('job_id' => $jobId);
+                    $jobAttachments = $this->common_model->getRecords(TBL_JOBS_ATTACHMENTS, array('attach_id', 'attach_file_path'), $where1);
+                    if(count($jobAttachments)) {
+                        $allDeleted = $this->common_model->delete(TBL_JOBS_ATTACHMENTS, $where1);
+                        foreach ($jobAttachments as $jobAttachment) {
+                            /*Remove File as well*/
+                            $fileFullPath = $basePath.DIRECTORY_SEPARATOR.$jobAttachment->attach_file_path;
+                            unlink($fileFullPath);
+                        }
+                    }
+                    /*END REMOVE JOB ATTACHMENT*/
+
+                    /*START REMOVE JOB CARD*/
+                    $where2 = array('job_id' => $jobId);
+                    $jobCard = $this->common_model->getRecord(TBL_JOBCARDS_FILES, array('id', 'file_path'), $where2);
+                    if($jobCard) {
+                        $isDeleted = $this->common_model->delete(TBL_JOBCARDS_FILES, $where2);
+                        if($isDeleted){
+                            /*Remove Job Card as well*/
+                            $fileFullPath = $basePath.DIRECTORY_SEPARATOR.$jobCard->file_path;
+                            unlink($fileFullPath);
+                        }
+                    }
+                    /*END REMOVE JOB CARD*/
+
+                    /*START REMOVE JOB Work FILE IF EXIST (in case rejection)*/
+                    $where3 = array('job_id' => $jobId);
+                    $jobWorkFiles = $this->common_model->getRecords(TBL_JOBCARDS_WORK_FILES, array('id', 'file_path'), $where3);
+                    if($jobWorkFiles) {
+                        $isDeleted = $this->common_model->delete(TBL_JOBCARDS_WORK_FILES, $where3);
+                        if($isDeleted){
+                            foreach ($jobWorkFiles as $jobAttachment) {
+                                /*Remove File as well*/
+                                $fileFullPath = $basePath.DIRECTORY_SEPARATOR.$jobAttachment->file_path;
+                                unlink($fileFullPath);
+                            }
+                        }
+                    }
+                    /*END REMOVE JOB WORK FILES*/
+                    $this->session->set_flashdata('success', 'Job and it\'s related documents has been deleted successfully.');
+                    redirect('/jobs');
+                } else {
+                    $this->session->set_flashdata('error', "There is an error while deleting job.");
+                    redirect('/jobs/view-job/'.$jobId);
+                }
+            } else {
+                $this->session->set_flashdata('error', "Unable to find job. Please try again.");
+                redirect('/jobs');
+            }
+        } else {
+            $this->session->set_flashdata('error', "You are not authorize to remove Job.");
+            redirect('/jobs/view-job/'.$jobId);
+        }
+    }
 }
