@@ -247,6 +247,7 @@ class Jobs extends CI_Controller
                     'client_id' => $postData['client'],
                     'work_type' => $work_type,
                     'amount'    => $postData['price'],
+                    'discount_price' => $postData['discount_price'],
                     'advanced_amount'  => $postData['advance_price'],
                     'remaining_amount' => $postData['remaining_amount'],
                     'staff_id'  => $postData['staff'],

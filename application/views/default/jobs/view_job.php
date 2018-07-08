@@ -58,6 +58,12 @@
                             </li>
                             <li>
                                 <div class="order_info_block">
+                                    <span class="ov_title">Discount ( if any )</span>
+                                    <span class="ov_data"><?php echo formatAmount($jobDetail->discount_price); ?></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="order_info_block">
                                     <span class="ov_title">Advanced Amount</span>
                                     <span class="ov_data"><?php echo formatAmount($jobDetail->advanced_amount); ?></span>
                                 </div>

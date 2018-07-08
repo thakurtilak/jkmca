@@ -131,32 +131,78 @@ $(document).ready(function () {
         $("#price").focus();
     });
 
-    $("#price").keyup(function () {
+    $("#price").change(function () {
         var price = $(this).val();
         var ad = $("#advance_price").val();
+        var discount = $("#discount_price").val();
         if(parseFloat(ad) > parseFloat(price)) {
             $("#advance_price").val("");
             ad = 0;
+        }
+        if(discount > 0) {
+            price = price - discount;
         }
         var remaining_amount = price;
         if(ad > 0) {
             remaining_amount = price - ad;
         }
+        if(remaining_amount < 0) {
+            //$(this).val("");
+            $("#discount_price").trigger("change");
+            //alert("Invalid Amount");
+            return;
+        }
         $("#remaining_amount").val(remaining_amount);
     });
 
-    $("#advance_price").keyup(function () {
+    $("#advance_price").change(function () {
         var ad = $(this).val();
         var price = $("#price").val();
+        var discount = $("#discount_price").val();
         if(parseFloat(ad) > parseFloat(price)) {
             $(this).val("");
             ad = 0;
             alert("Invalid advance amount");
             //return;
         }
+        if(discount > 0) {
+            price = price - discount;
+        }
         var remaining_amount = price;
         if(ad > 0) {
             remaining_amount = price - ad;
+        }
+        if(remaining_amount < 0) {
+            $(this).val("");
+            $(this).trigger("change");
+            alert("Invalid Amount");
+            return;
+        }
+        $("#remaining_amount").val(remaining_amount);
+    });
+
+    $("#discount_price").change(function () {
+        var discount = $(this).val();
+        var price = $("#price").val();
+        var ad = $("#advance_price").val();
+        if(parseFloat(discount) > parseFloat(price)) {
+            $(this).val("");
+            discount = 0;
+            alert("Invalid discount amount");
+            //return;
+        }
+        if(discount > 0) {
+            price = price - discount;
+        }
+        var remaining_amount = price;
+        if(ad > 0) {
+            remaining_amount = price - ad;
+        }
+        if(remaining_amount < 0) {
+            $(this).val("");
+            $(this).trigger("change");
+            alert("Invalid Amount");
+            return;
         }
         $("#remaining_amount").val(remaining_amount);
     });

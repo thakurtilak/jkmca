@@ -246,13 +246,21 @@
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label class="ims_form_label">Price*</label>
+                                                <label class="ims_form_label">Fee*</label>
                                                 <input style="width:90%;" maxlength="10" type="text" name="price"
                                                        class="ims_form_control" id="price"
-                                                       placeholder="Price" value="" readonly/>
+                                                       placeholder="Fee" value="" readonly/>
                                                 <label style="display: none;width: 90%;float: left;" id="price-error" class="error" for="price"></label>
                                                 <a id="editPrice" style="vertical-align:bottom;" href="javascript:void(0);"><i class='icon-edit'></i></a>
                                                 <?php echo form_error('price'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="ims_form_label">Discount ( if any )</label>
+                                                <input maxlength="10" type="text" name="discount_price"
+                                                       class="ims_form_control" id="discount_price"
+                                                       placeholder="Discount" value=""/>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">

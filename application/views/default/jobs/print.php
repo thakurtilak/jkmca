@@ -53,9 +53,23 @@
                     <td align="center" valign="middle" bgcolor="#4a51be" style="color:#fff;"><strong>COMPLETION DATE</strong></td>
                     <td align="center" valign="middle"><?php echo date('d-M-Y', strtotime($jobDetail->completion_date)) ?></td>
                 </tr>
+            </table></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><strong>Fee Detail</strong></td>
+    </tr>
+    <tr>
+        <td><table width="100%" border="1" cellspacing="0" cellpadding="5">
                 <tr>
                     <td align="center" valign="middle" bgcolor="#4a51be" style="color:#fff;"><strong>AMOUNT</strong></td>
                     <td align="center" valign="middle"><?php echo formatAmount($jobDetail->amount); ?></td>
+                    <?php if($jobDetail->discount_price > 0): ?>
+                        <td align="center" valign="middle" bgcolor="#4a51be" style="color:#fff;"><strong>DISCOUNT</strong></td>
+                        <td align="center" valign="middle"><?php echo formatAmount($jobDetail->discount_price); ?></td>
+                    <?php endif; ?>
                     <td align="center" valign="middle" bgcolor="#4a51be" style="color:#fff;"><strong>ADVANCED AMOUNT</strong></td>
                     <td align="center" valign="middle"><?php echo formatAmount($jobDetail->advanced_amount); ?></td>
                     <td align="center" valign="middle" bgcolor="#4a51be" style="color:#fff;"><strong>REMAINING AMOUNT</strong></td>
