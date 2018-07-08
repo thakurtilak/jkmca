@@ -76,16 +76,27 @@ class Job_model extends CI_Model
         }
 
         if ($name) {
+            $name = $this->db->escape_like_str($name);
             $this->db->group_start();
+            $this->db->where("CONCAT(clientM.first_name, ' ', clientM.last_name) LIKE '%".$name."%'", NULL, FALSE);
+            $this->db->or_where("CONCAT(uM.first_name, ' ', uM.last_name) LIKE '%".$name."%'", NULL, FALSE);
+            $this->db->or_like('clientM.mobile', $name);
+            $this->db->or_like('clientM.firm_name',$name);
+            $this->db->or_like('Tm.job_number', $name);
+            $this->db->or_like('clientM.pan_no',$name);
+            $this->db->or_like('clientM.gst_no',$name);
+            $this->db->or_like('clientM.aadhar_number',$name);
+            $this->db->group_end();
+            /*$this->db->group_start();
             $this->db->like('Tm.mobile_number', $name);
             $this->db->or_like('Tm.job_number', $name);
-            $this->db->or_like('Tm.first_name',$name);
-            $this->db->or_like('Tm.last_name',$name);
+            $this->db->or_like('clientM.first_name',$name);
+            $this->db->or_like('clientM.last_name',$name);
             $this->db->or_like('uM.first_name',$name);
             $this->db->or_like('uM.last_name',$name);
             $this->db->or_like('Tm.pan_no',$name);
             $this->db->or_like('Tm.aadhar_no',$name);
-            $this->db->group_end();
+            $this->db->group_end();*/
         }
 
         if ($month && $month != '-1') {

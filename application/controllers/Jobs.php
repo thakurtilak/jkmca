@@ -61,6 +61,8 @@ class Jobs extends CI_Controller
             $month = (!empty($month)) ? $month : false;
             $payment_status = $this->input->get('payment_status');
             $searchKey = $this->input->get('search[value]');
+            //$searchKey = (!empty($searchKey)) ? str_replace(' ', '%', trim($searchKey)):'';
+            //debug($searchKey);
             switch ($orderField) {
                 case 0 :
                     $orderColumn = "job_number";
@@ -360,8 +362,22 @@ class Jobs extends CI_Controller
         $clients = $this->common_model->getRecords(TBL_CLIENT_MASTER, array('client_id','CONCAT(first_name,\' \', last_name) as name'), $where, 'name');
         $data = array('clients' => $clients);
 
-        $where = array('role_id' => 2,'status' => 'A');
-        $staff = $this->common_model->getRecords(TBL_USER,array( 'id','CONCAT(first_name,\' \', last_name) as name'), $where, 'name');
+        //$where = array('role_id' => 2,'status' => 'A');
+        $where = array('status' => 'A');/*Allow all user as assign*/
+        $staff = $this->common_model->getRecords(TBL_USER,array( 'id','CONCAT(first_name,\' \', last_name) as name','role_id'), $where, 'name');
+        if($staff) {
+            foreach ($staff as $k => $user) {
+                $appendText = '';
+                if($user->role_id == 1) {
+                    $appendText = ' - Receptionist';
+                } elseif ($user->role_id == 2){
+                    $appendText = ' - Staff';
+                }elseif ($user->role_id == 5){
+                    $appendText = ' - Administrator';
+                }
+                $user->name .= $appendText;
+            }
+        }
         $data['staff'] = $staff;
 
         $where = array('status' => '1');
@@ -681,6 +697,11 @@ class Jobs extends CI_Controller
         $jobDetail = $this->job_model->getJob($jobId);
         if(!$jobDetail) {
             $this->session->set_flashdata('error', "Unable to find Job details.");
+            redirect('/jobs');
+        }
+        /*Addition Security here*/
+        if($isStaff && $jobDetail->staff_id != getCurrentUsersId()) {
+            $this->session->set_flashdata('error', "Sorry, You are authorize to view this job.");
             redirect('/jobs');
         }
         //echo "<pre>"; print_r($jobDetail); exit;

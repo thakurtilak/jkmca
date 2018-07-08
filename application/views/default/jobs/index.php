@@ -111,7 +111,7 @@
                         <th>JobID</th>
                         <th>Work Type</th>
                         <th>Client Name</th>
-                        <th>Staff Name</th>
+                        <th>Assign To</th>
                         <th>Request Date</th>
                         <th>Status</th>
                         <th>Action</th>

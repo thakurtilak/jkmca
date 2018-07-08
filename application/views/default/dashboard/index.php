@@ -42,7 +42,7 @@
                                     <th>Job ID</th>
                                     <th>Client Name</th>
                                     <th>Work Type</th>
-                                    <th>Staff Name</th>
+                                    <th>Assign To</th>
                                     <th>Complete Date</th>
                                     <th>View</th>
                                 </tr>
@@ -155,7 +155,7 @@
                                     <th>Job ID</th>
                                     <th>Client Name</th>
                                     <th>Work Type</th>
-                                    <th>Staff Name</th>
+                                    <th>Assign To</th>
                                     <th>Created Date</th>
                                     <th>View</th>
                                 </tr>

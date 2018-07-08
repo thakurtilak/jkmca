@@ -275,7 +275,7 @@
                                             <div class="form-group">
                                                 <label class="ims_form_label">Assign To *</label>
                                                 <select class="ims_form_control" name="staff" id="staff">
-                                                    <option value="">Select Staff</option>
+                                                    <option value="">Select User</option>
                                                     <?php if($staff) :
                                                         foreach ($staff as $user):
                                                             ?>

@@ -62,22 +62,20 @@
         <li>
             <div class="order_info_block">
                 <span class="ov_title">Client Name</span>
-                <span class="ov_data"><?php echo $jobDetail->first_name;
-                    echo ($jobDetail->middle_name) ? " " . $jobDetail->middle_name : '';
-                    echo ($jobDetail->last_name) ? " " . $jobDetail->last_name : '';
+                <span class="ov_data"><?php echo $jobDetail->clientName;
                     ?></span>
             </div>
         </li>
         <li>
             <div class="order_info_block">
                 <span class="ov_title">Client Address</span>
-                <span class="ov_data"><?php echo $jobDetail->address; ?></span>
+                <span class="ov_data"><?php echo $jobDetail->clientAddress; ?></span>
             </div>
         </li>
         <li>
             <div class="order_info_block">
                 <span class="ov_title">Client Mobile No.</span>
-                <span class="ov_data"><?php echo $jobDetail->mobile_number; ?></span>
+                <span class="ov_data"><?php echo $jobDetail->clientContact; ?></span>
             </div>
         </li>
         <li>

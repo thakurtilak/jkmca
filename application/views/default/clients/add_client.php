@@ -114,6 +114,29 @@
 
                 <div class="col-sm-12">
                     <div class="row">
+                        <div class="col-sm-12">
+                            <div class="box-form">
+                                <h3 class="form-box-title">Firm Detail</h3>
+                                <div class="theme-form">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <label class="ims_form_label">Firm Name</label>
+                                                <input type="text" name="firm_name" class="ims_form_control"
+                                                       maxlength="255" id="firm_name" placeholder="Firm Name"
+                                                       value="<?php echo (isset($clientDetail)) ? $clientDetail->firm_name : "" ?>"/>
+                                                <?php echo form_error('father_first_name'); ?>
+                                                <label class="error" style="display:none;">Required</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="box-form">
                                 <!--<h3 class="form-box-title">Client Info</h3>-->

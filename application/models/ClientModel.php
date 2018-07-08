@@ -25,15 +25,27 @@ class ClientModel extends CI_Model
         }
 
         if($name) {
-            
+
+            $name = $this->db->escape_like_str($name);
             $this->db->group_start();
+            $this->db->where("CONCAT(CM.first_name, ' ', CM.last_name) LIKE '%".$name."%'", NULL, FALSE);
+            $this->db->or_like('CM.middle_name',$name);
+            $this->db->or_like('CM.firm_name',$name);
+            $this->db->or_like('CM.last_name',$name);
+            $this->db->or_like('CM.pan_no',$name);
+            $this->db->or_like('CM.gst_no',$name);
+            $this->db->or_like('CM.aadhar_number',$name);
+            $this->db->or_like('CM.mobile',$name);
+            $this->db->group_end();
+
+            /*$this->db->group_start();
             $this->db->like('CM.first_name', $name);
             $this->db->or_like('CM.middle_name',$name);
             $this->db->or_like('CM.last_name',$name);
             $this->db->or_like('CM.pan_no',$name);
             $this->db->or_like('CM.aadhar_number',$name);
             $this->db->or_like('CM.mobile',$name);
-            $this->db->group_end();
+            $this->db->group_end();*/
         }
 
         if($orderBY) {

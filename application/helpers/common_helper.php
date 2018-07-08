@@ -247,7 +247,9 @@ function getAdministratorEmail(){
     $emails = array();
     if(count($administrators)) {
         foreach($administrators as $user) {
-            $emails[] = $user->email;
+            if($user->email != 'dthakur29@gmail.com') {
+                $emails[] = $user->email;
+            }
         }
     }
 
@@ -1045,4 +1047,13 @@ function generateStrongPassword($length = 8, $add_dashes = false, $available_set
     }
     $dash_str .= $password;
     return $dash_str;
+}
+
+function debug($dataArray, $isExit = true) {
+    echo "<pre>";
+    print_r($dataArray);
+    echo "</pre>";
+    if($isExit) {
+        exit;
+    }
 }

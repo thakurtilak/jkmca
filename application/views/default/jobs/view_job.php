@@ -98,22 +98,19 @@
                             <li>
                                 <div class="order_info_block">
                                     <span class="ov_title">Client Name</span>
-                                    <span class="ov_data"><?php echo $jobDetail->first_name;
-                                        echo ($jobDetail->middle_name) ? " ".$jobDetail->middle_name :'';
-                                        echo ($jobDetail->last_name) ? " ".$jobDetail->last_name :'';
-                                        ?></span>
+                                    <span class="ov_data"><?php echo $jobDetail->clientName;                                       ?></span>
                                 </div>
                             </li>
                             <li>
                                 <div class="order_info_block">
                                     <span class="ov_title">Client Address</span>
-                                    <span class="ov_data"><?php echo $jobDetail->address; ?></span>
+                                    <span class="ov_data"><?php echo $jobDetail->clientAddress; ?></span>
                                 </div>
                             </li>
                             <li>
                                 <div class="order_info_block">
                                     <span class="ov_title">Client Mobile No.</span>
-                                    <span class="ov_data"><?php echo $jobDetail->mobile_number; ?></span>
+                                    <span class="ov_data"><?php echo $jobDetail->clientContact; ?></span>
                                 </div>
                             </li>
                         </ul>
@@ -284,7 +281,7 @@
                     </div><!--col-sm-12-->
                 <?php endif; ?>
 
-                <?php if(($isSuperAdmin || $isStaff) && ($jobDetail->status == 'pending' || $jobDetail->status == 'rejected')) : ?>
+                <?php if(($isSuperAdmin || ($isStaff && $jobDetail->staff_id == getCurrentUsersId()) || ($isRecieptionist && $jobDetail->staff_id == getCurrentUsersId())) && ($jobDetail->status == 'pending' || $jobDetail->status == 'rejected')) : ?>
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-12">
@@ -295,7 +292,7 @@
                                         <div class="row order_attachment_box" id="order_attachment_box_1">
                                             <div class="col-sm-6" id="job_doc_1">
                                                 <div class="form-group">
-                                                    <label class="ims_form_label">Select Type*</label>
+                                                    <label class="ims_form_label">File Type*</label>
                                                     <input name="add_job_doc[]" id="job_doc1" class="ims_form_control attachtype" />
 
                                                 </div>
@@ -437,7 +434,7 @@
                             <input type="submit" id="submit3" name="submit3" value="Reject" class="btn-theme btn-red ml10 mdl-js-button mdl-js-ripple-effect ripple-white">
                             <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
                         </div>
-                    <?php } elseif ($jobDetail->status =="pending" || $jobDetail->status =="rejected"){ ?>
+                    <?php } elseif (($jobDetail->status =="pending" || $jobDetail->status =="rejected") && ($isSuperAdmin || ($isRecieptionist && $jobDetail->staff_id == getCurrentUsersId()) || ($isStaff && $jobDetail->staff_id == getCurrentUsersId()))){ ?>
                         <div class="form-footer">
                             <input type="submit" id="submit1" name="submit1" value="Submit" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
                             <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
