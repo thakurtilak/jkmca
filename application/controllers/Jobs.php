@@ -364,7 +364,7 @@ class Jobs extends CI_Controller
         $data = array('clients' => $clients);
 
         //$where = array('role_id' => 2,'status' => 'A');
-        $where = array('status' => 'A');/*Allow all user as assign*/
+        $where = array('status' => 'A', 'id >' => 1);/*Allow all user as assign*/
         $staff = $this->common_model->getRecords(TBL_USER,array( 'id','CONCAT(first_name,\' \', last_name) as name','role_id'), $where, 'name');
         if($staff) {
             foreach ($staff as $k => $user) {
