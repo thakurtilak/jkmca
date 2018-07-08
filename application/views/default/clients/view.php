@@ -51,6 +51,19 @@
     </div>
     <div class="box-form">
         <div class="theme-form">
+            <h3 class="form-box-title">Firm Details</h3>
+            <ul class="order_view_detail">
+                <li>
+                    <div class="order_info_block">
+                        <span class="ov_title">Firm Name</span>
+                        <span class="ov_data"><?php echo $clientInfo->firm_name; ?></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="box-form">
+        <div class="theme-form">
             <h3 class="form-box-title">Personal Details</h3>
             <ul class="order_view_detail">
                 <li>
