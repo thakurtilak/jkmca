@@ -118,37 +118,10 @@ class Jobs extends CI_Controller
                         $status = $job->status;
                     }
                     $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#InvoiceDetailModal\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='View'><i class='icon-view1'></i></a>";
-                    /*if($isSuperAdmin){
-                        if($job->status == 'pending') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-print\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Print'><i class=\"fa fa-print\" aria-hidden=\"true\"></i></a>";
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-upload-job\" href=\"#uploadJobFile\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='Upload Job File'><i class=\"fa fa-upload\"></i></a>";
-                        } else if($job->status == 'approval_pending') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-complete\" href=\"#approveRejectJob\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='Approve'><i class=\"fa fa-thumbs-up\"></i></a>";
-                        } else if($job->status == 'completed') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-completed\" target='_blank' href='".base_url().$job->work_file_path."' data-target-id=" . $job->id . " title='Completed'><i class=\"fa fa-download\" aria-hidden=\"true\"></i></a>";
-                        }elseif ($job->status == 'rejected') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-rejected\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Rejected'><i class=\"fa fa-ban\"></i></a>";
-                        }
-                    }elseif($isRecieptionist){
-                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-print\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Print'><i class=\"fa fa-print\" aria-hidden=\"true\"></i></a>";
-                        if($job->status == 'completed') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-completed\" target='_blank' href='".base_url().$job->work_file_path."' data-target-id=" . $job->id . " title='Completed'><i class=\"fa fa-download\" aria-hidden=\"true\"></i></a>";
-                        } elseif ($job->status == 'rejected') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-rejected\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Rejected'><i class=\"fa fa-ban\"></i></a>";
-                        }else if($job->status == 'approval_pending') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-complete\" target='_blank' href='".base_url().$job->work_file_path."' data-target-id=" . $job->id . " title='Pending For Review'><i class=\"fa fa-hourglass\"></i></i></a>";
-                        }
-                    } elseif ($isStaff) {
-                        if($job->status == 'pending' || $job->status == 'rejected') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-upload-job\" href=\"#uploadJobFile\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='Upload Job File'><i class=\"fa fa-upload\"></i></a>";
-                        } else if($job->status == 'approval_pending') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-complete\" href=\"javascript:void(0)\" data-target-id=" . $job->id . " title='Pending For Review'><i class=\"fa fa-hourglass\"></i></i></a>";
-                        } else if($job->status == 'completed') {
-                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn button-completed\" target='_blank' href='".base_url().$job->work_file_path."' data-target-id=" . $job->id . " title='Completed'><i class=\"fa fa-download\" aria-hidden=\"true\"></i></a>";
-                        }
-                    }*/
                     $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='".base_url()."jobs/view-job/".$job->id."' data-target-id=" . $job->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
-
+                    if ($isSuperAdmin && ($job->status == 'pending' || $job->status == 'rejected')) {
+                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='" . base_url() . "jobs/edit-job/" . $job->id . "' data-target-id=" . $job->id . " title='Edit'><i class='icon-edit'></i></a>";
+                    }
 
 
                     $tempData = array("jobID" => $jobID,
@@ -396,6 +369,178 @@ class Jobs extends CI_Controller
         $this->template->load('default', 'contents', 'default/jobs/new_job',$data);
     }
 
+    /**
+     * @param bool $jobId
+     */
+    public function edit_job($jobId = false)
+    {
+        $basePath = FCPATH;
+        if(!$jobId) {
+            $this->session->set_flashdata('error', "Unable to find JobId. Please try again");
+            redirect('/jobs');
+        }
+        $userDetail = getCurrentUser();
+        $usersRoles = $userDetail->role_id;
+        $rolesIDArray = explode(',', $usersRoles);
+        $isSuperAdmin = false;
+        if (!in_array(SUPERADMINROLEID, $rolesIDArray)) {
+            $isSuperAdmin = true;
+            $this->session->set_flashdata('error', "You are not authorize to edit Job.");
+            redirect('/jobs');
+        }
+        $postData = $this->input->post(NULL, true);
+        if($postData && $jobId == $postData['job_id']) {
+            debug($_FILES, false);
+            $uploadError = false;
+            /*If Job Card Update*/
+            if(isset($_FILES['job_card']['name']) && !empty($_FILES['job_card']['name']) && !$_FILES['job_card']['error']) {
+                /*Upload Job card*/
+                $upload_data = $this->do_upload_jobs($jobId);
+                if(isset($upload_data['full_path'])) {
+                    /*Get OlD Job Card*/
+                    $where = array('job_id' => $jobId);
+                    $jobFileRecords = $this->common_model->getRecords(TBL_JOBCARDS_FILES, array('id', 'file_path'), $where);
+                    /*Add New Entry in table*/
+                    $jobCardArray = explode(UPLOAD_ROOT_DIR, $upload_data['full_path']);
+                    $filePath = UPLOAD_ROOT_DIR.end($jobCardArray);
+                    $insertJob = array(
+                        'job_id' => $jobId,
+                        'file_path' => $filePath,
+                        'file_name' => $upload_data['client_name'],
+                        'file_detail'=> json_encode($upload_data)
+                    );
+                    $inserted_id = $this->common_model->insert(TBL_JOBCARDS_FILES, $insertJob);
+                    if($inserted_id) {
+                        if($jobFileRecords) {
+                            foreach ($jobFileRecords as $card) {
+                                $delWhere = array('id' => $card->id);
+                                $deleted = $this->common_model->delete(TBL_JOBCARDS_FILES, $delWhere);
+                                if ($deleted) {
+                                    /*Remove File as well*/
+                                    $fileFullPath = $basePath . DIRECTORY_SEPARATOR . $card->file_path;
+                                    unlink($fileFullPath);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $uploadError = TRUE;
+                }
+            }
+
+            if($uploadError) {
+                $this->session->set_flashdata('error', "There is an error while upload Job card. Please try again");
+                redirect('/jobs/edit-job/'.$jobId);
+            }
+            /*Every thing is fine till now*/
+
+            /*upload Documents*/
+            $upload_doc_data = $this->do_upload_documents($jobId);
+            if(isset($postData['file-upload-input'])) {
+                /* Insert agreement  information.*/
+                $numFields = count($postData['file-upload-input']);
+                for ($i = 0; $i < $numFields; $i++) {
+                    if (isset($upload_doc_data[$i]['full_path'])) {
+                        $jobCardDocArray = explode(UPLOAD_ROOT_DIR, $upload_doc_data[$i]['full_path']);
+                        $filePath = UPLOAD_ROOT_DIR.end($jobCardDocArray);
+                        $data = array(
+                            'job_id' => $jobId,
+                            'attach_type' => (isset($postData['add_job_doc'][$i])) ? $postData['add_job_doc'][$i]:0,
+                            'attach_file_path' => $filePath,
+                            'attach_file_name' => $upload_doc_data[$i]['client_name'],
+                            'attach_file_detail' => json_encode($upload_doc_data[$i]),
+                        );
+                        if($data['attach_type'] == 0) {
+                            $data['other_file_name'] = (isset($postData['add_job_other'][$i])) ? $postData['add_job_other'][$i] :null;
+                        }
+                        $this->common_model->insert(TBL_JOBS_ATTACHMENTS, $data);
+                    }
+                }
+            }
+
+            /*Finally update the Job Record*/
+            $updateArray = array(
+                'amount' => $postData['price'],
+                'discount_price' => $postData['discount_price'],
+                'advanced_amount'  => $postData['advance_price'],
+                'remaining_amount' => $postData['remaining_amount'],
+                'staff_id'  => $postData['staff'],
+                'completion_date' => date('Y-m-d', strtotime($postData['completion_date'])),
+                'remark'  => $postData['remark'],
+            );
+            $updateWhere = array('id' => $jobId);
+            $this->common_model->update(TBL_JOB_MASTER, $updateArray, $updateWhere);
+            $this->session->set_flashdata('success', 'Job has been updated successfully.');
+            redirect('/jobs');
+        }
+        $jobDetail = $this->job_model->getJob($jobId);
+        if(!$jobDetail) {
+            $this->session->set_flashdata('error', "Unable to find Job details.");
+            redirect('/jobs');
+        }
+        if($jobDetail->status !='pending' && $jobDetail->status !='rejected') {
+            $this->session->set_flashdata('error', "You can't edit this Job. because it's already completed OR Pending for review");
+            redirect('/jobs');
+        }
+        //echo "<pre>"; print_r($jobDetail); exit;
+        $data = array('jobDetail' => $jobDetail);
+        $data['userRole'] = explode(',',$userDetail->role_id);
+        //$data['requestUser'] = getUserInfo($jobDetail->created_by);
+
+        if($jobDetail->staff_id) {
+            $staffDetail = getUserInfo($jobDetail->staff_id);
+            $staffName = $staffDetail->first_name . " " . $staffDetail->last_name;
+            $data['staffName'] = $staffName;
+        }
+
+        $where = array('job_id' => $jobId);
+        $jobCard = $this->common_model->getRecord(TBL_JOBCARDS_FILES, array(
+            'file_path','file_name', 'file_detail'), $where);
+        $data['jobCard'] = $jobCard;
+
+        $where = array('job_id' => $jobId);
+        $jobWorkFiles = $this->common_model->getRecords(TBL_JOBCARDS_WORK_FILES
+            , array(
+                'id','file_path','file_name', 'attach_type'), $where);
+        $data['jobWorkFiles'] = $jobWorkFiles;
+
+        $jobDocuments = $this->job_model->getJobDocuments($jobId);
+        //print_r($jobDocuments);
+        $data['jobDocuments'] = $jobDocuments;
+        if($jobDetail->client_id) {
+            $clientDocuments = $this->ClientModel->getJobDocuments($jobDetail->client_id);
+            $data['clientDocuments'] = $clientDocuments;
+        }
+
+        /*$data['isStaff'] = $isStaff;
+        $data['isRecieptionist'] = $isRecieptionist;
+        $data['isSuperAdmin'] = $isSuperAdmin;*/
+        $where = array('status' => 'A', 'id >' => 1);/*Allow all user as assign*/
+        $staff = $this->common_model->getRecords(TBL_USER,array( 'id','CONCAT(first_name,\' \', last_name) as name','role_id'), $where, 'name');
+        if($staff) {
+            foreach ($staff as $k => $user) {
+                $appendText = '';
+                if($user->role_id == 1) {
+                    $appendText = ' - Receptionist';
+                } elseif ($user->role_id == 2){
+                    $appendText = ' - Staff';
+                }elseif ($user->role_id == 5){
+                    $appendText = ' - Administrator';
+                }
+                $user->name .= $appendText;
+            }
+        }
+        $data['staff'] = $staff;
+
+        $where = array('status' => '1');
+        $documentTypes = $this->common_model->getRecords(TBL_DOCUMENTS_MASTER,array( 'id','name'), $where, 'name');
+        $data['documentTypes'] = $documentTypes;
+
+        $this->template->set('title', 'Edit Job');
+        $this->template->load('default', 'contents', 'default/jobs/edit_job', $data);
+
+    }
+
     private function do_upload_documents($inserted_job_id=false)
     {
         $financialYear = getCurrentFinancialYear();
@@ -414,8 +559,7 @@ class Jobs extends CI_Controller
         }
         $uploadedFiles = array();
 
-
-        if (isset($_FILES['add_document_name']) && is_array($_FILES['add_document_name'])) {
+        if (isset($_FILES['add_document_name']) && is_array($_FILES['add_document_name']) && count($_FILES["add_document_name"]['name'])) {
             /*ADD MORE*/
             //$filesCount = count($_FILES["add_agreement_name"]['name']);
             foreach ($_FILES["add_document_name"]['name'] as $key => $file) {
@@ -973,6 +1117,42 @@ class Jobs extends CI_Controller
             $this->session->set_flashdata('error', "There is an error while deleting job file.");
         }
         redirect('/jobs/view-job/'.$jobId);
+    }
+
+
+    /**
+     * @param int $jobId
+     * @param int $documentId
+     * @author DHARMENDRA T
+     * @version 1.0
+     */
+    public function delete_job_document($jobId = 0, $documentId = 0){
+        $basePath = FCPATH;
+        if(!$jobId) {
+            $this->session->set_flashdata('error', "Unable to find JobId. Please try again");
+            redirect('/jobs');
+        }
+        if($documentId) {
+            $where = array('attach_id' => $documentId, 'job_id' => $jobId);
+            $docRecord = $this->common_model->getRecord(TBL_JOBS_ATTACHMENTS, array('attach_id', 'attach_file_path'), $where);
+            //debug($docRecord);
+            if($docRecord){
+                $deleted = $this->common_model->delete(TBL_JOBS_ATTACHMENTS, $where);
+                if($deleted) {
+                    /*Remove File as well*/
+                    $docFullPath = $basePath.DIRECTORY_SEPARATOR.$docRecord->attach_file_path;
+                    unlink($docFullPath);
+                    $this->session->set_flashdata('success', 'Job document has been deleted successfully ');
+                } else {
+                    $this->session->set_flashdata('error', "There is an error while deleting job document.");
+                }
+            } else {
+                $this->session->set_flashdata('error', "Unable to find job document. Please try again.");
+            }
+        } else {
+            $this->session->set_flashdata('error', "There is an error while deleting job file.");
+        }
+        redirect('/jobs/edit-job/'.$jobId);
     }
 
     /**
