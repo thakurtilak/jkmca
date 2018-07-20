@@ -445,9 +445,11 @@
                             <input type="submit" id="submit1" name="submit1" value="Submit" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
                             <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
                             <?php if($isSuperAdmin): ?>
-                                <a class='mdl-js-button mdl-js-ripple-effect btn-view button-delete' href='#deleteJobCard' data-toggle='modal' data-target-id='<?php echo $jobDetail->id; ?>' title='Remove'>
-                                    <input name="remove" type="button" class="btn-theme btn-event ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="remove" value="Remove">
-                                </a>
+                                <div class="pull-right">
+                                    <a class='mdl-js-button btn-view button-delete' href='#deleteJobCard' data-toggle='modal' data-target-id='<?php echo $jobDetail->id; ?>' title='Remove'>
+                                        <input name="remove" type="button" class="btn-theme btn-event ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="remove" value="Remove">
+                                    </a>
+                                </div>
                             <?php endif; ?>
                         </div>
                     <?php } elseif (($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0){ ?>
