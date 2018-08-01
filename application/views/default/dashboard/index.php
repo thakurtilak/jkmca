@@ -50,7 +50,7 @@
                                 <tbody>
                                 <?php if(count($approvePendingJobs)):
                                     foreach($approvePendingJobs as $item):
-                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='".base_url()."jobs/view-job/".$item->id."' data-target-id=" . $item->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
+                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$item->id."' data-target-id=" . $item->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
                                         $clientName = $item->clientName;
                                         $clientName = "<a href=\"#ClientViewModal\" data-toggle=\"modal\" data-target-id=" . $item->client_id . ">" . $clientName . "</a>";
 
@@ -107,7 +107,7 @@
                                 <tbody>
                                 <?php if(count($paymentPendingJobs)):
                                     foreach($paymentPendingJobs as $item):
-                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='".base_url()."jobs/view-job/".$item->id."' data-target-id=" . $item->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
+                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$item->id."' data-target-id=" . $item->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
                                         $clientName = $item->clientName;
                                         $clientName = "<a href=\"#ClientViewModal\" data-toggle=\"modal\" data-target-id=" . $item->client_id . ">" . $clientName . "</a>";
                                         ?>
@@ -163,7 +163,7 @@
                                 <tbody>
                                 <?php if(count($pendingJobs)):
                                     foreach($pendingJobs as $item):
-                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='".base_url()."jobs/view-job/".$item->id."' data-target-id=" . $item->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
+                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$item->id."' data-target-id=" . $item->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
                                         $clientName = $item->clientName;
                                         $clientName = "<a href=\"#ClientViewModal\" data-toggle=\"modal\" data-target-id=" . $item->client_id . ">" . $clientName . "</a>";
 

@@ -7,6 +7,7 @@
                 <th>Choose</th>
                 <th>Client Code</th>
                 <th width="15%">Name</th>
+                <th>Firm Name</th>
                 <th>Father Name</th>
                 <th>PAN</th>
                 <th>Aadhar NO.</th>
@@ -24,6 +25,7 @@
                     </td>
                     <td><?php echo $client->client_id; ?></td>
                     <td><?php echo $client->first_name.' '.$client->last_name; ?></td>
+                    <td><?php echo $client->firm_name; ?></td>
                     <td><?php echo $client->father_first_name.' '.$client->father_last_name; ?></td>
                     <td><?php echo ($client->pan_no)? $client->pan_no :'--'; ?></td>
                     <td><?php echo ($client->aadhar_number) ? $client->aadhar_number :'--' ; ?></td>

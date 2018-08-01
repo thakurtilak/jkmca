@@ -118,9 +118,9 @@ class Jobs extends CI_Controller
                         $status = $job->status;
                     }
                     $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#InvoiceDetailModal\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='View'><i class='icon-view1'></i></a>";
-                    $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='".base_url()."jobs/view-job/".$job->id."' data-target-id=" . $job->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
+                    $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$job->id."' data-target-id=" . $job->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
                     if ($isSuperAdmin && ($job->status == 'pending' || $job->status == 'rejected')) {
-                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" target='_blank' href='" . base_url() . "jobs/edit-job/" . $job->id . "' data-target-id=" . $job->id . " title='Edit'><i class='icon-edit'></i></a>";
+                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='" . base_url() . "jobs/edit-job/" . $job->id . "' data-target-id=" . $job->id . " title='Edit'><i class='icon-edit'></i></a>";
                     }
 
 

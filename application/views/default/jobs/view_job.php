@@ -1,7 +1,9 @@
 <div class="content-wrapper">
     <div class="content_header">
         <h3 class="pull-left1" style="width: 85%">Job Detail</h3>
-        <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-event pull-right ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Exit">
+        <a href="<?php echo base_url('jobs'); ?>">
+            <input name="Cancel" type="button" class="btn-theme btn-event pull-right ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Exit">
+        </a>
     </div>
     <div class="inner_bg content_box">
         <div class="row">
@@ -105,6 +107,12 @@
                                 <div class="order_info_block">
                                     <span class="ov_title">Client Name</span>
                                     <span class="ov_data"><?php echo $jobDetail->clientName;                                       ?></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="order_info_block">
+                                    <span class="ov_title">Firm Name</span>
+                                    <span class="ov_data"><?php echo ($jobDetail->firm_name)? $jobDetail->firm_name: '--';                                       ?></span>
                                 </div>
                             </li>
                             <li>
@@ -438,13 +446,17 @@
                         <div class="form-footer">
                             <input type="submit" id="submit2" name="submit2" value="Approve" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
                             <input type="submit" id="submit3" name="submit3" value="Reject" class="btn-theme btn-red ml10 mdl-js-button mdl-js-ripple-effect ripple-white">
-                            <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
+                            <a href="<?php echo base_url('jobs'); ?>">
+                            <input name="Cancel" type="button" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
+                            </a>
                         </div>
                     <?php } elseif (($jobDetail->status =="pending" || $jobDetail->status =="rejected") && ($isSuperAdmin || ($isRecieptionist && $jobDetail->staff_id == getCurrentUsersId()) || ($isStaff && $jobDetail->staff_id == getCurrentUsersId()))){ ?>
                         <div class="form-footer">
                             <input type="submit" id="submit1" name="submit1" value="Submit" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
-                            <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
-                            <?php if($isSuperAdmin): ?>
+                            <a href="<?php echo base_url('jobs'); ?>">
+                            <input name="Cancel" type="button" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
+                            </a>
+                                <?php if($isSuperAdmin): ?>
                                 <div class="pull-right">
                                     <a class='mdl-js-button btn-view button-delete' href='#deleteJobCard' data-toggle='modal' data-target-id='<?php echo $jobDetail->id; ?>' title='Remove'>
                                         <input name="remove" type="button" class="btn-theme btn-event ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="remove" value="Remove">
@@ -455,7 +467,9 @@
                     <?php } elseif (($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0){ ?>
                         <div class="form-footer">
                             <input type="submit" id="submit4" name="submit4" value="Update Payment Status" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
-                            <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
+                            <a href="<?php echo base_url('jobs'); ?>">
+                            <input name="Cancel" type="button" class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Cancel">
+                            </a>
                         </div>
                     <?php } ?>
                 </div>

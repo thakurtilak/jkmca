@@ -1,7 +1,9 @@
 <div class="content-wrapper">
     <div class="content_header">
         <h3><?php echo "Edit Job Card" ?></h3>
-        <input name="Cancel" type="button" onClick="window.top.close();" class="btn-theme btn-event pull-right ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Exit">
+        <a href="<?php echo base_url('jobs'); ?>">
+        <input name="Cancel" type="button" class="btn-theme btn-event pull-right ml10 mdl-js-button mdl-js-ripple-effect ripple-white" id="cancel" value="Exit">
+        </a>
     </div>
     <div class="inner_bg content_box">
         <div class="row">
@@ -70,6 +72,12 @@
                                                     <div class="order_info_block">
                                                         <span class="ov_title">Client Name</span>
                                                         <span class="ov_data"><?php echo $jobDetail->clientName;                                       ?></span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="order_info_block">
+                                                        <span class="ov_title">Firm Name</span>
+                                                        <span class="ov_data"><?php echo ($jobDetail->firm_name)? $jobDetail->firm_name: '--';                                       ?></span>
                                                     </div>
                                                 </li>
                                                 <li>

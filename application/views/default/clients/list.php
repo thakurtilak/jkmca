@@ -58,6 +58,7 @@
                     <tr>
                         <th width="5%">Code</th>
                         <th width="15%">Name</th>
+                        <th>Firm Name</th>
                         <th>Father Name</th>
                         <th>PAN</th>
                         <th>Aadhar NO.</th>
@@ -67,6 +68,7 @@
                     </thead>
                     <tbody>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -123,11 +125,11 @@
                     "orderable": false,
                 },
                 {
-                    "targets": [ 3 ],
+                    "targets": [ 4 ],
                     "orderable":false
                 },
                 {
-                    "targets": [ 6 ],
+                    "targets": [ 7 ],
                     "orderable":false
                 }
             ],
@@ -143,6 +145,7 @@
             "columns": [
                 { "data": "client_id" },
                 { "data": "client_name" },
+                { "data" : "firm_name"},
                 { "data": "father_name" },
                 { "data": "pan_no" },
                 { "data": "aadhar_no" },

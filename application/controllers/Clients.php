@@ -106,6 +106,7 @@ class Clients extends CI_Controller
                     }
                     $tempData = array("client_id" => $client->client_id,
                         "client_name" => $clientName,
+                        "firm_name"   => ($client->firm_name) ? $client->firm_name : '--',
                         "father_name" => $father_name,
                         "pan_no" => $client->pan_no,
                         "aadhar_no" => $client->aadhar_number,

@@ -75,6 +75,13 @@
         </li>
         <li>
             <div class="order_info_block">
+                <span class="ov_title">Firm Name</span>
+                <span class="ov_data"><?php echo ($jobDetail->firm_name) ? $jobDetail->firm_name :'--';
+                    ?></span>
+            </div>
+        </li>
+        <li>
+            <div class="order_info_block">
                 <span class="ov_title">Client Address</span>
                 <span class="ov_data"><?php echo $jobDetail->clientAddress; ?></span>
             </div>
