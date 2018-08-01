@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IMS | Login</title>
+    <title>JKMCA | Login</title>
     <link href="<?php echo base_url();?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/vendor/material/css/material.min.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/style.css" rel="stylesheet">
@@ -12,13 +12,13 @@
 <body class="login_body">
 <div class="login_page">
     <div class="login_box">
-        <div class="login_l_block">
+        <!--<div class="login_l_block">
             <div style="text-align: center"><h3>System Admin</h3></div>
-            <div class="lg_wd"><img class="svg" src="<?php echo base_url();?>assets/images/logo_wd.svg" /></div>
-        </div><!--login_l_block-->
+            <div class="lg_wd"><img class="svg" src="<?php /*echo base_url();*/?>assets/images/logo_wd.svg" /></div>
+        </div>--><!--login_l_block-->
         <div class="login_r_block">
           <div class="login_block">
-            <div class="lg_ims"><img class="svg" src="<?php echo base_url();?>assets/images/logo_ims.svg" /></div>
+            <div class="lg_ims"><img class="svg" src="<?php echo base_url();?>assets/images/logo_2.png" /></div>
 
             <?php if($this->session->flashdata('error') != '') { ?>
                 <div class="alert alert-danger" style="margin-top:18px;">
