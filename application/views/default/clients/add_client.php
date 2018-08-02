@@ -29,7 +29,24 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="box-form">
-                                <h3 class="form-box-title">Client Info</h3>
+                                <div style="display: inline-block; width: 100%">
+                                <h3 class="form-box-title pull-left" style="width: 65%">Client Info</h3>
+                                <div class="add_new_btn text-right">
+                                        <div class="form-group1">
+                                            <label class="form_label pull-left">Is Manager/Responsible</label>
+                                            <div class="pull-right">
+                                            <div class="radio radio-inline">
+                                                <input type="radio" id="is_manager_yes" name="is_manager" value="1" <?php echo (isset($clientDetail) && $clientDetail->is_manager == '1') ? 'checked=checked' :''; ?>>
+                                                <label for="is_manager_yes"> YES</label>
+                                            </div>
+                                            <div class="radio radio-inline">
+                                                <input <?php echo (!isset($clientDetail))? "checked":'';?> type="radio" id="is_manager_no" name="is_manager" value="0" <?php echo (isset($clientDetail) && $clientDetail->is_manager == '0') ? 'checked=checked' :''; ?>>
+                                                <label for="is_manager_no"> NO</label>
+                                            </div>
+                                            </div>
+                                        </div><!--form-group-->
+                                </div>
+                                </div>
                                 <div class="theme-form">
                                     <div class="row">
                                         <div class="col-sm-4">

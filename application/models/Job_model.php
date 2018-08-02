@@ -171,11 +171,12 @@ class Job_model extends CI_Model
     /*To get Job Details*/
     public function getJob($jobId){
 
-        $this->db->select('Tm.*,wt.work,uM.id as userId,CONCAT(uM.first_name, \' \' , uM.last_name) as requestorname, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact, clientM.firm_name' );
+        $this->db->select('Tm.*,wt.work,uM.id as userId,CONCAT(uM.first_name, \' \' , uM.last_name) as requestorname, CONCAT(PR.first_name, " " , IFNULL(PR.middle_name, ""), " ",IFNULL(PR.last_name, "")) as responsible, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact, clientM.firm_name' );
         $this->db->from(TBL_JOB_MASTER.' as Tm');
         $this->db->join(TBL_WORK_TYPE.' as wt','wt.id = Tm.work_type', 'left');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.created_by', 'left');
         $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        $this->db->join(TBL_CLIENT_MASTER. ' as PR','PR.client_id = Tm.payment_responsible','left');
         if($jobId) {
             $this->db->where('Tm.id', $jobId);
         }

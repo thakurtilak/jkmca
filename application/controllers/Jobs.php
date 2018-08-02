@@ -229,6 +229,10 @@ class Jobs extends CI_Controller
                     'created_date' => date('Y-m-d H:i:s'),
                     'created_by'   => getCurrentUsersId()
                 );
+
+                if(isset($postData['payment_responsible']) && !empty($postData['payment_responsible'])) {
+                    $insertArray['payment_responsible'] = $postData['payment_responsible'];
+                }
                 if($work_type == 1) {
                     $insertArray['first_name'] =  $postData['first_name'];
                     $insertArray['middle_name'] =  $postData['middle_name'];
@@ -363,6 +367,10 @@ class Jobs extends CI_Controller
         $documentTypes = $this->common_model->getRecords(TBL_DOCUMENTS_MASTER,array( 'id','name'), $where, 'name');
         $data['documentTypes'] = $documentTypes;
 
+        $where = array('status' => '1','is_manager' => '1');
+        $managers = $this->common_model->getRecords(TBL_CLIENT_MASTER,array( 'client_id','CONCAT(first_name, " " , IFNULL(middle_name, ""), " ",IFNULL(last_name, "")) as clientName'), $where, 'clientName');
+        $data['managers'] = $managers;
+
         $data['currentUserId'] = getCurrentUsersId();
         $data['rolesIDArray'] = $rolesIDArray;
         $this->template->set('title', 'Create Job');
@@ -468,6 +476,8 @@ class Jobs extends CI_Controller
                 'completion_date' => date('Y-m-d', strtotime($postData['completion_date'])),
                 'remark'  => $postData['remark'],
             );
+            $updateArray['payment_responsible'] = $postData['payment_responsible'];
+
             $updateWhere = array('id' => $jobId);
             $this->common_model->update(TBL_JOB_MASTER, $updateArray, $updateWhere);
             $this->session->set_flashdata('success', 'Job has been updated successfully.');
@@ -535,6 +545,10 @@ class Jobs extends CI_Controller
         $where = array('status' => '1');
         $documentTypes = $this->common_model->getRecords(TBL_DOCUMENTS_MASTER,array( 'id','name'), $where, 'name');
         $data['documentTypes'] = $documentTypes;
+
+        $where = array('status' => '1','is_manager' => '1');
+        $managers = $this->common_model->getRecords(TBL_CLIENT_MASTER,array( 'client_id','CONCAT(first_name, " " , IFNULL(middle_name, ""), " ",IFNULL(last_name, "")) as clientName'), $where, 'clientName');
+        $data['managers'] = $managers;
 
         $this->template->set('title', 'Edit Job');
         $this->template->load('default', 'contents', 'default/jobs/edit_job', $data);

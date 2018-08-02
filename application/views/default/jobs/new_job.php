@@ -305,7 +305,21 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="ims_form_label">Responsible For Payment</label>
+                                                <select class="ims_form_control" name="payment_responsible" id="payment_responsible">
+                                                    <option value="">Select Responsible</option>
+                                                    <?php if($managers) :
+                                                        foreach ($managers as $user):
+                                                            ?>
+                                                            <option value="<?php echo $user->client_id; ?>"><?php echo $user->clientName; ?></option>
+                                                        <?php endforeach; endif; ?>
+                                                </select>
+                                                <label class="error" style="display:none;">Required</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8">
                                             <div class="form-group">
                                                 <label class="ims_form_label">Remark</label>
                                                 <textarea class="ims_form_control" name="remark" id="remark"></textarea>

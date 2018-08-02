@@ -46,7 +46,14 @@
                 <span class="ov_data"><?php echo formatAmount($jobDetail->remaining_amount); ?></span>
             </div>
         </li>
-
+        <?php if($jobDetail->responsible): ?>
+        <li style="background: yellow; ">
+            <div class="order_info_block">
+                <span class="ov_title">Responsible For Payment</span>
+                <span class="ov_data"><?php echo $jobDetail->responsible; ?></span>
+            </div>
+        </li>
+        <?php endif; ?>
         <li class="od_block">
             <div class="order_info_block">
                 <span class="ov_title">Requested By</span>
