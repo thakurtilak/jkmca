@@ -264,6 +264,21 @@ class Jobs extends CI_Controller
                 $inserted_job_id = $this->common_model->insert(TBL_JOB_MASTER, $insertArray);
                 //$inserted_job_id = 1;
                 if($inserted_job_id) {
+                    /*If Any advanced amt then save it to payment history */
+                    if($insertArray['advanced_amount'] > 0) {
+                        $payByUserId = isset($insertArray['payment_responsible']) ? $insertArray['payment_responsible'] : $insertArray['client_id'];
+                        $paymentHistory = array(
+                            'job_id' => $inserted_job_id,
+                            'pay_by' => $payByUserId,
+                            'amount' => $insertArray['advanced_amount'],
+                            'payment_type' => 'Advanced',
+                            'payment_date' => date('Y-m-d H:i:s'),
+                            'update_by' => getCurrentUsersId()
+                        );
+                        $payment_id = $this->common_model->insert(TBL_JOB_PAYMENT_HISTORY, $paymentHistory);
+                    }
+
+
                     $uploadError = false;
                     /*Upload Job card*/
                     $upload_data = $this->do_upload_jobs($inserted_job_id);
@@ -827,7 +842,7 @@ class Jobs extends CI_Controller
                 }
                 redirect('/jobs');
             } elseif(isset($postData['submit4'])) {
-                $jobRecord = $this->common_model->getRecord(TBL_JOB_MASTER, array('amount','advanced_amount','remaining_amount'), array('id' => $jobId));
+                $jobRecord = $this->common_model->getRecord(TBL_JOB_MASTER, array('amount','advanced_amount','remaining_amount','client_id','payment_responsible'), array('id' => $jobId));
 
                 if(isset($postData['payment_status']) && $jobRecord) {
                     $remainingAmount = $jobRecord->remaining_amount - $postData['pay_amount'];
@@ -839,6 +854,18 @@ class Jobs extends CI_Controller
                     $where = array('id' => $jobId);
                     $updated = $this->common_model->update(TBL_JOB_MASTER, $updateArray, $where);
                     if ($updated) {
+                        /*Add in payment history */
+                        $payByUserId = ($jobRecord->payment_responsible) ? $jobRecord->payment_responsible : $jobRecord->client_id;
+                        $paymentHistory = array(
+                            'job_id' => $jobId,
+                            'pay_by' => $payByUserId,
+                            'amount' => $postData['pay_amount'],
+                            'payment_type' => 'onCompleted',
+                            'payment_date' => date('Y-m-d H:i:s'),
+                            'update_by' => getCurrentUsersId()
+                        );
+                        $payment_id = $this->common_model->insert(TBL_JOB_PAYMENT_HISTORY, $paymentHistory);
+
                         $this->session->set_flashdata('success', 'Payment has been updated successfully');
                     } else {
                         $this->session->set_flashdata('error', "There is an error while updating job record.");

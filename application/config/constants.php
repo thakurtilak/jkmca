@@ -127,6 +127,7 @@ define('TBL_JOB_MASTER', 'jkm_job_master');
 define('TBL_JOBCARDS_FILES', 'jkm_job_card_files');
 define('TBL_JOBS_ATTACHMENTS', 'jkm_jobs_attachments');
 define('TBL_JOBCARDS_WORK_FILES', 'jkm_job_work_files');
+define('TBL_JOB_PAYMENT_HISTORY', 'jkm_job_payment_history');
 /*End Tables*/
 
 /*DEFINE CATEGORY ID*/
