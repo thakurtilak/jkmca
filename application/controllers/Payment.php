@@ -23,6 +23,7 @@ class Payment extends CI_Controller
         $this->load->library('emailUtility');
         //$this->load->library('phpspreadsheet');
         $this->load->library('Phpspreadsheet');
+        debug($this->phpspreadsheet); die;
         if (!isLoggedIn()) {
             redirect('login');
         }
