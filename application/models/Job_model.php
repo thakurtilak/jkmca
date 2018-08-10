@@ -236,10 +236,12 @@ class Job_model extends CI_Model
     public function getPaymentPendingJobs($limitLength = 10, $limitStart = 0) {
 
         $this->db->from(TBL_JOB_MASTER . ' as Tm');
-        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact, CONCAT(RM.first_name, " " , IFNULL(RM.middle_name, ""), " ",IFNULL(RM.last_name, "")) as responsibleName,RM.mobile as responsibleContact');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
         $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
         $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        $this->db->join(TBL_CLIENT_MASTER. ' as RM','RM.client_id = Tm.payment_responsible','left');
+
         $this->db->where('Tm.status', 'completed');
         $this->db->where('Tm.remaining_amount >', 0);
         $this->db->order_by('complete_date DESC');
@@ -279,10 +281,11 @@ class Job_model extends CI_Model
     */
     public function listPaymentLaser($type, $clientId, $workType = false, $month = false,  $searchKey = false, $orderBY= false, $limitStart= 0, $limitLength = 10, $countOnly = false) {
         $this->db->from(TBL_JOB_MASTER . ' as Tm');
-        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
+        $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact,CONCAT(RM.first_name, " " , IFNULL(RM.middle_name, ""), " ",IFNULL(RM.last_name, "")) as responsibleName,RM.mobile as responsibleContact');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
         $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = Tm.work_type');
         $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = Tm.client_id','left');
+        $this->db->join(TBL_CLIENT_MASTER. ' as RM','RM.client_id = Tm.payment_responsible','left');
         if($type == 1) {
             $this->db->group_start();
             $this->db->where('Tm.client_id', $clientId);
@@ -338,7 +341,9 @@ class Job_model extends CI_Model
             $query = $this->db->get();
             return $query->num_rows();
         } else {
-            $this->db->limit($limitLength, $limitStart);
+            if($limitLength !== false){
+                $this->db->limit($limitLength, $limitStart);
+            }
             $query = $this->db->get();
             //echo  $this->db->last_query(); die;
             return $query->result();

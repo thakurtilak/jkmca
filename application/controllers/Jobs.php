@@ -119,7 +119,7 @@ class Jobs extends CI_Controller
                     }
                     $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#InvoiceDetailModal\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='View'><i class='icon-view1'></i></a>";
                     $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$job->id."' data-target-id=" . $job->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
-                    if ($isSuperAdmin && ($job->status == 'pending' || $job->status == 'rejected')) {
+                    if (($isSuperAdmin || $isRecieptionist) && ($job->status == 'pending' || $job->status == 'rejected')) {
                         $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='" . base_url() . "jobs/edit-job/" . $job->id . "' data-target-id=" . $job->id . " title='Edit'><i class='icon-edit'></i></a>";
                     }
 
@@ -406,14 +406,15 @@ class Jobs extends CI_Controller
         $usersRoles = $userDetail->role_id;
         $rolesIDArray = explode(',', $usersRoles);
         $isSuperAdmin = false;
-        if (!in_array(SUPERADMINROLEID, $rolesIDArray)) {
+        if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray) ) {
             $isSuperAdmin = true;
             $this->session->set_flashdata('error', "You are not authorize to edit Job.");
             redirect('/jobs');
         }
+        $jobDetail = $this->job_model->getJob($jobId);
         $postData = $this->input->post(NULL, true);
         if($postData && $jobId == $postData['job_id']) {
-            debug($_FILES, false);
+            //debug($_FILES, false);
             $uploadError = false;
             /*If Job Card Update*/
             if(isset($_FILES['job_card']['name']) && !empty($_FILES['job_card']['name']) && !$_FILES['job_card']['error']) {
@@ -495,10 +496,25 @@ class Jobs extends CI_Controller
 
             $updateWhere = array('id' => $jobId);
             $this->common_model->update(TBL_JOB_MASTER, $updateArray, $updateWhere);
+
+            /*If Any advanced amt then save it to payment history */
+            if($updateArray['advanced_amount'] > 0 && $updateArray['advanced_amount'] > $jobDetail->advanced_amount) {
+                $payByUserId = isset($updateArray['payment_responsible']) ? $updateArray['payment_responsible'] : $jobDetail->client_id;
+                $paymentHistory = array(
+                    'job_id' => $jobId,
+                    'pay_by' => $payByUserId,
+                    'amount' => $updateArray['advanced_amount'],
+                    'payment_type' => 'Advanced',
+                    'payment_date' => date('Y-m-d H:i:s'),
+                    'update_by' => getCurrentUsersId()
+                );
+                $payment_id = $this->common_model->insert(TBL_JOB_PAYMENT_HISTORY, $paymentHistory);
+            }
+
             $this->session->set_flashdata('success', 'Job has been updated successfully.');
             redirect('/jobs');
         }
-        $jobDetail = $this->job_model->getJob($jobId);
+
         if(!$jobDetail) {
             $this->session->set_flashdata('error', "Unable to find Job details.");
             redirect('/jobs');

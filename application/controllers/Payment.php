@@ -21,6 +21,7 @@ class Payment extends CI_Controller
         $this->load->model('job_model');
         $this->load->model('ClientModel');
         $this->load->library('emailUtility');
+        $this->load->library('phpspreadsheet');
         if (!isLoggedIn()) {
             redirect('login');
         }
@@ -31,12 +32,15 @@ class Payment extends CI_Controller
         $userDetail = getCurrentUser();
         $usersRoles = $userDetail->role_id;
         $rolesIDArray = explode(',', $usersRoles);
+        if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray) ) {
+            $this->session->set_flashdata('error', "You are not authorize to see payment laser.");
+            redirect('/dashboard');
+        }
         //print_r($rolesIDArray);
         $isSuperAdmin = false;
         $isRecieptionist = false;
         $isStaff = false;
         if (in_array(SUPERADMINROLEID, $rolesIDArray)) {
-
             $userID = false;
             $isSuperAdmin = true;
         } else if(in_array(RECIEPTIONISTROLEID, $rolesIDArray)) {
@@ -260,6 +264,89 @@ class Payment extends CI_Controller
             }
 
         }
+    }
+
+    public function download_excel(){
+
+        $laserFor = $this->input->get('laserFor', true);
+        $clientId = $this->input->get('client', true);
+        $work_type= $this->input->get('work_type', true);
+        $searchKey= $this->input->get('searchKey', true);
+        $orderColumn = "created_date";
+        $direction = "ASC";
+        $orderBY = $orderColumn . " " . $direction;
+        $jobsList = $this->job_model->listPaymentLaser($laserFor, $clientId, $work_type, false, $searchKey, $orderBY, false, false, false);
+        $fileName = "Payment-pending-".date('d-M-Y');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date', 'Payment Due');
+        $dataArray = array();
+        $dataArray[] =$header;
+        if ($jobsList) {
+            foreach ($jobsList as $key => $job) {
+                $jobID = $job->job_number;
+                $created_date = ($job->created_date ? date('d-M-Y', strtotime($job->created_date)) : '');
+                if (trim($job->clientName) == "") {
+                    $clientName = "--";
+                } else {
+                    $clientName = $job->clientName;
+                }
+                $workName = $job->work;
+                $remaining_amount = $job->remaining_amount;
+                $clientContact = $job->clientContact;
+                $responsibleName = ($job->responsibleName) ? $job->responsibleName :'--';
+                $responsibleContact = ($job->responsibleContact) ? $job->responsibleContact :'--';
+                $tempData = array(
+                    $jobID,
+                    $clientName,
+                    $clientContact,
+                    $workName,
+                    $created_date,
+                    $remaining_amount,
+                    $responsibleName,
+                    $responsibleContact
+                );
+                $dataArray[] =$tempData;
+            }
+        }
+        $this->phpspreadsheet->createXlSX($fileName, $dataArray, "Payment Laser");
+        exit();
+    }
+
+    public function download_excel_pending_all(){
+        $jobsList = $this->job_model->getPaymentPendingJobs(1000);
+        $fileName = "Payment-pending-".date('d-M-Y');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date', 'Payment Due','Payment Responsible', 'Responsible No.');
+        $dataArray = array();
+        $dataArray[] =$header;
+        if ($jobsList) {
+            foreach ($jobsList as $key => $job) {
+                $jobID = $job->job_number;
+                $created_date = ($job->created_date ? date('d-M-Y', strtotime($job->created_date)) : '');
+                if (trim($job->clientName) == "") {
+                    $clientName = "--";
+                } else {
+                    $clientName = $job->clientName;
+                }
+                $workName = $job->work;
+                $remaining_amount = $job->remaining_amount;
+                $clientContact = $job->clientContact;
+                $responsibleName = ($job->responsibleName) ? $job->responsibleName :'--';
+                $responsibleContact = ($job->responsibleContact) ? $job->responsibleContact :'--';
+                $tempData = array(
+                    $jobID,
+                    $clientName,
+                    $clientContact,
+                    $workName,
+                    $created_date,
+                    $remaining_amount,
+                    $responsibleName,
+                    $responsibleContact
+                );
+                $dataArray[] =$tempData;
+            }
+        }
+        //debug($dataArray); die;
+        $this->phpspreadsheet->createXlSX($fileName, $dataArray, "Payment Payments");
+        exit();
     }
 
 }

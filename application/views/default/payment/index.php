@@ -52,6 +52,10 @@
                             </select>
                         </div>
                     </div><!--col-sm-3-->
+
+                    <div class="col-sm-12 pull-right" style="text-align: right; font-size: 25px;">
+                            <a href="javascript:void(0)" id="exportPaymentLaser" style="font-size: 25px;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" title="Export Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                    </div><!--col-sm-3-->
                     <!--<div class="col-sm-3">
                         <div class="form-group">
                             <select class="ims_form_control" name="month" id="month">
@@ -335,6 +339,20 @@
                     console.log(err);
                 }
             });
+        });
+
+        $("#exportPaymentLaser").click(function () {
+            var Client = $("#client").val();
+            if ($('input[name=laser_for]:checked').length > 0 && Client !='') {
+                var laserFor = $("input[name='laser_for']:checked").val();
+                var client = $('#client').val();
+                var work_type = $('#work_type').val();
+                var searchKey = $('input[type=search]').val();
+                $url = BASEURL +"payment/download-excel?laserFor="+laserFor+"&client="+client+"&work_type="+work_type+"&searchKey="+searchKey;
+                window.location = $url;
+            } else {
+                alert('Please Filter Payment laser before export');
+            }
         });
 
     });
