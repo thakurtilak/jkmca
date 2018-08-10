@@ -345,7 +345,8 @@ class Payment extends CI_Controller
                 $dataArray[] =$tempData;
             }
         }
-        debug($dataArray); die;
+        //debug($dataArray); die;
+        error_reporting(E_ALL);
         $this->phpspreadsheet->createXlSX($fileName, $dataArray, "Payment Payments");
         exit();
     }
