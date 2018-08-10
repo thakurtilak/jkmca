@@ -313,6 +313,7 @@ class Payment extends CI_Controller
 
     public function download_excel_pending_all(){
         $jobsList = $this->job_model->getPaymentPendingJobs(1000);
+        debug($jobsList); die;
         $fileName = "Payment-pending-".date('d-M-Y');
         $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date', 'Payment Due','Payment Responsible', 'Responsible No.');
         $dataArray = array();
