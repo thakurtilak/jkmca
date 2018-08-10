@@ -6,7 +6,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 /**
  * Class phpspreadsheet
  */
-class phpspreadsheet {
+class Phpspreadsheet {
     public function __construct()
     {
 
