@@ -21,7 +21,8 @@ class Payment extends CI_Controller
         $this->load->model('job_model');
         $this->load->model('ClientModel');
         $this->load->library('emailUtility');
-        $this->load->library('phpspreadsheet');
+        //$this->load->library('phpspreadsheet');
+        $this->load->library('Phpspreadsheet');
         if (!isLoggedIn()) {
             redirect('login');
         }
