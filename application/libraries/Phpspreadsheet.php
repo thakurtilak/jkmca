@@ -14,6 +14,7 @@ class Phpspreadsheet {
 
     public function createXlSX($filename, $dataArray = array(), $title= 'Data', $printTitle = "Confidential Data"){
         $spreadsheet = new Spreadsheet();
+        debug($spreadsheet); die;
         $spreadsheet->getProperties()
             ->setCreator("JKMCA")
             ->setTitle($printTitle);
