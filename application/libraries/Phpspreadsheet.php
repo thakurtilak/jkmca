@@ -7,12 +7,27 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
  * Class phpspreadsheet
  */
 class Phpspreadsheet {
+    public $_rang = array(
+        1 => 'A', 2 => 'B', 3 => 'C', 4 => 'D', 5 => 'E',
+        6 => 'F', 7 => 'G', 8 => 'H', 9 => 'I', 10 => 'J',
+        11 => 'K', 12 => 'L', 13 => 'M', 14 => 'N', 15 => 'O',
+        16 => 'P', 17 => 'Q',18 => 'R',19 => 'S',20 => 'T',
+        21 => 'U',22 => 'V',24 => 'W',24 => 'X',25 => 'Y',
+        26 => 'Z',
+    );
     public function __construct()
     {
 
     }
 
     public function createXlSX($filename, $dataArray = array(), $title= 'Data', $printTitle = "Confidential Data"){
+        $firstCol = 1;
+        $lastCol  = 1;
+        if(isset($dataArray[0])) {
+            $lastCol = count($dataArray[0]);
+        }
+        $startCell = $this->_rang[$firstCol];
+        $endCell = $this->_rang[$lastCol];
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getProperties()
             ->setCreator("JKMCA")
@@ -55,24 +70,23 @@ class Phpspreadsheet {
                 ),
             )
         );
-        //$spreadsheet->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-        //$spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(12);
-        //debug(range('A', $spreadsheet->getActiveSheet()->getHighestDataColumn())); die;
-        foreach (range('A', 'H') as $col) {
+
+        foreach (range($startCell, $endCell) as $col) {
             $spreadsheet->getActiveSheet()
                 ->getColumnDimension($col)
                 ->setAutoSize(true);
         }
 
-
-        $spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray($styleArray);
-        $spreadsheet->getActiveSheet()->getStyle('A1:H1')
+        $rowNumber = 1;
+        $pCellCoordinate = $startCell.$rowNumber.':'.$endCell.$rowNumber;
+        $spreadsheet->getActiveSheet()->getStyle($pCellCoordinate)->applyFromArray($styleArray);
+        $spreadsheet->getActiveSheet()->getStyle($pCellCoordinate)
             ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-        $spreadsheet->getActiveSheet()->getStyle('A1:H1')
+        $spreadsheet->getActiveSheet()->getStyle($pCellCoordinate)
             ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        $spreadsheet->getActiveSheet()->getRowDimension('1')->setRowHeight(25);
+        $spreadsheet->getActiveSheet()->getRowDimension($rowNumber)->setRowHeight(25);
 
         //For Print
         $spreadsheet->getActiveSheet()->getPageSetup()
@@ -80,7 +94,7 @@ class Phpspreadsheet {
         $spreadsheet->getActiveSheet()->getPageSetup()
             ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->fromArray( $dataArray, NULL, 'A1' );
+        $sheet->fromArray( $dataArray, NULL, $startCell.'1' );
         $writer = new Xlsx($spreadsheet);
 
         header('Content-Type: application/vnd.ms-excel');

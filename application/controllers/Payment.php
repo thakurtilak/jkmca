@@ -353,4 +353,69 @@ class Payment extends CI_Controller
         exit();
     }
 
+    public function download_all_view_jobs(){
+        $work_type = $this->input->get('work_type');
+        $work_type = (!empty($work_type)) ? $work_type : false;
+        $status_id = $this->input->get('status_id');
+        $status = (!empty($status_id)) ? $status_id : false;
+        $month  = $this->input->get('month');
+        $month = (!empty($month)) ? $month : false;
+        $payment_status = $this->input->get('payment_status');
+        $searchKey= $this->input->get('searchKey', true);
+        $orderColumn = "created_date";
+        $direction = "ASC";
+        $orderBY = $orderColumn . " " . $direction;
+        //$jobsList = $this->job_model->getPaymentPendingJobs(1000);
+        $jobsList = $this->job_model->downloadAllJobList(false, $work_type, $status, $month, $payment_status, $searchKey, $orderBY);
+        $fileName = "Job-List-".date('d-M-Y');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date','Job Status','Pending Amount','Payment Responsible', 'Responsible No.');
+        $dataArray = array();
+        $dataArray[] =$header;
+        if ($jobsList) {
+            foreach ($jobsList as $key => $job) {
+                $jobID = $job->job_number;
+                $created_date = ($job->created_date ? date('d-M-Y', strtotime($job->created_date)) : '');
+                if (trim($job->clientName) == "") {
+                    $clientName = "--";
+                } else {
+                    $clientName = $job->clientName;
+                }
+                $workName = $job->work;
+                $remaining_amount = $job->remaining_amount;
+                $clientContact = $job->clientContact;
+                $responsibleName = ($job->responsibleName) ? $job->responsibleName :'--';
+                $responsibleContact = ($job->responsibleContact) ? $job->responsibleContact :'--';
+                if($job->status == 'pending') {
+                    $status = 'Pending';
+                } else if($job->status == 'approval_pending') {
+                    $status = 'Pending For Review';
+                } else if($job->status == 'rejected') {
+                    $status = 'Rejected';
+                }else if($job->status == 'completed') {
+                    $status = 'Completed';
+                } else {
+                    $status = $job->status;
+                }
+                $tempData = array(
+                    $jobID,
+                    $clientName,
+                    $clientContact,
+                    $workName,
+                    $created_date,
+                    $status,
+                    $remaining_amount,
+                    $responsibleName,
+                    $responsibleContact
+                );
+                $dataArray[] =$tempData;
+            }
+        }
+        try{
+            $this->phpspreadsheet->createXlSX($fileName, $dataArray, "All Jobs");
+        } catch (Exception $e) {
+            //debug($e); die;
+        }
+        exit();
+    }
+
 }

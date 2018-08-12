@@ -73,6 +73,13 @@
                 <span class="ov_data"><?php echo date('d-M-Y', strtotime($jobDetail->completion_date)); ?></span>
             </div>
         </li>
+
+        <li>
+            <div class="order_info_block">
+                <span class="ov_title">Client ID</span>
+                <span class="ov_data"><?php echo $jobDetail->clientId;                                       ?></span>
+            </div>
+        </li>
         <li>
             <div class="order_info_block">
                 <span class="ov_title">Client Name</span>
@@ -97,6 +104,12 @@
             <div class="order_info_block">
                 <span class="ov_title">Client Mobile No.</span>
                 <span class="ov_data"><?php echo $jobDetail->clientContact; ?></span>
+            </div>
+        </li>
+        <li>
+            <div class="order_info_block">
+                <span class="ov_title">Client Pan No.</span>
+                <span class="ov_data"><?php echo $jobDetail->clientPan; ?></span>
             </div>
         </li>
         <li>

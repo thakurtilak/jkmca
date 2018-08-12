@@ -100,7 +100,11 @@
                                 </select>
                             </div>
                         </div><!--col-sm-3-->
+                        <div class="col-sm-12 pull-right" style="text-align: right; font-size: 25px;">
+                            <a href="javascript:void(0)" id="exportPaymentLaser" style="font-size: 25px;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" title="Export Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                        </div>
                     <?php endif; ?>
+
                 </div><!--row-->
             </div><!--order_filter-->
             <div class="ims_datatable table-responsive">
@@ -415,6 +419,16 @@
             messages: {
                 "file-upload-input": {required: "This field is required",extension:"Invalid file format"},
             }
+        });
+
+        $("#exportPaymentLaser").click(function () {
+            var status_id = $("#status_id").val();
+            var month = $('#month').val();
+            var work_type = $('#work_type').val();
+            var payment_status = $('#payment_status').val();
+            var searchKey = $('input[type=search]').val();
+            $url = BASEURL +"payment/download-all-view-jobs?payment_status="+payment_status+"&month="+month+"&status_id="+status_id+"&work_type="+work_type+"&searchKey="+searchKey;
+            window.location = $url;
         });
 
     });

@@ -112,6 +112,12 @@
                         <ul class="order_view_detail">
                             <li>
                                 <div class="order_info_block">
+                                    <span class="ov_title">Client ID</span>
+                                    <span class="ov_data"><?php echo $jobDetail->clientId;                                       ?></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="order_info_block">
                                     <span class="ov_title">Client Name</span>
                                     <span class="ov_data"><?php echo $jobDetail->clientName;                                       ?></span>
                                 </div>
@@ -134,6 +140,13 @@
                                     <span class="ov_data"><?php echo $jobDetail->clientContact; ?></span>
                                 </div>
                             </li>
+                            <li>
+                                <div class="order_info_block">
+                                    <span class="ov_title">Client Pan No.</span>
+                                    <span class="ov_data"><?php echo $jobDetail->clientPan; ?></span>
+                                </div>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
