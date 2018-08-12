@@ -86,6 +86,7 @@ class Phpspreadsheet {
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
         header('Cache-Control: max-age=0');
+        echo "TEST"; die;
         $writer->save('php://output'); // download file
         die;
     }
