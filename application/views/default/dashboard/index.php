@@ -88,7 +88,7 @@
                             </div>
                             <div class="more_result text-right">
                                 <a href="<?php echo base_url(); ?>jobs" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" data-upgraded=",MaterialButton,MaterialRipple">View all<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
-                                <a href="javascript:void(0)" style="font-size: 25px; display: none;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" id="exportPaymentLaser" title="Export All In Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                                <a href="javascript:void(0)" style="font-size: 25px;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" id="exportPaymentLaser" title="Export All In Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div><!--dash_box_header-->

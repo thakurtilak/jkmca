@@ -345,16 +345,11 @@ class Payment extends CI_Controller
                 $dataArray[] =$tempData;
             }
         }
-        //debug($dataArray); die;
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
         try{
-            //debug($this->phpspreadsheet); die;
-            $this->phpspreadsheet->createXlSX($fileName, $dataArray, "Payment Payments");
+            $this->phpspreadsheet->createXlSX($fileName, $dataArray, "Pending Payments");
         } catch (Exception $e) {
-            debug($e); die;
+            //debug($e); die;
         }
-
         exit();
     }
 

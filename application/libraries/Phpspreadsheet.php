@@ -90,7 +90,7 @@ class Phpspreadsheet {
             $writer->save('php://output'); // download file
             //$this->saveViaTempFile($writer);
         } catch(Exception $e) {
-            echo $e->__toString();
+            //echo $e->__toString();
         }
         die;
     }

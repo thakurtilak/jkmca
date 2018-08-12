@@ -54,7 +54,7 @@
                     </div><!--col-sm-3-->
 
                     <div class="col-sm-12 pull-right" style="text-align: right; font-size: 25px;">
-                            <a href="javascript:void(0)" id="exportPaymentLaser" style="font-size: 25px; display: none;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" title="Export Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                            <a href="javascript:void(0)" id="exportPaymentLaser" style="font-size: 25px;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" title="Export Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                     </div><!--col-sm-3-->
                     <!--<div class="col-sm-3">
                         <div class="form-group">
