@@ -98,7 +98,7 @@ class Phpspreadsheet {
     function saveViaTempFile($objWriter){
         $filePath = '' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
         $fileFullPath = realpath(UPLOAD_ROOT_DIR) . DIRECTORY_SEPARATOR .$filePath;
-
+        echo $fileFullPath;die;
         $objWriter->save($fileFullPath);
         readfile($fileFullPath);
         unlink($fileFullPath);
