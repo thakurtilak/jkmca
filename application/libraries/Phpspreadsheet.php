@@ -14,7 +14,6 @@ class Phpspreadsheet {
 
     public function createXlSX($filename, $dataArray = array(), $title= 'Data', $printTitle = "Confidential Data"){
         $spreadsheet = new Spreadsheet();
-        debug($spreadsheet); die;
         $spreadsheet->getProperties()
             ->setCreator("JKMCA")
             ->setTitle($printTitle);
@@ -83,6 +82,7 @@ class Phpspreadsheet {
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->fromArray( $dataArray, NULL, 'A1' );
         $writer = new Xlsx($spreadsheet);
+        debug($writer); die;
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
         header('Cache-Control: max-age=0');
