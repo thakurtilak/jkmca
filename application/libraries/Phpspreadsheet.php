@@ -87,10 +87,21 @@ class Phpspreadsheet {
         header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
         header('Cache-Control: max-age=0');
         try{
-            $writer->save('php://output'); // download file
+            //$writer->save('php://output'); // download file
+            $this->saveViaTempFile($writer);
         } catch(Exception $e) {
             echo $e->__toString();
         }
         die;
+    }
+
+    function saveViaTempFile($objWriter){
+        $filePath = '' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+        $fileFullPath = realpath(UPLOAD_ROOT_DIR) . DIRECTORY_SEPARATOR .$filePath;
+
+        $objWriter->save($fileFullPath);
+        readfile($fileFullPath);
+        unlink($fileFullPath);
+        exit;
     }
 }
