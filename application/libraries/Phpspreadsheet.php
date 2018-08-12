@@ -87,8 +87,8 @@ class Phpspreadsheet {
         header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
         header('Cache-Control: max-age=0');
         try{
-            //$writer->save('php://output'); // download file
-            $this->saveViaTempFile($writer);
+            $writer->save('php://output'); // download file
+            //$this->saveViaTempFile($writer);
         } catch(Exception $e) {
             echo $e->__toString();
         }
