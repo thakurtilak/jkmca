@@ -30,6 +30,7 @@ class Clients extends CI_Controller
         $this->load->library('upload');
         $this->load->model('common_model');
         $this->load->model('ClientModel');
+        $this->load->model('job_model');
         $this->load->library('emailUtility');
         if (!isLoggedIn()) {
             redirect('login');
@@ -403,6 +404,8 @@ class Clients extends CI_Controller
         //print_r($jobDocuments);
         $data = array('clientInfo' => $clientInfo);
         $data['clientDocuments'] = $clientDocuments;
+        $jobDocuments =$this->job_model->getClientsJobDocuments($clientId);
+        $data['jobDocuments'] = $jobDocuments;
         $viewHtml = $this->load->view('default/clients/view', $data, true);
         echo $viewHtml;
     }

@@ -277,7 +277,7 @@ class Payment extends CI_Controller
         $orderBY = $orderColumn . " " . $direction;
         $jobsList = $this->job_model->listPaymentLaser($laserFor, $clientId, $work_type, false, $searchKey, $orderBY, false, false, false);
         $fileName = "Payment-pending-".date('d-M-Y');
-        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date', 'Payment Due');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date','Amount', 'Discount', 'Advanced', 'Payment Due','Payment Responsible', 'Responsible No.');
         $dataArray = array();
         $dataArray[] =$header;
         if ($jobsList) {
@@ -300,6 +300,9 @@ class Payment extends CI_Controller
                     $clientContact,
                     $workName,
                     $created_date,
+                    $job->amount,
+                    $job->discount_price,
+                    $job->advanced_amount,
                     $remaining_amount,
                     $responsibleName,
                     $responsibleContact
@@ -315,7 +318,7 @@ class Payment extends CI_Controller
         $jobsList = $this->job_model->getPaymentPendingJobs(1000);
 
         $fileName = "Payment-pending-".date('d-M-Y');
-        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date', 'Payment Due','Payment Responsible', 'Responsible No.');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date', 'Amount', 'Discount', 'Advanced', 'Payment Due','Payment Responsible', 'Responsible No.');
         $dataArray = array();
         $dataArray[] =$header;
         if ($jobsList) {
@@ -338,6 +341,9 @@ class Payment extends CI_Controller
                     $clientContact,
                     $workName,
                     $created_date,
+                    $job->amount,
+                    $job->discount_price,
+                    $job->advanced_amount,
                     $remaining_amount,
                     $responsibleName,
                     $responsibleContact
@@ -368,7 +374,7 @@ class Payment extends CI_Controller
         //$jobsList = $this->job_model->getPaymentPendingJobs(1000);
         $jobsList = $this->job_model->downloadAllJobList(false, $work_type, $status, $month, $payment_status, $searchKey, $orderBY);
         $fileName = "Job-List-".date('d-M-Y');
-        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date','Job Status','Pending Amount','Payment Responsible', 'Responsible No.');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date','Job Status','Amount', 'Discount', 'Advanced','Pending Amount','Payment Responsible', 'Responsible No.');
         $dataArray = array();
         $dataArray[] =$header;
         if ($jobsList) {
@@ -403,6 +409,9 @@ class Payment extends CI_Controller
                     $workName,
                     $created_date,
                     $status,
+                    $job->amount,
+                    $job->discount_price,
+                    $job->advanced_amount,
                     $remaining_amount,
                     $responsibleName,
                     $responsibleContact

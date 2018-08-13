@@ -166,6 +166,11 @@
                     </div>
                 </div>
                 <div id="clientDocumentSec"></div>
+                <div class="col-sm-12 pull-right">
+                    <div class="col-sm-3 pull-right">
+                    <a href="#DocumentViewModal" data-toggle="modal" class="pull-right mdl-js-button mdl-js-ripple-effect ripple-white">View Document History</a>
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
@@ -344,6 +349,24 @@
             </div><!--row-->
         </form>
     </div><!--content-wrapper-->
+    <!--=============== START View Modal ======================-->
+    <!-- View client Modal-->
+    <div id="DocumentViewModal" class="modal">
+        <div class="modal-dialog zoomIn animated">
+            <div class="modal-content">
+                <div class="modal-header ims_modal_header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Document List</h4>
+                </div>
+                <div class="modal-body view-details custom_client_scroll">
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <!--=============== End View Modal ======================-->
     <script src="<?php echo base_url(); ?>assets/js/create-job.js"></script>
 <style>
     .income_box {

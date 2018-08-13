@@ -239,6 +239,36 @@ $(document).ready(function () {
         }
 
     });
+
+
+    /*Client View Model Window*/
+    $("#DocumentViewModal").on("show.bs.modal", function(e) {
+        var modal = $(this);
+        modal.find(".view-details").html("");
+        var clientId = $("#client_code").val();
+        if(clientId){
+            var viewUrl = BASEURL + "jobs/document-history/"+clientId;
+            $.ajax({
+                type: "GET",
+                url: viewUrl,
+                cache: false,
+                success: function (data) {
+                    modal.find(".view-details").html(data);
+                    $(".custom_client_scroll").mCustomScrollbar();
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        } else {
+            modal.find(".view-details").html("Please Select client");
+        }
+
+    });
+
+    $("#DocumentViewModal").on("hide.bs.modal", function() {
+        $(".custom_client_scroll").mCustomScrollbar("destroy");
+    });
 });
 
 function displayWorkTypeForm(workType) {

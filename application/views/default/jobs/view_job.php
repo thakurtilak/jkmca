@@ -223,6 +223,11 @@
                         </div>
                     </div>
                 <?php endif; ?>
+                <div class="col-sm-12 pull-right">
+                    <div class="col-sm-3 pull-right">
+                        <a href="#DocumentViewModal" data-toggle="modal" data-target-id="<?php echo $jobDetail->client_id."/".$jobDetail->id; ?>" class="pull-right mdl-js-button mdl-js-ripple-effect ripple-white">View Document History</a>
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <div class="box-form">
                         <h3 class="form-box-title">Job Documents</h3>
@@ -558,6 +563,22 @@
         </div>
     </div>
 
+    <div id="DocumentViewModal" class="modal">
+        <div class="modal-dialog zoomIn animated">
+            <div class="modal-content">
+                <div class="modal-header ims_modal_header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Document List</h4>
+                </div>
+                <div class="modal-body view-details custom_client_scroll">
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
     <script>
         <?php if(($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0) :  ?>
         $("#helpText").modal('show');
@@ -609,6 +630,35 @@
             var jobFileHref = BASEURL + "jobs/delete-job-card/"+id;
             $("#deleteJobCardForm").prop('action', jobFileHref);
 
+        });
+
+        /*Client View Model Window*/
+        $("#DocumentViewModal").on("show.bs.modal", function(e) {
+            var modal = $(this);
+            modal.find(".view-details").html("");
+            var clientId = $(e.relatedTarget).data('target-id');
+            if(clientId){
+                var viewUrl = BASEURL + "jobs/document-history/"+clientId;
+                $.ajax({
+                    type: "GET",
+                    url: viewUrl,
+                    cache: false,
+                    success: function (data) {
+                        modal.find(".view-details").html(data);
+                        $(".custom_client_scroll").mCustomScrollbar();
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            } else {
+                modal.find(".view-details").html("Please Select client");
+            }
+
+        });
+
+        $("#DocumentViewModal").on("hide.bs.modal", function() {
+            $(".custom_client_scroll").mCustomScrollbar("destroy");
         });
 
         /*Client side validations*/
@@ -677,84 +727,7 @@
             //$(".add_more_attach_inv").parent().before($cloneHtml);
             $(".job-documents-wrapper").append($cloneHtml);
         }
-        /*
-         * reject_submit
-         * @purpose - To reject Invoice.
-         * @Date - 23/02/2018
-         * @author - NJ
-         */
-        function reject_submit(ev) {
 
-            if ($("#invoice_gen_comments").val() == "") {
-                $("#invoice_no").attr('disabled','disabled');
-                $("#invoice_date").attr('disabled','disabled');
-                $("#payment_due_date").attr('disabled','disabled');
-                $("#submit2").attr('disabled','disabled');
-                $("#error_msg").html("Please enter Rejection Remarks in the Comments section !!");
-                return false;
-            } else {
-                //event.preventDefault();
-                bootbox.confirm({
-                    title: "Reject Invoice?",
-                    message: "Are you want to reject the Invoice?",
-                    className: "theme-dialog",
-                    buttons: {
-                        cancel: {
-                            label: '<i class="fa fa-times"></i> Cancel'
-                        },
-                        confirm: {
-                            label: '<i class="fa fa-check"></i> Confirm'
-                        }
-
-                    },
-                    callback: function (result) {
-                        if (result==true) {
-                            var comment = $('#invoice_gen_comments').val();
-                            var status= $('#submit1').val();
-
-
-                            $.ajax({
-                                type: "POST",
-                                url: BASEURL+"invoice/rejectInvoice",
-                                data: {Id: <?php echo $jobDetail->id; ?>, comment:comment,status:status},
-                                beforeSend: function() {
-                                    $('.loader-wrapper').show()
-                                },
-                                success: function (res) {
-                                    $('.loader-wrapper').hide();
-                                    if(res){
-                                        var data = JSON.parse(res);
-                                        if(data.success == '1') {
-                                            window.location.href = BASEURL+"invoice/generates";
-                                            $("#success_msg").html(data.message);
-                                            setTimeout(function(){
-                                                $('#ViewModal').modal('hide');
-                                            }, 2000);
-
-                                        } else if(data.success == '0') {
-                                            //$("#error_msg").html("There is an error while rejecting invoice.");
-                                            window.location.href = BASEURL+"invoice/generates";
-                                        }
-                                    } else {
-                                        window.location.href = BASEURL+"invoice/generates";
-                                        //$("#error_msg").html("There is an error while rejecting invoice.");
-                                    }
-
-                                },
-                                error: function (error) {
-                                    alert("error");
-                                    return;
-                                },
-                                complete: function() {
-                                    $('.loader-wrapper').hide();
-                                },
-                            });
-                        }
-                    }
-                });
-
-            }
-        }
         function round_decimals(original_number, decimals) {
             var result1 = original_number * Math.pow(10, decimals)
             var result2 = Math.round(result1)

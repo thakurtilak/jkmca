@@ -444,6 +444,20 @@ class Job_model extends CI_Model
         return $query->result();
     }
 
+    public function getClientsJobDocuments($clientId, $jobId = false){
+        $this->db->select('JA.*, DM.name as documentName');
+        $this->db->from(TBL_JOBS_ATTACHMENTS.' as JA');
+        $this->db->join(TBL_JOB_MASTER.' as Tm','Tm.id = JA.job_id');
+        $this->db->join(TBL_DOCUMENTS_MASTER.' as DM','DM.id = JA.attach_type', 'left');
+        $this->db->where('Tm.client_id', $clientId);
+        if($jobId) {
+            $this->db->where('Tm.id !=', $jobId);
+        }
+        $query = $this->db->get();
+        return $query->result();
+        //echo  $this->db->last_query(); die;
+    }
+
 }
 
 

@@ -1291,4 +1291,13 @@ class Jobs extends CI_Controller
             redirect('/jobs/view-job/'.$jobId);
         }
     }
+
+    public function document_history($clientId = false, $jobId = false){
+        if($this->input->is_ajax_request()) {
+            $documents =$this->job_model->getClientsJobDocuments($clientId, $jobId);
+            $data = array('documents' => $documents);
+            $flieds = $this->load->view('default/jobs/document_history', $data, TRUE);
+            echo $flieds;
+        }
+    }
 }

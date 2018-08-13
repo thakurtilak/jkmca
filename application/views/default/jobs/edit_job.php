@@ -100,31 +100,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!--<div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="box-form">
-                                <h3 class="form-box-title">Job Card Details</h3>
-                                <div class="theme-form">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 income_tax_work">
-                                            <div class="form-group">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="formFields"></div>-->
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
@@ -266,6 +241,11 @@
                         </div>
                     </div>
                 </div><!--col-sm-12-->
+                <div class="col-sm-12 pull-right">
+                    <div class="col-sm-3 pull-right">
+                        <a href="#DocumentViewModalEdit" data-toggle="modal" data-target-id="<?php echo $jobDetail->client_id."/".$jobDetail->id; ?>" class="pull-right mdl-js-button mdl-js-ripple-effect ripple-white">View Document History</a>
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
@@ -440,6 +420,22 @@
             </div>
         </div>
     </div>
+
+    <div id="DocumentViewModalEdit" class="modal">
+        <div class="modal-dialog zoomIn animated">
+            <div class="modal-content">
+                <div class="modal-header ims_modal_header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Document List</h4>
+                </div>
+                <div class="modal-body view-details custom_client_scroll">
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
     <script>
         $(document).ready(function () {
             /*Delete job file Model window*/
@@ -448,6 +444,35 @@
                 var jobFileHref = BASEURL + "jobs/delete-job-document/"+id;
                 $("#deleteJobFileForm").prop('action', jobFileHref);
 
+            });
+
+            /*Client View Model Window*/
+            $("#DocumentViewModalEdit").on("show.bs.modal", function(e) {
+                var modal = $(this);
+                modal.find(".view-details").html("");
+                var clientId = $(e.relatedTarget).data('target-id');
+                if(clientId){
+                    var viewUrl = BASEURL + "jobs/document-history/"+clientId;
+                    $.ajax({
+                        type: "GET",
+                        url: viewUrl,
+                        cache: false,
+                        success: function (data) {
+                            modal.find(".view-details").html(data);
+                            $(".custom_client_scroll").mCustomScrollbar();
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    modal.find(".view-details").html("Please Select client");
+                }
+
+            });
+
+            $("#DocumentViewModalEdit").on("hide.bs.modal", function() {
+                $(".custom_client_scroll").mCustomScrollbar("destroy");
             });
         });
     </script>
