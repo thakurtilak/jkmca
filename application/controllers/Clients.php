@@ -559,4 +559,47 @@ class Clients extends CI_Controller
         }
         redirect('/clients/edit-client/'.$clientId);
     }
+
+    /*To Download All Client List*/
+    public function download_all_client(){
+        $this->load->library('Phpspreadsheet');
+        $searchKey= $this->input->get('searchKey', true);
+        $orderColumn = "first_name";
+        $direction = "ASC";
+        $orderBY = $orderColumn . " " . $direction;
+        $start = 0;
+        $length = 10000;
+        $clientList = $this->ClientModel->listClient(false, false, false, $searchKey, $orderBY, $start, $length);
+        $fileName = "Client-list-".date('d-M-Y');
+        $header = array('Client Code', 'Client Name','Father Name', 'Firm Name',
+            'Mobile NO.','PAN', 'Aadhar NO.','GST', 'DOB', 'Email', 'Address 1',
+            'Address 2','Is Responsible');
+        $dataArray = array();
+        $dataArray[] =$header;
+        if ($clientList) {
+            foreach ($clientList as $client) {
+                $clientName = $client->first_name . ' ' . $client->last_name;
+                $father_name = $client->father_first_name . " " . $client->father_last_name;
+
+                $tempData = array(
+                    $client->client_id,
+                    $clientName,
+                    $father_name,
+                    ($client->firm_name) ? $client->firm_name : '--',
+                    $client->mobile,
+                    $client->pan_no,
+                    $client->aadhar_number,
+                    $client->gst_no,
+                    $client->dob,
+                    $client->email,
+                    $client->address1,
+                    $client->address2,
+                    ($client->is_manager)?'YES':'NO'
+                );
+                $dataArray[] = $tempData;
+            }
+        }
+        $this->phpspreadsheet->createXlSX($fileName, $dataArray, "Client List");
+        exit();
+    }
 }

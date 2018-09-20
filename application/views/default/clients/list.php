@@ -48,7 +48,9 @@
                         </div>
                     </div>--><!--col-sm-3-->
 
-                   
+                    <div class="col-sm-12 pull-right" style="text-align: right; font-size: 25px;">
+                        <a href="javascript:void(0)" id="exportClients" style="font-size: 25px;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" title="Export Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                    </div>
                 </div><!--row-->
             </div><!--order_filter-->
             <div class="ims_datatable table-responsive">
@@ -208,6 +210,12 @@
 
         $("#ClientViewModal").on("hide.bs.modal", function() {
             $(".custom_client_scroll").mCustomScrollbar("destroy");
+        });
+
+        $("#exportClients").click(function () {
+            var searchKey = $('input[type=search]').val();
+            $url = BASEURL +"clients/download-all-client?searchKey="+searchKey;
+            window.location = $url;
         });
 
     });
