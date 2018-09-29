@@ -6,6 +6,7 @@ $(document).ready(function () {
     /* Clone Fields*/
     $incomeBoxCloneObje = $("#income_box_1").clone();
     $attachmentCloneObje = $("#order_attachment_box_1").clone();
+    $fileAttachmentCloneObj = $("#file_attachment_box_1").clone();
 
     $("#completion_date").datepicker({format: "d-M-yyyy", autoclose: true, startDate: FromEndDate});
 
@@ -15,6 +16,7 @@ $(document).ready(function () {
             client: {required: true},
             client_code : {required: true},
             work_type: {required: true},
+            update_work_type: {required: true},
             price: {required: true},
             staff: {required: true},
             completion_date: {required: true},
@@ -26,6 +28,7 @@ $(document).ready(function () {
             client: {required: "This field is required"},
             client_code : {required: "This field is required"},
             work_type: {required: "This field is required"},
+            update_work_type: {required: "This field is required"},
             price: {required: "This field is required"},
             staff: {required: "This field is required"},
             completion_date: {required: "This field is required"},
@@ -376,4 +379,52 @@ function addMoreAttachment() {
     $cloneHtml = $attachmentCloneObje.wrap("<div>").parent().html();
     //$(".add_more_attach_inv").parent().before($cloneHtml);
     $(".job-documents-wrapper").append($cloneHtml);
+}
+
+function addMoreWorkFile() {
+    //$(".delete_attachment").show();
+    //var nextIndex = $(".attachtype").length + 1;
+    var LastEl = $(".file_attachment_box").last();
+    var lastid = LastEl.attr("id");
+    var LastIdParts = lastid.split("file_attachment_box_");
+    var lenth = LastIdParts[1];
+    var nextIndex = parseInt(lenth) + 1;
+    $fileAttachmentCloneObj.attr({id:"file_attachment_box_"+nextIndex});
+
+    if($fileAttachmentCloneObj.find("input[name^='job_file[']").length > 0) {
+        $fileAttachmentCloneObj.find("input[name^='job_file[']").attr({
+            name: "add_job_file[]",
+            id: "job_file" + nextIndex,
+            value: ""
+        });
+    } else {
+        $fileAttachmentCloneObj.find("input[name^='add_job_file[']").attr({
+            name: "add_job_file[]",
+            id: "job_file" + nextIndex,
+            value: ""
+        });
+    }
+    //var nextIndex = $(".file-upload-wrapper").length + 1;
+    $fileAttachmentCloneObj.find(".file-upload-wrapper").attr("id","file-upload-wrapper_"+nextIndex);
+
+    if($fileAttachmentCloneObj.find("input[name^='add_file_name[']").length > 0) {
+        $fileAttachmentCloneObj.find("input[name^='add_file_name[']").attr({id:"file"+nextIndex,value:""});
+        $fileAttachmentCloneObj.find("input[name^='add_file_name[']").attr({name:"add_file_name[]"});
+    } else {
+        $fileAttachmentCloneObj.find("input[name^='add_file_name[']").attr({id:"file"+nextIndex,value:''});
+        $fileAttachmentCloneObj.find("input[name^='add_file_name[']").attr({name:"add_file_name[]"});
+    }
+    $fileAttachmentCloneObj.find(".file-upload-span").html("");
+    $fileAttachmentCloneObj.find("input[name^='file-upload-input[']").attr({name:"file-upload-input[]" ,id:"file-upload-input_"+nextIndex, value:""});
+    $fileAttachmentCloneObj.find("label[for^=file-upload-input]").attr({id:"file-upload-input_"+nextIndex+"-error", for:"file-upload-input_"+nextIndex});
+
+    //$attachmentCloneObje.find(".add_more_btn").attr("id", "add_more_btn_' + nextIndex);
+    $fileAttachmentCloneObj.find(".delete_record ").attr("id", "delete_record_" + nextIndex);
+
+    //$attachmentCloneObje.find(".add_more_btn").hide();
+    $fileAttachmentCloneObj.find(".delete_attachment").show();
+
+    $cloneHtml = $fileAttachmentCloneObj.wrap("<div>").parent().html();
+    //$(".add_more_attach_inv").parent().before($cloneHtml);
+    $(".job-file-documents-wrapper").append($cloneHtml);
 }

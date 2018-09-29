@@ -119,7 +119,7 @@ class Jobs extends CI_Controller
                     }
                     $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#InvoiceDetailModal\" data-toggle=\"modal\" data-target-id=" . $job->id . " title='View'><i class='icon-view1'></i></a>";
                     $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$job->id."' data-target-id=" . $job->id . " title='View Details'><i class='icon-generate_invoice'></i></a>";
-                    if (($isSuperAdmin || $isRecieptionist) && ($job->status == 'pending' || $job->status == 'rejected')) {
+                    if ($isSuperAdmin || (($isRecieptionist) && ($job->status == 'pending' || $job->status == 'rejected'))) {
                         $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='" . base_url() . "jobs/edit-job/" . $job->id . "' data-target-id=" . $job->id . " title='Edit'><i class='icon-edit'></i></a>";
                     }
 
@@ -406,6 +406,9 @@ class Jobs extends CI_Controller
         $usersRoles = $userDetail->role_id;
         $rolesIDArray = explode(',', $usersRoles);
         $isSuperAdmin = false;
+        if(in_array(SUPERADMINROLEID, $rolesIDArray)){
+            $isSuperAdmin = true;
+        }
         if (!in_array(SUPERADMINROLEID, $rolesIDArray) && !in_array(RECIEPTIONISTROLEID, $rolesIDArray) ) {
             $isSuperAdmin = true;
             $this->session->set_flashdata('error', "You are not authorize to edit Job.");
@@ -414,7 +417,15 @@ class Jobs extends CI_Controller
         $jobDetail = $this->job_model->getJob($jobId);
         $postData = $this->input->post(NULL, true);
         if($postData && $jobId == $postData['job_id']) {
+            if($isSuperAdmin) {
+                $this->form_validation->set_rules('update_work_type', 'Work Type', 'required');
+                if (!$this->form_validation->run()) {
+                    $this->session->set_flashdata('error', "Please select work type.");
+                    redirect('/jobs/edit-job/'.$jobId);
+                }
+            }
             //debug($_FILES, false);
+            //debug($postData);
             $uploadError = false;
             /*If Job Card Update*/
             if(isset($_FILES['job_card']['name']) && !empty($_FILES['job_card']['name']) && !$_FILES['job_card']['error']) {
@@ -482,6 +493,30 @@ class Jobs extends CI_Controller
                 }
             }
 
+            /*upload Work File*/
+            if($isSuperAdmin && ($jobDetail->status == 'completed' || $jobDetail->status == 'approval_pending')) {
+                $upload_file_data = $this->do_upload_work_file_on_edit($jobId);
+                if (isset($postData['work_file-upload-input'])) {
+                    /* Insert agreement  information.*/
+                    $numFields = count($postData['work_file-upload-input']);
+                    for ($i = 0; $i < $numFields; $i++) {
+                        if (isset($upload_file_data[$i]['full_path'])) {
+                            $jobCardDocArray = explode(UPLOAD_ROOT_DIR, $upload_file_data[$i]['full_path']);
+                            $filePath = UPLOAD_ROOT_DIR . end($jobCardDocArray);
+                            $data = array(
+                                'job_id' => $jobId,
+                                'attach_type' => (isset($postData['add_job_file'][$i])) ? $postData['add_job_file'][$i] : 0,
+                                'file_path' => $filePath,
+                                'file_name' => $upload_file_data[$i]['client_name'],
+                                'file_detail' => json_encode($upload_file_data[$i]),
+                            );
+                            $this->common_model->insert(TBL_JOBCARDS_WORK_FILES, $data);
+                        }
+                    }
+                }
+            }
+            /*END WORK FILE UPLOAD*/
+
             /*Finally update the Job Record*/
             $updateArray = array(
                 'amount' => $postData['price'],
@@ -493,7 +528,9 @@ class Jobs extends CI_Controller
                 'remark'  => $postData['remark'],
             );
             $updateArray['payment_responsible'] = $postData['payment_responsible'];
-
+            if($isSuperAdmin) {
+                $updateArray['work_type'] = $postData['update_work_type'];
+            }
             $updateWhere = array('id' => $jobId);
             $this->common_model->update(TBL_JOB_MASTER, $updateArray, $updateWhere);
 
@@ -519,7 +556,7 @@ class Jobs extends CI_Controller
             $this->session->set_flashdata('error', "Unable to find Job details.");
             redirect('/jobs');
         }
-        if($jobDetail->status !='pending' && $jobDetail->status !='rejected') {
+        if((!$isSuperAdmin && $jobDetail->status !='pending' && $jobDetail->status !='rejected')) {
             $this->session->set_flashdata('error', "You can't edit this Job. because it's already completed OR Pending for review");
             redirect('/jobs');
         }
@@ -556,6 +593,7 @@ class Jobs extends CI_Controller
         /*$data['isStaff'] = $isStaff;
         $data['isRecieptionist'] = $isRecieptionist;
         $data['isSuperAdmin'] = $isSuperAdmin;*/
+        $data['isSuperAdmin'] = $isSuperAdmin;
         $where = array('status' => 'A', 'id >' => 1);/*Allow all user as assign*/
         $staff = $this->common_model->getRecords(TBL_USER,array( 'id','CONCAT(first_name,\' \', last_name) as name','role_id'), $where, 'name');
         if($staff) {
@@ -580,6 +618,10 @@ class Jobs extends CI_Controller
         $where = array('status' => '1','is_manager' => '1');
         $managers = $this->common_model->getRecords(TBL_CLIENT_MASTER,array( 'client_id','CONCAT(first_name, " " , IFNULL(middle_name, ""), " ",IFNULL(last_name, "")) as clientName'), $where, 'clientName');
         $data['managers'] = $managers;
+
+        $where = array('status' => '1');
+        $workTypes = $this->common_model->getRecords(TBL_WORK_TYPE,array( 'id','work'), $where, 'work');
+        $data['workTypes'] = $workTypes;
 
         $this->template->set('title', 'Edit Job');
         $this->template->load('default', 'contents', 'default/jobs/edit_job', $data);
@@ -1075,31 +1117,83 @@ class Jobs extends CI_Controller
                 die('Failed to create upload directory...');
             }
         }
-
         $uploadedFiles = array();
-        foreach ($_FILES["add_document_name"]['name'] as $key => $file) {
-            $fileObjName = 'attachment' . $key;
-            $_FILES[$fileObjName]['name'] = $_FILES['add_document_name']['name'][$key];
-            $_FILES[$fileObjName]['type'] = $_FILES['add_document_name']['type'][$key];
-            $_FILES[$fileObjName]['tmp_name'] = $_FILES['add_document_name']['tmp_name'][$key];
-            $_FILES[$fileObjName]['error'] = $_FILES['add_document_name']['error'][$key];
-            $_FILES[$fileObjName]['size'] = $_FILES['add_document_name']['size'][$key];
+        if (isset($_FILES['add_document_name']) && is_array($_FILES['add_document_name']) && count($_FILES["add_document_name"]['name'])) {
+            foreach ($_FILES["add_document_name"]['name'] as $key => $file) {
+                if(!empty($_FILES['add_document_name']['name'][$key])) {
+                    $fileObjName = 'attachment' . $key;
+                    $_FILES[$fileObjName]['name'] = $_FILES['add_document_name']['name'][$key];
+                    $_FILES[$fileObjName]['type'] = $_FILES['add_document_name']['type'][$key];
+                    $_FILES[$fileObjName]['tmp_name'] = $_FILES['add_document_name']['tmp_name'][$key];
+                    $_FILES[$fileObjName]['error'] = $_FILES['add_document_name']['error'][$key];
+                    $_FILES[$fileObjName]['size'] = $_FILES['add_document_name']['size'][$key];
 
-            $new_name = time() . '_' . $_FILES[$fileObjName]['name'];
-            $config = array(
-                'upload_path' => $uploadDirectory,
-                'allowed_types' => "gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg",
-                'overwrite' => TRUE,
-                'max_size' => "0", // Can be set to particular file size , here it is 2 MB(2048 Kb)
-                //'max_height' => "768",
-                //'max_width' => "1024",
-                'file_name' => $new_name
-            );
-            $this->upload->initialize($config);
-            if ($this->upload->do_upload($fileObjName)) {
-                $uploadedFiles[$key] = $this->upload->data();
-            } else {
-                $uploadedFiles[$key] = array('error' => $this->upload->display_errors());
+                    $new_name = time() . '_' . $_FILES[$fileObjName]['name'];
+                    $config = array(
+                        'upload_path' => $uploadDirectory,
+                        'allowed_types' => "gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg",
+                        'overwrite' => TRUE,
+                        'max_size' => "0", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+                        //'max_height' => "768",
+                        //'max_width' => "1024",
+                        'file_name' => $new_name
+                    );
+                    $this->upload->initialize($config);
+                    if ($this->upload->do_upload($fileObjName)) {
+                        $uploadedFiles[$key] = $this->upload->data();
+                    } else {
+                        $uploadedFiles[$key] = array('error' => $this->upload->display_errors());
+                    }
+                }
+            }
+        }
+        return $uploadedFiles;
+    }
+
+    private function do_upload_work_file_on_edit($jobId=false)
+    {
+        $financialYear = getCurrentFinancialYear();
+        $uploadDirectory = realpath(UPLOAD_ROOT_DIR) . DIRECTORY_SEPARATOR .$financialYear. DIRECTORY_SEPARATOR . $jobId;
+        // Ensure there's a trailing slash
+        $uploadDirectory = strtr(
+                rtrim($uploadDirectory, '/\\'),
+                '/\\',
+                DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+            ) . DIRECTORY_SEPARATOR;
+        $uploadDirectory = $uploadDirectory . 'jobfiles' . DIRECTORY_SEPARATOR;
+        if (!is_dir($uploadDirectory)) {
+            if (!mkdir($uploadDirectory, 0755, true)) {
+                die('Failed to create upload directory...');
+            }
+        }
+        $uploadedFiles = array();
+        if (isset($_FILES['add_file_name']) && is_array($_FILES['add_file_name']) && count($_FILES["add_document_name"]['name'])) {
+            foreach ($_FILES["add_file_name"]['name'] as $key => $file) {
+                if(!empty($_FILES['add_file_name']['name'][$key])) {
+                    $fileObjName = 'attachment' . $key;
+                    $_FILES[$fileObjName]['name'] = $_FILES['add_file_name']['name'][$key];
+                    $_FILES[$fileObjName]['type'] = $_FILES['add_file_name']['type'][$key];
+                    $_FILES[$fileObjName]['tmp_name'] = $_FILES['add_file_name']['tmp_name'][$key];
+                    $_FILES[$fileObjName]['error'] = $_FILES['add_file_name']['error'][$key];
+                    $_FILES[$fileObjName]['size'] = $_FILES['add_file_name']['size'][$key];
+
+                    $new_name = time() . '_' . $_FILES[$fileObjName]['name'];
+                    $config = array(
+                        'upload_path' => $uploadDirectory,
+                        'allowed_types' => "gif|jpg|png|jpeg|pdf|zip|docx|doc|xls|xlsx|eml|msg",
+                        'overwrite' => TRUE,
+                        'max_size' => "0", // Can be set to particular file size , here it is 2 MB(2048 Kb)
+                        //'max_height' => "768",
+                        //'max_width' => "1024",
+                        'file_name' => $new_name
+                    );
+                    $this->upload->initialize($config);
+                    if ($this->upload->do_upload($fileObjName)) {
+                        $uploadedFiles[$key] = $this->upload->data();
+                    } else {
+                        $uploadedFiles[$key] = array('error' => $this->upload->display_errors());
+                    }
+                }
             }
         }
         return $uploadedFiles;
@@ -1148,7 +1242,7 @@ class Jobs extends CI_Controller
      * @author DHARMENDRA T
      * @version 1.0
      */
-    public function delete_job_file($jobId = 0, $workFileId = 0){
+    public function delete_job_file($jobId = 0, $workFileId = 0, $fromEdit = false){
         $basePath = FCPATH;
         if(!$jobId) {
             $this->session->set_flashdata('error', "Unable to find JobId. Please try again");
@@ -1172,6 +1266,9 @@ class Jobs extends CI_Controller
             }
         } else {
             $this->session->set_flashdata('error', "There is an error while deleting job file.");
+        }
+        if($fromEdit){
+            redirect('/jobs/edit-job/'.$jobId);
         }
         redirect('/jobs/view-job/'.$jobId);
     }

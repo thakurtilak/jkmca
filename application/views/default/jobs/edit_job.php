@@ -70,6 +70,12 @@
                                             <ul class="order_view_detail">
                                                 <li>
                                                     <div class="order_info_block">
+                                                        <span class="ov_title">Client ID</span>
+                                                        <span class="ov_data"><?php echo $jobDetail->clientId;                                       ?></span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="order_info_block">
                                                         <span class="ov_title">Client Name</span>
                                                         <span class="ov_data"><?php echo $jobDetail->clientName;                                       ?></span>
                                                     </div>
@@ -92,6 +98,12 @@
                                                         <span class="ov_data"><?php echo $jobDetail->clientContact; ?></span>
                                                     </div>
                                                 </li>
+                                                <li>
+                                                    <div class="order_info_block">
+                                                        <span class="ov_title">Client Pan No.</span>
+                                                        <span class="ov_data"><?php echo $jobDetail->clientPan; ?></span>
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -107,7 +119,36 @@
                                 <h3 class="form-box-title">Job Card</h3>
                                 <div class="theme-form">
                                     <div class="row">
-                                        <div class="col-sm-12">
+                                        <?php if($isSuperAdmin) : ?>
+                                        <div class="col-sm-6">
+                                            <div class="form-group" style="padding-bottom:2px;">
+                                                <label class="ims_form_label">Work Type*</label>
+                                                <select class="ims_form_control" name="update_work_type" id="update_work_type">
+                                                    <option value="">Select Work Type</option>
+                                                    <?php if($workTypes) :
+                                                        foreach ($workTypes as $wType):
+                                                            ?>
+                                                            <option <?php echo ($jobDetail->work_type == $wType->id)? "selected='selected'":""; ?> value="<?php echo $wType->id; ?>"><?php echo $wType->work; ?></option>
+                                                        <?php endforeach; endif; ?>
+                                                </select>
+                                                <?php echo form_error('update_work_type'); ?>
+                                                <label class="error" style="display:none;">Required</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                        <?php else: ?>
+                                            <div class="col-sm-12">
+                                        <?php endif; ?>
+                                            <ul class="order_view_detail">
+                                                <li>
+                                                    <div class="order_info_block">
+                                                        <span class="ov_title">Remark</span>
+                                                        <span class="ov_data"><?php echo $jobDetail->remark ?></span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-6">
                                             <ul class="order_view_detail">
                                                 <li>
                                                     <div class="order_info_block">
@@ -124,7 +165,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="ims_form_label">Job Card Upload ( <span style="color: red;">Upload new job card will automatically replace old one </span> )</label>
                                                 <div class="custom-file-upload">
@@ -157,6 +198,48 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-sm-12">
+                    <div class="box-form">
+                        <h3 class="form-box-title">Job Status</h3>
+                        <div class="theme-form">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <?php if($jobDetail->status =='approval_pending') {
+                                            echo "<h4>Pending for Approval</h4>";
+                                        } else {
+                                            echo "<h4>".ucwords($jobDetail->status)."</h4>";
+                                        } ?>
+                                    </div>
+                                </div><!--col-sm-12-->
+                                <?php if($jobDetail->status =='rejected'): ?>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="ims_form_label">Comment</label>
+                                            <p><?php echo  $jobDetail->reject_comment; ?></p>
+                                        </div>
+                                    </div><!--col-sm-12-->
+                                <?php elseif ($jobDetail->status =='completed'): ?>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="ims_form_label">Comment</label>
+                                            <p><?php echo $jobDetail->approval_comment; ?></p>
+                                        </div>
+                                    </div><!--col-sm-12-->
+                                <?php elseif ($jobDetail->status =='approval_pending'): ?>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="ims_form_label">Comment</label>
+                                            <p><?php echo $jobDetail->staff_comment; ?></p>
+                                        </div>
+                                    </div><!--col-sm-12-->
+                                <?php endif; ?>
+                            </div><!--row-->
+                        </div><!--theme-form-->
+                    </div><!--box-form-->
+                </div><!--col-sm-12-->
+
                 <?php if (isset($clientDocuments) && count($clientDocuments)): ?>
                     <div class="col-sm-12">
                         <div class="box-form client_adress">
@@ -289,6 +372,86 @@
                         </div>
                     </div>
                 </div>
+
+                <?php if(count($jobWorkFiles)): ?>
+                    <div class="col-sm-12">
+                        <div class="box-form">
+                            <h3 class="form-box-title">Work File Documents</h3>
+                            <div class="ims_datatable table-responsive" style="background: #FFFFFF;">
+                                <!-- <h3 class="form-box-title">Client Details </h3>-->
+                                <table id="clientList" class="table table-striped table-bordered table-condensed table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th width="40%">Document Name</th>
+                                        <th>Attached File</th>
+                                        <?php if($jobDetail->status =='completed'): ?>
+                                            <th>Action</th>
+                                        <?php endif; ?>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    if(count($jobWorkFiles)):
+                                        foreach ($jobWorkFiles as $doc): ?>
+                                            <tr>
+                                                <td><?php echo $doc->attach_type; ?></td>
+                                                <td><span class="ov_data"><a href="<?php echo base_url();?><?php echo $doc->file_path; ?>" title="<?php echo $doc->file_name; ?>" target="_blank"><?php echo $doc->file_name; ?></a></span></td>
+                                                <?php if($jobDetail->status =='completed'):
+                                                    $removeLink = "<a class='mdl-js-button mdl-js-ripple-effect btn-view action-btn button-delete' href='#deleteWorkFile' data-toggle='modal' data-target-id='" . $jobDetail->id."/".$doc->id . "' title='Remove'><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a>";
+                                                    ?>
+                                                    <td><?php echo $removeLink; ?></td>
+                                                <?php endif; ?>
+                                            </tr>
+                                        <?php   endforeach;
+                                    else: ?>
+                                        <tr>
+                                            <td colspan="2">No file found</td>
+                                        </tr>
+                                    <?php endif;
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div><!--col-sm-12-->
+                <?php endif; ?>
+                <?php if($isSuperAdmin && ($jobDetail->status == 'completed' || $jobDetail->status == 'approval_pending')) : ?>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="box-form client_adress">
+                                    <h3 class="form-box-title pull-left" style="width: 95%">Upload Work File Documents</h3>
+                                    <a href="javascript:void(0)" onclick="addMoreWorkFile()"  class="pull-right add_more_btn mdl-js-button mdl-js-ripple-effect ripple-white add"><img src="<?php echo base_url() ?>assets/images/plus_bordered.svg"  /></a>
+                                    <div class="theme-form job-file-documents-wrapper">
+                                        <div class="row file_attachment_box" id="file_attachment_box_1">
+                                            <div class="col-sm-6" id="job_file_1">
+                                                <div class="form-group">
+                                                    <label class="ims_form_label">File Type</label>
+                                                    <input name="add_job_file[]" id="job_file1" class="ims_form_control attachtype" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 attach_col attach" id="attachment_file_1">
+                                                <div class="form-group order-attachment-group">
+                                                    <label class="ims_form_label">Document</label>
+                                                    <div class="file-upload-wrapper" id="file-upload-wrapper_1">
+                                                        <input type="file" name="add_file_name[]" id="file1" class="ims_form_control upload_icon custom-file-upload-hidden1" placeholder="Name of File" tabindex="-1" aria-invalid="false" style="position: absolute; left: -9999px;">
+                                                        <input style="display: none" type="text" name="work_file-upload-input[]" id="file-upload-input_1" class="file-upload-input" placeholder="Attachment" readonly>
+                                                        <span class="file-upload-span"></span>
+                                                        <button type="button" class="file-upload-button file-upload-select" tabindex="-1">
+                                                        </button>
+                                                    </div>
+                                                    <label id="file-upload-input_1-error" class="error" for="file-upload-input_1" style="display: none;width: 88%; float: left;"></label>
+                                                    <a href="javascript:void(0);" class="delete_record delete_attachment" style="display:none"><img src="<?php echo base_url();?>assets/images/delete_icon.svg" /></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
@@ -421,6 +584,30 @@
         </div>
     </div>
 
+    <div class="modal fade" id="deleteWorkFile" tabindex="-1" role="dialog" aria-labelledby="deleteFileLabel" aria-hidden="true">
+        <div style="width: 350px;" class="modal-dialog cancel-order-modal zoomIn animated" role="document">
+            <div class="modal-content">
+                <div class="modal-header ims_modal_header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="deleteFileLabel">Job File Delete Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo base_url(); ?>jobs/delete-job-file" method="POST" name="deleteJobFileForm1" id="deleteJobFileForm1">
+                        <div class="form-group">
+                            <p>Are you sure want to delete this job file ?</p>
+                        </div>
+                        <div class="form-footer1">
+                            <button type="submit" class="btn-theme btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">YES</button>
+                            <button class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" data-dismiss="modal">NO</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="DocumentViewModalEdit" class="modal">
         <div class="modal-dialog zoomIn animated">
             <div class="modal-content">
@@ -443,6 +630,13 @@
                 var id = $(e.relatedTarget).data('target-id');
                 var jobFileHref = BASEURL + "jobs/delete-job-document/"+id;
                 $("#deleteJobFileForm").prop('action', jobFileHref);
+
+            });
+
+            $("#deleteWorkFile").on("show.bs.modal", function(e) {
+                var id = $(e.relatedTarget).data('target-id');
+                var jobFileHref = BASEURL + "jobs/delete-job-file/"+id+"/1";
+                $("#deleteJobFileForm1").prop('action', jobFileHref);
 
             });
 
