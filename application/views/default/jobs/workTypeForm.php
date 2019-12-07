@@ -180,7 +180,7 @@ if (isset($clientRecord->client_id)) {
                                     <label class="ims_form_label">DOB*</label>
                                     <input class="ims_form_control date_icon sel_date" type="text" name="dob" id="dob"
                                            placeholder="DOB"
-                                           value="<?php echo (isset($clientRecord->client_id)) ? date('d-M-Y', strtotime($clientRecord->dob)) : ''; ?>">
+                                           value="<?php echo (isset($clientRecord->client_id) && !empty($clientRecord->dob)) ? date('d-M-Y', strtotime($clientRecord->dob)) : ''; ?>">
                                     <?php echo form_error('dob'); ?>
                                     <label class="error" style="display:none;">Required</label>
                                 </div>

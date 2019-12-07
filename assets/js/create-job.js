@@ -63,11 +63,39 @@ $(document).ready(function () {
        }
 
     });
+    
+    if(typeof clientId !== 'undefined'){/*Only Run in case of we have temp ref job*/
+        $("#client_code").val(clientId);
+        $("#work_type").val(workType);
+        $("#staff").val(staffId);
+        $.ajax({
+            type: "POST",
+            url: BASEURL+"jobs/getClientDetails",
+            data: {clientId:clientId},
+            beforeSend: function() {
+                // setting a timeout
+                $(".loader-wrapper").show();
+            },
+            success: function (data) {
+                populateClientDetails(data);
+                $("#work_type").trigger("change");
+            },
+            error: function (error) {
+                $(".loader-wrapper").hide();
+                alert("There is an error while getting clients. Please try again.");
+            },
+            complete: function() {
+                $(".loader-wrapper").hide();
+            }
+        });
+        
+    }
 
     $("#work_type").change(function () {
         var workType = $(this).val();
         displayWorkTypeForm(workType);
-        var clientId = $("input[name='client']:checked").val();
+        //var clientId = $("input[name='client']:checked").val();
+        var clientId = $("#client_code").val();
         if(workType){
             $.ajax({
                 type: "POST",

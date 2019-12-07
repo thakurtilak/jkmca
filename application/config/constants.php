@@ -128,6 +128,8 @@ define('TBL_JOBCARDS_FILES', 'jkm_job_card_files');
 define('TBL_JOBS_ATTACHMENTS', 'jkm_jobs_attachments');
 define('TBL_JOBCARDS_WORK_FILES', 'jkm_job_work_files');
 define('TBL_JOB_PAYMENT_HISTORY', 'jkm_job_payment_history');
+
+define('TBL_INQUIRY_MASTER', 'jkm_inquiry_master');
 /*End Tables*/
 
 /*DEFINE CATEGORY ID*/

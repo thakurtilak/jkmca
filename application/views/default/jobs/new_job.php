@@ -17,9 +17,9 @@
                 </div>
             <?php } ?>
         </div>
-
         <form name="jobCards" enctype="multipart/form-data" method="post" id="jobCards" action="">
             <div class="row">
+            <?php if(!$clientId): ?>
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
@@ -47,6 +47,7 @@
                         </div>
                     </div>
                 </div>
+            <?php endif; ?>
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
@@ -54,26 +55,11 @@
                                 <h3 class="form-box-title">Client Info</h3>
                                 <div class="theme-form">
                                     <div class="row">
-                                        <!--<div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label class="ims_form_label">Client*</label>
-                                                <select class="ims_form_control" name="client" id="client">
-                                                    <option value="">Select client</option>
-                                                    <?php /*if($clients) :
-                                                        foreach ($clients as $client):
-                                                        */?>
-                                                        <option value="<?php /*echo $client->client_id; */?>"><?php /*echo $client->name; */?></option>
-                                                    <?php /*endforeach; endif; */?>
-                                                </select>
-                                                <?php /*echo form_error('first_name'); */?>
-                                                <label class="error" style="display:none;">Required</label>
-                                            </div>
-                                        </div>-->
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="ims_form_label">Client Code</label>
                                                 <input type="text" name="client_code" class="ims_form_control"
-                                                       maxlength="12" id="client_code" placeholder="Client Code" value="" readonly="readonly"/>
+                                                       maxlength="12" id="client_code" placeholder="Client Code" value="<?php echo ($clientId)? $clientId :''; ?>" readonly="readonly"/>
 
                                             </div>
                                         </div>
@@ -367,6 +353,17 @@
         </div>
     </div>
     <!--=============== End View Modal ======================-->
+    <?php if($clientId): ?>
+        <script>
+        var clientId = '<?php echo $clientId; ?>';
+        var workType = '<?php echo $inquiryDetail->work_type; ?>';
+        var staffId = '<?php echo $inquiryDetail->staff_id; ?>';
+        </script>
+    <?php else: ?>
+        <script>
+            var clientId;
+        </script>
+    <?php endif; ?>
     <script src="<?php echo base_url(); ?>assets/js/create-job.js"></script>
 <style>
     .income_box {

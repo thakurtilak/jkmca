@@ -76,6 +76,7 @@ $mainMenuArray = array(
     'view invoices'=> array('collection', 'collection/view','collection/pending'),
     'Reports' => array('reports'),
     'Payment Laser' => array('payments'),
+    'job_inquiry' => array('inquiry'),
 );
 
 ?>
@@ -104,7 +105,11 @@ $mainMenuArray = array(
 			</div>
             <?php  if($menuList) :
 
-                $iconArray = array('Dashboard' => 'icon-dashboard','manage_clients' => 'icon-client', 'Manage Order' => 'icon-order', 'Manage Invoice' => 'icon-invoice-menu', 'payment-laser' => 'icon-projection', 'view invoices'=> 'icon-view','Reports' => 'icon-report-new','currency_conversions' => 'icon-recycle' );
+                $iconArray = array('Dashboard' => 'icon-dashboard','manage_clients' => 'icon-client',
+                 'Manage Order' => 'icon-order', 'Manage Invoice' => 'icon-invoice-menu', 
+                 'payment-laser' => 'icon-projection', 'job_inquiry'=> 'icon-report-new',
+                 'view invoices'=> 'icon-view','Reports' => 'icon-report-new',
+                 'currency_conversions' => 'icon-recycle' );
                 ?>
 
             <ul>

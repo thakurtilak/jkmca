@@ -76,6 +76,64 @@
             </div><!--col-sm-12-->
         </div>
     <?php endif; ?>
+    <?php if(isset($pendingInquiries)): ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="dash_box_block fadeInLeft animated">
+                    <div class="dash_box_header">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h3 class="dash_box_header-title">Pending Inquiries</h3>
+                            </div>
+                            <div class="more_result text-right">
+                                <a href="<?php echo base_url(); ?>inquiry" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" data-upgraded=",MaterialButton,MaterialRipple">View all<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+                            </div>
+                        </div>
+                    </div><!--dash_box_header-->
+                    <div class="dash_box_body">
+                        <div class="table-theme table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Ref ID</th>
+                                    <th>Client Name</th>
+                                    <th>Work Type</th>
+                                    <th>Mobile</th>
+                                    <th>Created Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php if(count($pendingInquiries)):
+                                    foreach($pendingInquiries as $item):
+                                        $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#inquiryViewModal\" data-toggle=\"modal\" data-target-id=" . $item->ref_no . " title='View Details'><i class='icon-view1'></i></a>"; 
+                                        //$actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='".base_url()."jobs/view-job/".$item->ref_no."' data-target-id=" . $item->ref_no . " title='View Details'><i class='icon-generate_invoice'></i></a>";
+                                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='" . base_url() . "jobs/new-job/" . $item->ref_no . "' data-target-id=" . $item->ref_no . " title='Create Job'><i class='fa fa-plus-square'></i></a>";
+                                        $clientName = $item->client_name;
+                                        $clientName = "<a href=\"#ClientViewModal\" data-toggle=\"modal\" data-target-id=" . $item->client_id . ">" . $clientName . "</a>";
+
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $item->ref_no; ?></td>
+                                            <td><?php echo $clientName; ?></td>
+                                            <td><?php echo $item->work; ?></td>
+                                            <td><?php echo $item->mobile; ?></td>
+                                            <td><?php echo date('d-M-Y', strtotime($item->created_at)); ?></td>
+                                            <td><?php echo $actionLink; ?></td>
+                                        </tr>
+                                    <?php endforeach; else: ?>
+                                    <tr>
+                                        <td colspan="7">No Pending Inquiries</td>
+                                    </tr>
+                                <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--dash_box_body-->
+                </div><!--dash_box_block-->
+            </div><!--col-sm-12-->
+        </div>
+    <?php endif; ?>
 
     <?php if(isset($paymentPendingJobs)): ?>
         <div class="row">
@@ -207,6 +265,21 @@
         </div>
     </div>
 </div>
+<div id="inquiryViewModal" class="modal">
+    <div class="modal-dialog modal-lg zoomIn animated">
+        <div class="modal-content">
+            <div class="modal-header ims_modal_header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Inquiry Information</h4>
+            </div>
+            <div class="modal-body view-details custom_client_scroll">
+            </div>
+            <!--<div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>-->
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         /*Client View Model Window*/
@@ -227,6 +300,30 @@
                     console.log(err);
                 }
             });
+        });
+
+        $("#inquiryViewModal").on("show.bs.modal", function(e) {
+            var modal = $(this);
+            modal.find('.view-details').html("");
+            var id = $(e.relatedTarget).data('target-id');
+            var viewUrl = BASEURL + "inquiry/view/"+id;
+            $.ajax({
+                type: "GET",
+                url: viewUrl,
+                cache: false,
+                data:{type:'view'},
+                success: function (data) {
+                    modal.find('.view-details').html(data);
+                    $(".custom_client_scroll").mCustomScrollbar();
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        });
+
+        $("#inquiryViewModal").on("hide.bs.modal", function() {
+            $(".custom_client_scroll").mCustomScrollbar("destroy");
         });
 
         $("#ClientViewModal").on("hide.bs.modal", function() {

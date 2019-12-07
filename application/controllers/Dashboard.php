@@ -10,7 +10,7 @@ class Dashboard extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->model('common_model');
         $this->load->model('job_model');
-        //  load libs
+        $this->load->model('InquiryModel');
         $this->load->library('permission');
         if (!isLoggedIn()) {
             redirect('login');
@@ -41,6 +41,9 @@ class Dashboard extends CI_Controller {
             $pendingJobs = $this->job_model->getPendingJobs();
             $data['pendingJobs'] = $pendingJobs;
 
+            $pendingInquiries = $this->InquiryModel->getPendingInquiries();
+            $data['pendingInquiries'] = $pendingInquiries;
+
         } elseif (in_array(RECIEPTIONISTROLEID, $rolesIDArray)) {
             /*get payment pending*/
             $paymentPendingJobs = $this->job_model->getPaymentPendingJobs();
@@ -49,6 +52,9 @@ class Dashboard extends CI_Controller {
             /*get pending job*/
             $pendingJobs = $this->job_model->getPendingJobs();
             $data['pendingJobs'] = $pendingJobs;
+
+            $pendingInquiries = $this->InquiryModel->getPendingInquiries();
+            $data['pendingInquiries'] = $pendingInquiries;
         } elseif (in_array(STAFFROLEID, $rolesIDArray)){
             /*get pending job*/
             $pendingJobs = $this->job_model->getPendingJobs(getCurrentUsersId());

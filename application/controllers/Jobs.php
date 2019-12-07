@@ -20,6 +20,7 @@ class Jobs extends CI_Controller
         $this->load->model('common_model');
         $this->load->model('job_model');
         $this->load->model('ClientModel');
+        $this->load->model('InquiryModel');
         $this->load->library('emailUtility');
         if (!isLoggedIn()) {
             redirect('login');
@@ -162,7 +163,15 @@ class Jobs extends CI_Controller
         $this->template->load('default', 'contents', 'default/jobs/index', $data);
     }
 
-    public function new_job(){
+    public function new_job($refId = false){
+        $clientId = false;
+        $inquiryDetail = null;
+        if($refId) {
+            $inquiryDetail = $this->InquiryModel->getInquiry($refId);
+            if($inquiryDetail && $inquiryDetail->client_id) {
+                $clientId = $inquiryDetail->client_id;
+            }
+        }
         $postData = $this->input->post(NULL, true);
         $userDetail = getCurrentUser();
         $usersRoles = $userDetail->role_id;
@@ -174,42 +183,10 @@ class Jobs extends CI_Controller
         if ($postData) {
             //echo "<pre>"; print_r($postData); exit;
             $this->form_validation->set_rules('work_type', 'Work Type', 'required');
-            $this->form_validation->set_rules('client', 'Client', 'required');
             $this->form_validation->set_rules('client_code', 'Client Code', 'required');
             $this->form_validation->set_rules('price', 'Price', 'required');
             $this->form_validation->set_rules('staff', 'Staff', 'required');
             $this->form_validation->set_rules('completion_date', 'Completion Date', 'required');
-            if ($postData['work_type'] == 1) {
-                /*$this->form_validation->set_rules('first_name', 'First Name', 'required');
-                $this->form_validation->set_rules('dob', 'DOB', 'required');
-                $this->form_validation->set_rules('mobile_number', 'Mobile', 'required');
-                $this->form_validation->set_rules('aadhar_no', 'Aadhar Card No.', 'required');
-                $this->form_validation->set_rules('address', 'Address', 'required');*/
-
-            } elseif($postData['work_type'] == 2) {
-                //$this->form_validation->set_rules('assessment_year', 'Assessment Year', 'required');
-            }elseif($postData['work_type'] == 3) {
-
-            }elseif($postData['work_type'] == 4) {
-
-            }elseif($postData['work_type'] == 5) {
-
-            }elseif($postData['work_type'] == 6) {
-
-            }elseif($postData['work_type'] == 7) {
-
-            }elseif($postData['work_type'] == 8) {
-
-            }elseif($postData['work_type'] == 9) {
-
-            }elseif($postData['work_type'] == 10) {
-
-            }elseif($postData['work_type'] == 11) {
-
-            }elseif($postData['work_type'] == 12) {
-
-            }
-
             /*echo "<pre>";
             print_r($postData);
             print_r($_FILES);
@@ -217,7 +194,7 @@ class Jobs extends CI_Controller
             if ($this->form_validation->run()) {
                 $work_type = $postData['work_type'];
                 $insertArray = array(
-                    'client_id' => $postData['client'],
+                    'client_id' => $postData['client_code'],
                     'work_type' => $work_type,
                     'amount'    => $postData['price'],
                     'discount_price' => $postData['discount_price'],
@@ -258,6 +235,10 @@ class Jobs extends CI_Controller
                     $insertArray['aadhar_no'] =  $postData['aadhar_no'];
                     $insertArray['address'] =  $postData['address'];
                     $insertArray['assessment_year'] = $postData['assessment_year'];
+                }
+
+                if($refId) {
+                    $insertArray['temp_ref_no'] = $refId;
                 }
                 /*echo "<pre>";
                 print_r($attachment_detail);die;*/
@@ -326,6 +307,11 @@ class Jobs extends CI_Controller
                     $updateArray = array('job_number' => $jobNumber);
                     $updateWhere = array('id' => $inserted_job_id);
                     $this->common_model->update(TBL_JOB_MASTER, $updateArray, $updateWhere);
+                    if($refId) {/*Update status in Temp Inquiry record*/
+                        $updateArray = array('status' => 'COMPLETED');
+                        $updateWhere = array('ref_no' => $refId);
+                        $this->common_model->update(TBL_INQUIRY_MASTER, $updateArray, $updateWhere);
+                    }
                     /*Email to Admin and Staff about new Job*/
                     $administratorEmails = getAdministratorEmail();
                     $subject = "New Job Created Notification";
@@ -353,7 +339,7 @@ class Jobs extends CI_Controller
 
         $where = array('status' => 1);
         $clients = $this->common_model->getRecords(TBL_CLIENT_MASTER, array('client_id','CONCAT(first_name,\' \', last_name) as name'), $where, 'name');
-        $data = array('clients' => $clients);
+        $data = array('clients' => $clients, 'clientId'=> $clientId, 'inquiryDetail' => $inquiryDetail);
 
         //$where = array('role_id' => 2,'status' => 'A');
         $where = array('status' => 'A', 'id >' => 1);/*Allow all user as assign*/

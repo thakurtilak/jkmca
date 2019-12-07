@@ -118,5 +118,18 @@ class ClientModel extends CI_Model
         return $query->result();
     }
 
+    public function findClient($searchKey){
+
+        $this->db->select('CM.*' );
+        $this->db->from(TBL_CLIENT_MASTER.' as CM');
+        if($searchKey) {
+            $this->db->where('CM.aadhar_number',$searchKey);
+            $this->db->or_where('CM.pan_no',$searchKey);
+        }
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+
 }
 ?>
