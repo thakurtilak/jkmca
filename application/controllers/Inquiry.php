@@ -152,6 +152,17 @@ class Inquiry extends CI_Controller
 
                 if(isset($postData['client_id']) && !empty($postData['client_id'])) {
                     $insertArray['client_id'] = $postData['client_id'];
+                    $updateArray = array(
+                        'first_name' => $postData['first_name'],
+                        'last_name' => $postData['last_name'],
+                        'father_first_name' => $postData['father_first_name'],
+                        'father_last_name' => $postData['father_last_name'],
+                        'mobile' => $postData['mobile_number'],
+                        'pan_no' => $postData['pan_no'],
+                        'aadhar_number' => $postData['aadhar_no'],
+                    );
+                    $updateWhere = array('client_id' => $postData['client_id']);
+                    $this->common_model->update(TBL_CLIENT_MASTER, $updateArray, $updateWhere);
                 } else {/*Automatically create client*/
                     $insert_data = array(
                         'first_name' => $postData['first_name'],

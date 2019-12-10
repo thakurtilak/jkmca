@@ -50,7 +50,7 @@ $(document).ready(function () {
                    response = JSON.parse(data);
                    if(response.clientDetail) {
                      populateClientDetails(response);
-                   } else {
+                   } /*else {
                         $("#first_name").val("");
                         $("#last_name").val('');
                     
@@ -63,7 +63,7 @@ $(document).ready(function () {
                         }
                         $("#mobile_number").val('');
                         $("#client_id").val('');
-                   }
+                   }*/
                },
                error: function (error) {
                    $(".loader-wrapper").hide();
