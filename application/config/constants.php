@@ -153,3 +153,4 @@ define('MANAGERROLEID', 4);
 define('SUPERADMINROLEID', 5);
 
 define('UPLOAD_ROOT_DIR', 'uploads');
+define('FINANCIAL_YEAR_START_MONTH', 4);

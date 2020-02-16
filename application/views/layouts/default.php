@@ -46,7 +46,8 @@
     <script src="<?php echo base_url();?>assets/vendor/mCustomScrollbar/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="<?php echo base_url();?>assets/vendor/highcharts/js/highcharts.js"></script>
 	<script src="<?php echo base_url();?>assets/vendor/nice-select/js/jquery.nice-select.min.js"></script>
-	<script src="<?php echo base_url();?>assets/js/tableHeadFixer.js"></script>
+	<script src="<?php echo base_url();?>assets/vendor/moment/moment.js"></script>
+    <script src="<?php echo base_url();?>assets/js/tableHeadFixer.js"></script>
     <script src="<?php echo base_url();?>assets/js/custom_script.js"></script>
 </head>
 <body class="page_body">

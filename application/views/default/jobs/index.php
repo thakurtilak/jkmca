@@ -49,46 +49,14 @@
                         </div>
                     </div><!--col-sm-3-->
                     <div class="col-sm-3">
-                        <div class="form-group">
-                            <select class="ims_form_control" name="month" id="month">
-                                <option value="-1">Job for Month...</option>
-                                <option value="<?php echo date('Y-m-01');?>">This Month - <?php echo date('M Y');?></option>
-                                <?php
-                                $monthcount=date('n');
-                                if($monthcount<4)
-                                {
-                                    $count=1;
-                                    for($i=$monthcount;$i>1;$i--){
-                                        if($count==1){
-                                            ?>
-                                            <option value="<?php echo date('Y-m-01',mktime(0, 0, 0, date("m")-$count, date("d"),date("Y")));?>">Previous Month <?php echo date('M Y',mktime(0, 0, 0, date("m")-$count, date("d"),   date("Y")));?> </option>
-                                        <?php } else { ?>
-                                            <option value="<?php echo date('Y-m-01',mktime(0, 0, 0, date("m")-$count, date("d"),date("Y")));?>"><?php echo date('M Y',mktime(0, 0, 0, date("m")-$count, date("d"),   date("Y")));?> </option>
-                                            <?php
-                                        } }
-                                    for($i=3;$i<12;$i++){
-                                        ?>
-                                        <option value="<?php echo date('Y-m-01',mktime(0, 0, 0, date("m")+$i, date("d"),date("Y")-1));?>"><?php echo date('M Y',mktime(0, 0, 0, date("m")+$i, date("d"), date("Y")-1));?> </option>
-                                        <?php
-                                    } } else{
-                                    $count=1;
-                                    for($i=$monthcount;$i>1;$i--){
-                                        if($count==1){
-                                            ?>
-                                            <option value="<?php echo date('Y-m-01',mktime(0, 0, 0, date("m")-$count, date("d"),date("Y")));?>">Previous Month <?php echo date('M Y',mktime(0, 0, 0, date("m")-$count, date("d"),   date("Y")));?> </option>
-                                            <?php
-                                        }else{ ?>
-                                            <option value="<?php echo date('Y-m-01',mktime(0, 0, 0, date("m")-$count, date("d"),date("Y")));?>"><?php echo date('M Y',mktime(0, 0, 0, date("m")-$count, date("d"),   date("Y")));?> </option>
-                                        <?php  }
-                                        $count++;}
-                                    for($i=3;$i<13;$i++){
-                                        print '<option value="'.date('Y-m-01',mktime(0, 0, 0, $i , date("d"),date("Y")-1)).'">'.date('M Y',mktime(0, 0, 0, $i, date("d"), date("Y")-1)).'</option>';
-                                    }
-                                }
-                                ?>
-
+                            <select class="ims_form_control" id="financialYears">          
                             </select>
-                        </div>
+                    </div>
+
+                    <div class="col-sm-3 month-dropdown" style="display: none;">
+                            <div class="form-group">
+                                <select class="ims_form_control" id="financialMonth"></select>
+                            </div>
                     </div><!--col-sm-3-->
                     <?php if($isSuperAdmin || $isRecieptionist): ?>
                         <div class="col-sm-3">
@@ -257,14 +225,15 @@
 </div>
 <!--=============== End View Modal ======================-->
 <script type="text/javascript">
+    var selMonth = '';
+    var table = "";
     $(document).ready(function(){
         <?php
         if(isset($selectedMonth) && $selectedMonth) { ?>
             var selMonth = "<?php echo $selectedMonth; ?>";
-            $("#month").val(selMonth);
        <?php }
         ?>
-
+        getFinancialYears(selMonth);
         /*File Handling*/
         $(document).on("click", ".file-upload-button", function () {
             $(this).parent().find("input[type='file']").click();
@@ -275,54 +244,14 @@
             $("#" + fileID).parent().find(".file-upload-input").val(filename);
         });
 
-        /*Data table initialization*/
-        var table = $('#raisedJobs').DataTable({
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search..."
-            },
-            "order": [[ 4, "desc" ]],
-            "columnDefs": [
-                {
-                    "targets": [ 6 ],
-                    "orderable":false
-                }
-            ],
-
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                "url": BASEURL + "jobs",
-                "data": function ( d ) {
-                    d.status_id = $('#status_id').val();
-                    d.work_type = $('#work_type').val();
-                    <?php
-                    if(isset($selectedMonth) && $selectedMonth) { ?>
-                        if($('#month').val() =='-1') {
-                            d.month = '<?php echo $selectedMonth; ?>';
-                        } else {
-                            d.month = $('#month').val();
-                        }
-                    <?php } else { ?>
-                    d.month = $('#month').val();
-                   <?php  }
-                    ?>
-                    d.payment_status = $("#payment_status").val();
-                }
-            },
-           "columns": [
-               {"data":"jobID"},
-                { "data": "workName" },
-                { "data": "clientName" },
-                { "data": "staff_name" },
-                { "data": "request_date"},
-                { "data": "status"},
-                { "data": "action"}
-            ]
-        });
-
+    
         /*Custom Filter drop down*/
-        $("#work_type, #status_id, #month, #payment_status").on("change", function() {
+        $("#work_type, #status_id, #month, #payment_status, #financialYears, #financialMonth").on("change", function() {
+            var itemId = $(this).prop('id');
+            if (itemId == "financialYears") {
+                selMonth = '';
+                getMonthDropDown($("#financialYears").val());
+            }
             table.draw();
         });
 
@@ -423,15 +352,132 @@
 
         $("#exportPaymentLaser").click(function () {
             var status_id = $("#status_id").val();
-            var month = $('#month').val();
+            var month = $('#financialMonth').val();
+            var financialYears = $('#financialYears').val();
             var work_type = $('#work_type').val();
             var payment_status = $('#payment_status').val();
             var searchKey = $('input[type=search]').val();
-            $url = BASEURL +"payment/download-all-view-jobs?payment_status="+payment_status+"&month="+month+"&status_id="+status_id+"&work_type="+work_type+"&searchKey="+searchKey;
+            $url = BASEURL +"payment/download-all-view-jobs?payment_status="+payment_status+"&month="+month+"&status_id="+status_id+"&work_type="+work_type+"&searchKey="+searchKey+"&financial_years="+financialYears;;
             window.location = $url;
         });
 
     });
+
+    function getFinancialYears(selMonth) {
+            $.ajax({
+                type: "POST",
+                url: BASEURL + "jobs/getAllFinancialYears",
+                cache: false,
+                async: false,
+                beforeSend: function () {
+                    $('.loader-wrapper').show();
+                },
+                data: {selMonth:selMonth},
+                success: function (response) {
+                    if(response && response.status) {
+                        var options = "<option value=''>Select Year</option>";
+                        if(response.data && response.data.financialYears && response.data.financialYears.length) {
+                            $.each(response.data.financialYears, function( index, value ) {
+                                if(response.data.selectedFinancialYear == value['key']) {
+                                    options += "<option value="+value['key']+" selected>"+value['value']+"</option>";
+                                }else{
+                                    options += "<option value="+value['key']+">"+value['value']+"</option>";
+                                }
+                                // options += "<option value="+value['key']+">"+value['value']+"</option>";
+                            });
+                        }
+                        $("#financialYears").append(options);
+                        getMonthDropDown($("#financialYears").val());
+                        getTableData(); 
+                    }
+                },
+                error: function (error) {
+                    alert("There is an error while getting details. Please try again.");
+                },
+                complete: function(){
+                    $('.loader-wrapper').hide();
+                }
+            });
+    }
+
+    function getMonthDropDown(year) {
+            $("#financialMonth").html('<option  value="-1">Select Month</option>');
+            $(".month-dropdown").hide();
+            $.ajax({
+                type: "POST",
+                url: BASEURL + "jobs/getMonthDropDownInJson",
+                cache: false,
+                async: false,
+                data: {year: year},
+                success: function (response) {
+                    if(response && response.status) {
+                        $("#financialMonth").html('');
+                        var options = '<option  value="-1">Select Month</option>';
+                        if(response.data && response.data.allMonths && response.data.allMonths.length) {
+                            $.each(response.data.allMonths, function( key, value ) {
+                                /*if(parseInt(moment(value).format('M')), parseInt(response.data.current_month)) {
+                                    options += '<option  value="'+value+'" selected>'+moment(value).format('MMM - YYYY')+'</option>';
+                                }else{
+                                    options += '<option  value="'+value+'">'+moment(value).format('MMM - YYYY')+'</option>';
+                                }*/
+                                options += '<option  value="'+value+'">'+moment(value).format('MMM - YYYY')+'</option>';
+                            });
+
+                            $("#financialMonth").append(options);
+                            $(".month-dropdown").show();
+                            if(selMonth){
+                                $("#financialMonth").val(selMonth);
+                            }
+
+                        }
+
+
+                    }
+                },
+                error: function (error) {
+                    alert("There is an error while getting details. Please try again.");
+                },
+            });
+    }
+
+    function getTableData() {
+        /*Data table initialization*/
+        table = $('#raisedJobs').DataTable({
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search..."
+            },
+            "order": [[ 4, "desc" ]],
+            "columnDefs": [
+                {
+                    "targets": [ 6 ],
+                    "orderable":false
+                }
+            ],
+
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": BASEURL + "jobs",
+                "data": function ( d ) {
+                    d.status_id = $('#status_id').val();
+                    d.work_type = $('#work_type').val();
+                    d.financial_year = $('#financialYears').val();
+                    d.financial_month = $('#financialMonth').val();
+                    d.payment_status = $("#payment_status").val();
+                }
+            },
+           "columns": [
+               {"data":"jobID"},
+                { "data": "workName" },
+                { "data": "clientName" },
+                { "data": "staff_name" },
+                { "data": "request_date"},
+                { "data": "status"},
+                { "data": "action"}
+            ]
+        });
+    }
 
 
 

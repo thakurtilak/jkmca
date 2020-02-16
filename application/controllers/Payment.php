@@ -366,13 +366,15 @@ class Payment extends CI_Controller
         $status = (!empty($status_id)) ? $status_id : false;
         $month  = $this->input->get('month');
         $month = (!empty($month)) ? $month : false;
+        $financial_years  = $this->input->get('financial_years');
+        $financial_years = (!empty($financial_years)) ? $financial_years : false;
         $payment_status = $this->input->get('payment_status');
         $searchKey= $this->input->get('searchKey', true);
         $orderColumn = "created_date";
         $direction = "ASC";
         $orderBY = $orderColumn . " " . $direction;
         //$jobsList = $this->job_model->getPaymentPendingJobs(1000);
-        $jobsList = $this->job_model->downloadAllJobList(false, $work_type, $status, $month, $payment_status, $searchKey, $orderBY);
+        $jobsList = $this->job_model->downloadAllJobList(false, $work_type, $status, $month, $payment_status, $searchKey, $orderBY, $financial_years);
         $fileName = "Job-List-".date('d-M-Y');
         $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date','Job Status','Amount', 'Discount', 'Advanced','Pending Amount','Payment Responsible', 'Responsible No.');
         $dataArray = array();

@@ -39,10 +39,13 @@ class Job_model extends CI_Model
       * get_datatables_query
       * To get list of raised invoices.
       */
-    function _get_datatables_query($userId, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false)
+    function _get_datatables_query($userId, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false, $financialYear = false)
     {
         //$approverUsers = $this->_getAllexcutivesIds($userId);
-
+        if($financialYear){
+            $first_date = getFinancialYearStartDate($financialYear);
+            $second_date= getFinancialYearEndDate($financialYear);
+        }
         $this->db->from(TBL_JOB_MASTER . ' as Tm');
         $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact');
         $this->db->join(TBL_USER . ' as uM', 'uM.id = Tm.staff_id');
@@ -99,6 +102,13 @@ class Job_model extends CI_Model
             $this->db->group_end();*/
         }
 
+        if ($financialYear && $month == '-1') {
+            $this->db->group_start();
+            $this->db->where('Tm.created_date >=', $first_date);
+            $this->db->where('Tm.created_date <=', $second_date);
+            $this->db->group_end();
+        }
+
         if ($month && $month != '-1') {
             $first_date = $month;
             //Here we treat 1-6th date as previous month and 7th to next month's 6th will be current month
@@ -120,9 +130,9 @@ class Job_model extends CI_Model
 
     }
     /*RaisedInvoice count_filtered*/
-    function count_filtered($userId = false, $work_type = false, $status = false, $MONTH = false, $payment_status ='', $name = false, $orderBY = false)
+    function count_filtered($userId = false, $work_type = false, $status = false, $MONTH = false, $payment_status ='', $name = false, $orderBY = false, $financial_year = false)
     {
-        $this->_get_datatables_query($userId, $work_type, $status, $MONTH, $payment_status, $name, $orderBY);
+        $this->_get_datatables_query($userId, $work_type, $status, $MONTH, $payment_status, $name, $orderBY, $financial_year);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -157,10 +167,10 @@ class Job_model extends CI_Model
     }
 
     /*Jobs Listing*/
-    function listJobs($userId = false, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false, $limitStart = 0, $limitLength = 10)
+    function listJobs($userId = false, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false, $limitStart = 0, $limitLength = 10, $financial_year = false)
     {
 
-        $this->_get_datatables_query($userId, $work_type, $status, $month, $payment_status, $name, $orderBY);
+        $this->_get_datatables_query($userId, $work_type, $status, $month, $payment_status, $name, $orderBY, $financial_year);
 
         $this->db->limit($limitLength, $limitStart);
         $query = $this->db->get();
@@ -355,9 +365,12 @@ class Job_model extends CI_Model
     * downloadAllJobList
     * To Download All Job List.
     */
-    function downloadAllJobList($userId = false, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false)
+    function downloadAllJobList($userId = false, $work_type = false, $status = false, $month = false, $payment_status ='', $name = false, $orderBY = false, $financialYear = false)
     {
-        $financialYear = getCurrentFinancialYear();
+        if($financialYear){
+            $first_date = getFinancialYearStartDate($financialYear);
+            $second_date= getFinancialYearEndDate($financialYear);
+        }
         //$approverUsers = $this->_getAllexcutivesIds($userId);
         $this->db->from(TBL_JOB_MASTER . ' as Tm');
         $this->db->select('Tm.*, CONCAT(Tm.first_name, \' \' , Tm.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work, CONCAT(clientM.first_name, " " , IFNULL(clientM.middle_name, ""), " ",IFNULL(clientM.last_name, "")) as clientName, CONCAT(clientM.address1," ", IFNULL(clientM.address2, "") ) as clientAddress, clientM.mobile as clientContact, CONCAT(RM.first_name, " " , IFNULL(RM.middle_name, ""), " ",IFNULL(RM.last_name, "")) as responsibleName,RM.mobile as responsibleContact');
@@ -418,15 +431,6 @@ class Job_model extends CI_Model
             $this->db->where('Tm.created_date <', $second_date);
             $this->db->group_end();
         } else {
-            $bothYears = explode('-',$financialYear);
-            $startYear = current($bothYears);
-            $endYear = end($bothYears);
-            $first_date = "$startYear-04-01";
-            $end_date = "$endYear-04-01";
-            //Here we treat 1-6th date as previous month and 7th to next month's 6th will be current month
-            $first_date = date("Y-m-01", strtotime($first_date));
-            $second_date = date("Y-m-01", strtotime($end_date));
-            //$second_date = date("Y-m-t", strtotime($month));
             $this->db->group_start();
             $this->db->where('Tm.created_date >=', $first_date);
             $this->db->where('Tm.created_date <', $second_date);

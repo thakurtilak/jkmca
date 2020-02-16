@@ -58,9 +58,9 @@ class Jobs extends CI_Controller
             $work_type = (!empty($work_type)) ? $work_type : false;
             $status_id = $this->input->get('status_id');
             $status = (!empty($status_id)) ? $status_id : false;
-            $month  = $this->input->get('month');
-            $month = (!empty($month)) ? $month : false;
+            $month  = (!empty($this->input->get('financial_month'))) ? $this->input->get('financial_month') : false;
             $payment_status = $this->input->get('payment_status');
+            $financial_year = (!empty($this->input->get('financial_year'))) ? $this->input->get('financial_year') : false;
             $searchKey = $this->input->get('search[value]');
             //$searchKey = (!empty($searchKey)) ? str_replace(' ', '%', trim($searchKey)):'';
             //debug($searchKey);
@@ -88,9 +88,9 @@ class Jobs extends CI_Controller
             }
 
             $orderBY = $orderColumn . " " . $direction;
-            $jobsList = $this->job_model->listJobs($userID, $work_type, $status, $month, $payment_status, $searchKey, $orderBY, $start, $length);
+            $jobsList = $this->job_model->listJobs($userID, $work_type, $status, $month, $payment_status, $searchKey, $orderBY, $start, $length, $financial_year);
             $recordsTotal = $this->job_model->count_all($userID);
-            $recordsFiltered = $this->job_model->count_filtered($userID, $work_type, $status, $month, $payment_status, $searchKey, $orderBY);
+            $recordsFiltered = $this->job_model->count_filtered($userID, $work_type, $status, $month, $payment_status, $searchKey, $orderBY, $financial_year);
 
             $draw = $this->input->get('draw');
             $data = array();
@@ -204,7 +204,8 @@ class Jobs extends CI_Controller
                     'completion_date' => date('Y-m-d', strtotime($postData['completion_date'])),
                     'remark'  => $postData['remark'],
                     'created_date' => date('Y-m-d H:i:s'),
-                    'created_by'   => getCurrentUsersId()
+                    'created_by'   => getCurrentUsersId(),
+                    'financial_year' => getCurrentFinancialYear()
                 );
 
                 if(isset($postData['payment_responsible']) && !empty($postData['payment_responsible'])) {
@@ -1383,4 +1384,97 @@ class Jobs extends CI_Controller
             echo $flieds;
         }
     }
+
+    public function getAllFinancialYears() {
+        if($this->input->is_ajax_request()) {
+            $userInfo = getCurrentUser();
+            $startMonthTexual = getConfiguration('financial_year_start_month');
+            $dateParseArray = date_parse($startMonthTexual);
+            $startMonth = ($dateParseArray['month'])? $dateParseArray['month'] : FINANCIAL_YEAR_START_MONTH;
+            $selectedMonth = $this->input->post('selMonth');
+            $selectedYear = $this->input->post('selYear');
+            if(!empty($selectedYear)){
+                $selectedFinancialYear = $selectedYear;
+            }elseif(!empty($selectedMonth)){
+                $selYear = date('Y', strtotime($selectedMonth));
+                $selMonth = date('m', strtotime($selectedMonth));
+                $initailMonthArray = array('01', '02', '03');
+                if(in_array($selMonth, $initailMonthArray)) {
+                    $selectedFinancialYear = date('Y', strtotime("-1 year",strtotime($selectedMonth))).'-'.$selYear;
+                } else {
+                    $selectedFinancialYear = $selYear.'-'. date('Y', strtotime("+1 year",strtotime($selectedMonth)));
+                }
+            } else{
+                $selectedFinancialYear = getCurrentFinancialYear();
+            }
+            // get current financial year
+            $currentFinancialYear = getCurrentFinancialYear();
+            //$selectedFinancialYear = '2017-2018';
+            $currentMonth = date('Y-m-01');
+            
+
+            //$startMonth = date('m', strtotime($startMonthTexual));
+            
+            // Set your latest year you want in the range, in this case we use PHP to just set it to the current year.
+            $currentYear = current(explode('-', $currentFinancialYear)) ;
+            // Year to start available options at
+            $earliest_year = 2018;//date('Y',strtotime($currentYear.' -4 year'));
+
+            $currenctYearStartMonth = date($currentYear.'-'.$startMonth.'-01');
+            $latest_year = date('Y', strtotime($currenctYearStartMonth));
+            // Loops over each int[year] from current year, back to the $earliest_year [1950]
+            $financialYearsNew = array();
+            foreach ( range($latest_year, $earliest_year) as $year ) {
+                $temp = new stdClass();
+                $temp->key = $year ."-". ($year + 1);
+                $temp->value = 'FY '.$year ."-". ($year + 1);
+                $financialYearsNew[] = $temp;
+            }
+            $data = array();
+            $data['selectedFinancialYear'] = $selectedFinancialYear;
+            $data['financialYears'] = $financialYearsNew;
+            sendResponse(true, $this->lang->line('SUCCESS'), $data);
+        }else{
+            sendResponse(false, $this->lang->line('SOMETHING_WENT_WRONG'), array());
+        }
+    }
+
+    public function getMonthDropDownInJson() {
+        if ($this->input->is_ajax_request()) {
+            $data = array();
+            $financial_year = $this->input->post('year');
+            $business_page = (!empty($this->input->post('business_page'))) ? $this->input->post('business_page') : '0' ;
+            if ($financial_year) {
+                $startYear = current(explode('-', $financial_year));
+                $startMonthTexual = getConfiguration('financial_year_start_month');
+                $startMonth = date('m', strtotime($startMonthTexual));
+                $financialYearStartMonth = date($startYear.'-'.$startMonth.'-01');
+                $current_financial_year = getCurrentFinancialYear();
+                $current_month = 0;
+                if($financial_year == $current_financial_year) {
+                    $current_month = date('m');
+                }
+                if ($business_page == 1) {
+                    $current_month = 0;
+                }
+                $counter = 0;
+                $allMonths = array();
+                while($counter < 12 ) {
+                    $month_number = date('m', strtotime("+$counter month", strtotime($financialYearStartMonth))); 
+                    $allMonths[] = date('Y-m-d', strtotime("+$counter month", strtotime($financialYearStartMonth)));
+                    $counter++;
+                    if ($current_month != 0) {
+                        if($month_number == $current_month) {
+                            break;
+                        }   
+                    }
+                }
+                $data['allMonths'] = $allMonths;
+                $data['business_page'] = $business_page;
+                $data['current_month'] = $current_month;
+                sendResponse(true, $this->lang->line("SUCCESS"), $data);
+            }
+        }
+    }
+
 }

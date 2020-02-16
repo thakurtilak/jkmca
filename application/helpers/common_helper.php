@@ -1057,3 +1057,36 @@ function debug($dataArray, $isExit = true) {
         exit;
     }
 }
+
+function getFinancialYearStartDate($financialYear = false) {
+    if(!$financialYear) {
+        $financialYear = getCurrentFinancialYear();
+    }
+    $startYear = current(explode('-', $financialYear));
+
+    $startMonth = getConfiguration('financial_year_start_month');
+    $dateParseArray = date_parse($startMonth);
+    $startMonth = ($dateParseArray['month'])? $dateParseArray['month'] : FINANCIAL_YEAR_START_MONTH;
+    $considerDate = 01;
+    $startDate = $startYear.'-'.$startMonth.'-'.$considerDate;
+    $startDate = date('Y-m-d 00:00:00', strtotime($startDate));
+    return $startDate;
+}
+
+function getFinancialYearEndDate($financialYear = false) {
+    $startDate = getFinancialYearStartDate($financialYear);
+    $endDate = date('Y-m-31 23:59:59', strtotime('+1 year', strtotime('-1 day',strtotime($startDate))));
+    return $endDate;
+}
+
+function sendResponse($status, $message ,$data) {
+    if ($status) {
+        http_response_code(200);
+    }else{
+        http_response_code(203);
+    }
+    $resp = array('status' => $status, "message"=>$message, "data"=> $data);
+    header('Content-Type: application/json');
+    echo json_encode($resp);
+    exit(0);
+}
