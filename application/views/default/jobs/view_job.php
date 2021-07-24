@@ -428,7 +428,7 @@
                         </div><!--box-form-->
                     </div><!--col-sm-12-->
                 <?php endif; ?>
-                <?php if (($isSuperAdmin || $isRecieptionist) && $jobDetail->status == 'completed'): ?>
+                <?php if (($isSuperAdmin && $jobDetail->status == 'completed') || ( $isRecieptionist && ($jobDetail->status == 'completed' || $jobDetail->status =="approval_pending"))): ?>
                     <div class="col-sm-12">
                         <div class="box-form">
                             <h3 class="form-box-title">Payment Status</h3>
@@ -489,7 +489,7 @@
                                 </div>
                             <?php endif; ?>
                         </div>
-                    <?php } elseif (($isSuperAdmin || $isRecieptionist ) && $jobDetail->status =="completed" && $jobDetail->remaining_amount > 0){ ?>
+                    <?php } elseif (($isSuperAdmin || $isRecieptionist ) && ($jobDetail->status =="completed" || $jobDetail->status =="approval_pending") && $jobDetail->remaining_amount > 0){ ?>
                         <div class="form-footer">
                             <input type="submit" id="submit4" name="submit4" value="Update Payment Status" class="btn-theme ml10 btn-submit mdl-js-button mdl-js-ripple-effect ripple-white">
                             <a href="<?php echo base_url('jobs'); ?>">

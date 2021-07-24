@@ -24,6 +24,11 @@
 		</div>
         <div class="">
             <div class="order_filter">
+                <div class="row">
+                    <div class="col-sm-12 pull-right" style="text-align: right; font-size: 25px;">
+                        <a href="javascript:void(0)" id="exportAllInquiry" style="font-size: 25px;" class="mdl-js-button mdl-js-ripple-effect btn-view action-btn" title="Export Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                    </div>
+                </div>
             </div><!--order_filter-->
             <div class="ims_datatable table-responsive">
                <!-- <h3 class="form-box-title">Client Details </h3>-->
@@ -96,6 +101,29 @@
                <button class="btn btn-secondary" type="button" data-dismiss="modal">NO</button>
                 <a id="cancelTargetUrl" class="btn btn-primary" href="<?php /*echo base_url(); */?>orders/cancel-order">YES</a>
             </div>-->
+        </div>
+    </div>
+</div>
+
+<!--Delete -->
+<div class="modal fade" id="deleteInquiryModel" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog cancel-order-modal zoomIn animated" role="document">
+        <div class="modal-content">
+            <div class="modal-header ims_modal_header">
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="deleteModalLabel">Delete Inquiry</h4>
+            </div>
+            <div class="modal-body cancel_form" style="text-align:center; margin-bottom:10px;">
+            <div class="alert alert-danger" id="errorMessageDel" style="display: none;"></div>
+            <input type="hidden" name="refIdDel" id="refIdDel" value="">
+             Are you sure to delete Job Inquiry <b><span id="InqRef"></span></b>?
+            </div>
+            <div class="form-footer" style="text-align:center; margin-bottom:10px;">
+                <button id="deleteButton" type="button" value="DELETE" class="btn-theme btn-submit mdl-js-button mdl-js-ripple-effect ripple-white" name="Update">DELETE</button>
+                <button class="btn-theme btn-reset ml10 mdl-js-button mdl-js-ripple-effect ripple-white" data-dismiss="modal">No</button>
+            </div>
         </div>
     </div>
 </div>
@@ -196,6 +224,17 @@
             });
         });
 
+
+        $("#deleteInquiryModel").on("show.bs.modal", function(e) {
+            $("#errorMessageDel").text('').hide();
+            var modal = $(this);
+            //modal.find('.cancel_form').html("");
+            var refId = $(e.relatedTarget).data('target-id');
+            $("#InqRef").html(refId);
+            $("#refIdDel").val(refId);
+            
+        });
+
         $("#ClientViewModal").on("hide.bs.modal", function() {
             $(".custom_client_scroll").mCustomScrollbar("destroy");
         });
@@ -220,6 +259,36 @@
                     console.log(err);
                 }
             });
+        });
+
+        $(document).on("click", "#deleteButton", function () {
+            var refId = $("#refIdDel").val();
+            console.log(refId);
+            var SubmitURL = BASEURL + "inquiry/delete/"+refId;
+            $.ajax({
+                type: "POST",
+                url: SubmitURL,
+                cache: false,
+                success: function (data) {
+                    var response = $.parseJSON(data);
+                    if(response.success) {
+                        $("#deleteInquiryModel").modal('hide');
+                        table.draw();
+                    } else {
+                        $("#errorMessageDel").show().text("There is an error while delete Inquiry.");
+                    }
+                    //modal.find('.payment_form').html(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        });
+
+        $("#exportAllInquiry").click(function () {
+            var searchKey = $('input[type=search]').val();
+            $url = BASEURL +"inquiry/download-all?searchKey="+searchKey;
+            window.location = $url;
         });
         
     });

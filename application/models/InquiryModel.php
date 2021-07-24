@@ -104,5 +104,29 @@ class InquiryModel extends CI_Model
         //echo  $this->db->last_query(); die;
         return $query->result();
     }
+
+    public function downloadAll($searchKey) {
+        $this->db->select('CM.*, CONCAT(CM.first_name, \' \', CM.last_name) as client_name, CONCAT(uM.first_name, \' \' , uM.last_name) as staff_name, wt.work');
+        $this->db->from(TBL_INQUIRY_MASTER.' as CM');
+        $this->db->join(TBL_WORK_TYPE . ' as wt', 'wt.id = CM.work_type');
+        $this->db->join(TBL_USER . ' as uM', 'uM.id = CM.staff_id');
+        $this->db->join(TBL_CLIENT_MASTER. ' as clientM','clientM.client_id = CM.client_id','left');
+        $this->db->where('CM.status !=','COMPLETED');
+        if($searchKey) {
+            $name = $this->db->escape_like_str($searchKey);
+            $this->db->group_start();
+            $this->db->where("CONCAT(CM.first_name, ' ', CM.last_name) LIKE '%".$searchKey."%'", NULL, FALSE);
+            $this->db->or_like('CM.fathers_first_name',$searchKey);
+            $this->db->or_like('CM.fathers_last_name',$searchKey);
+            $this->db->or_like('CM.pan_no',$searchKey);
+            $this->db->or_like('CM.aadhar_no',$searchKey);
+            $this->db->or_like('CM.mobile',$searchKey);
+            $this->db->group_end();
+        }
+        $this->db->order_by('created_at DESC');
+        $query = $this->db->get();
+        //echo  $this->db->last_query(); die;
+        return $query->result();
+    }
 }
 ?>

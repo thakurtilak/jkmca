@@ -17,6 +17,7 @@ class Inquiry extends CI_Controller
         $this->load->model('InquiryModel');
         $this->load->model('job_model');
         $this->load->library('emailUtility');
+        $this->load->library('Phpspreadsheet');
         if (!isLoggedIn()) {
             redirect('login');
         }
@@ -85,9 +86,12 @@ class Inquiry extends CI_Controller
                     $created_date = ($client->created_at ? date('d-M-Y', strtotime($client->created_at)) : '');
                     $actionLink = "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#ClientViewModal\" data-toggle=\"modal\" data-target-id=" . $client->ref_no . " title='View'><i class='icon-view1'></i></a>";
                     $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect button-print action-btn\" href=\"javascript:void(0)\" data-toggle=\"modal\" data-target-id=" . $client->ref_no . " title='Print'><i class='fa fa-print' aria-hidden='true'></i></a>";
-                    if (($isSuperAdmin || $isRecieptionist) && $client->status !='CANCELLED') {
-                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#cancelInquiryModel\" data-toggle=\"modal\" data-target-id=" . $client->ref_no . " title='Cancel'><i class='fa fa-ban' aria-hidden='true'></i></a>";
-                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='" . base_url() . "jobs/new-job/" . $client->ref_no . "' data-target-id=" . $client->ref_no . " title='Create Job'><i class='fa fa-plus-square'></i></a>";
+                    if (($isSuperAdmin || $isRecieptionist)) {
+                        $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#deleteInquiryModel\" data-toggle=\"modal\" data-target-id=" . $client->ref_no . " title='Delete'><i class='fa fa-trash' aria-hidden='true'></i></a>"; 
+                        if($client->status !='CANCELLED') {
+                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href=\"#cancelInquiryModel\" data-toggle=\"modal\" data-target-id=" . $client->ref_no . " title='Cancel'><i class='fa fa-ban' aria-hidden='true'></i></a>";
+                            $actionLink .= "<a class=\"mdl-js-button mdl-js-ripple-effect btn-view action-btn\" href='" . base_url() . "jobs/new-job/" . $client->ref_no . "' data-target-id=" . $client->ref_no . " title='Create Job'><i class='fa fa-plus-square'></i></a>";
+                        }   
                     }
                     $tempData = array("ref_no" => $client->ref_no,
                         "client_name" => $clientName,
@@ -322,4 +326,72 @@ class Inquiry extends CI_Controller
         }
     }
     
+    public function delete($refId) {
+        if($this->input->is_ajax_request() && $refId) {
+            $method = $this->input->method(TRUE);
+            $inquiryDetail = $this->InquiryModel->getInquiry($refId);
+            if($method == 'POST') {
+                $where = array('ref_no' => $refId);
+                $deleted = $this->common_model->delete(TBL_INQUIRY_MASTER, $where);
+                if ($deleted) {
+                    $response = array('success' => true);
+                } else {
+                    $response = array('success' => false);
+                }
+                echo json_encode($response);
+                //POST 
+            }
+        }
+    }
+
+    /*
+    For download all INquiry
+    CreATED on - 24-jULY-2021
+    */
+    public function download_all() {
+        $searchKey= $this->input->get('searchKey', true);
+        $orderColumn = "created_date";
+        $direction = "ASC";
+        $orderBY = $orderColumn . " " . $direction;
+        $inquiryList = $this->InquiryModel->downloadAll($searchKey);
+        $fileName = "Inquiry-List-".date('d-M-Y');
+        $header = array('RefId', 'Client Name', 'Client Mobile NO.', 'Aadhar NO.', 'PAN NO.', 'Work Type','Staff Name', 'Status','Inquiry Date');
+        $dataArray = array();
+        $dataArray[] =$header;
+        if ($inquiryList) {
+            foreach ($inquiryList as $key => $job) {
+                $refID = $job->ref_no;
+                $created_date = ($job->created_at ? date('d-M-Y', strtotime($job->created_at)) : '');
+                if (trim($job->client_name) == "") {
+                    $clientName = "--";
+                } else {
+                    $clientName = $job->client_name;
+                }
+                $workName = $job->work;
+                $aadharNO = $job->aadhar_no;
+                $panNO = $job->pan_no;
+                $clientContact = $job->mobile;
+                $staffName = $job->staff_name;
+                $status = $job->status;
+                $tempData = array(
+                    $refID,
+                    $clientName,
+                    $clientContact,
+                    $aadharNO,
+                    $panNO,
+                    $workName,
+                    $staffName,
+                    $status,
+                    $created_date
+                );
+                $dataArray[] =$tempData;
+            }
+        }
+        try{
+            $this->phpspreadsheet->createXlSX($fileName, $dataArray, "All Inquiry");
+        } catch (Exception $e) {
+            //debug($e); die;
+        }
+        exit();
+    }
 }

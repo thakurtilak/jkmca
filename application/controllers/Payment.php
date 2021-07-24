@@ -376,7 +376,7 @@ class Payment extends CI_Controller
         //$jobsList = $this->job_model->getPaymentPendingJobs(1000);
         $jobsList = $this->job_model->downloadAllJobList(false, $work_type, $status, $month, $payment_status, $searchKey, $orderBY, $financial_years);
         $fileName = "Job-List-".date('d-M-Y');
-        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Work Type', 'Job Date','Job Status','Amount', 'Discount', 'Advanced','Pending Amount','Payment Responsible', 'Responsible No.');
+        $header = array('JobId', 'Client Name', 'Client Mobile NO.', 'Aadhar NO.', 'PAN NO.', 'Work Type', 'Job Date','Job Status','Amount', 'Discount', 'Advanced','Pending Amount','Payment Responsible', 'Responsible No.');
         $dataArray = array();
         $dataArray[] =$header;
         if ($jobsList) {
@@ -389,6 +389,8 @@ class Payment extends CI_Controller
                     $clientName = $job->clientName;
                 }
                 $workName = $job->work;
+                $aadharNO = $job->aadhar_no;
+                $panNO = $job->pan_no;
                 $remaining_amount = $job->remaining_amount;
                 $clientContact = $job->clientContact;
                 $responsibleName = ($job->responsibleName) ? $job->responsibleName :'--';
@@ -408,6 +410,8 @@ class Payment extends CI_Controller
                     $jobID,
                     $clientName,
                     $clientContact,
+                    $aadharNO,
+                    $panNO,
                     $workName,
                     $created_date,
                     $status,
